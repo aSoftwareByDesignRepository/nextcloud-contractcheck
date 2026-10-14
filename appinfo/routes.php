@@ -15,7 +15,6 @@ return [
 		['name' => 'page#reports', 'url' => '/reports', 'verb' => 'GET'],
 		['name' => 'page#audit', 'url' => '/audit', 'verb' => 'GET'],
 		['name' => 'page#import', 'url' => '/import', 'verb' => 'GET'],
-		['name' => 'page#getTheApp', 'url' => '/get-the-app', 'verb' => 'GET'],
 		['name' => 'page#settingsIndex', 'url' => '/settings', 'verb' => 'GET'],
 		['name' => 'page#settings', 'url' => '/settings/{section}', 'verb' => 'GET',
 			'requirements' => ['section' => \OCA\ContractCheck\Service\SettingsSectionCatalog::routeRequirement()]],
@@ -57,12 +56,5 @@ return [
 
 		// ICS feed (token-auth, read-only, no session)
 		['name' => 'feed#ics', 'url' => '/feed/deadlines.ics', 'verb' => 'GET'],
-
-		// Companion API (app-password Bearer auth)
-		['name' => 'companion#bootstrap', 'url' => '/api/companion/bootstrap', 'verb' => 'GET'],
-		['name' => 'companion#dashboard', 'url' => '/api/companion/dashboard', 'verb' => 'GET'],
-		['name' => 'companion#listContracts', 'url' => '/api/companion/contracts', 'verb' => 'GET'],
-		['name' => 'companion#getContract', 'url' => '/api/companion/contracts/{id}', 'verb' => 'GET', 'requirements' => ['id' => '\d+']],
-		['name' => 'companion#listParties', 'url' => '/api/companion/parties', 'verb' => 'GET'],
 	],
 ];

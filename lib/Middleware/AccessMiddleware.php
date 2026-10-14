@@ -27,7 +27,7 @@ use OCP\IUserSession;
  *
  *  - API routes      → canonical JSON 403
  *  - Page routes     → friendly access-denied page (HTTP 403)
- *  - Feed/companion  → token/Bearer auth handled in-controller; the door
+ *  - Feed            → token auth handled in-controller; the door
  *                      still applies to the resolved user
  *
  * Runs BEFORE the controller so no business code ever executes for a

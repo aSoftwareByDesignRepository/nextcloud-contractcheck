@@ -9,7 +9,7 @@
 $pageId = (string)($_['page'] ?? 'dashboard');
 $allowed = [
 	'dashboard', 'contracts', 'contract-form', 'contract-detail',
-	'parties', 'reports', 'audit', 'import', 'settings', 'get-the-app',
+	'parties', 'reports', 'audit', 'import', 'settings',
 ];
 if (!in_array($pageId, $allowed, true)) {
 	$pageId = 'dashboard';

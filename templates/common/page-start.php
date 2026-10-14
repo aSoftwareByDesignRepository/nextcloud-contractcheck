@@ -31,7 +31,6 @@ $headerIcons = [
 	'audit' => 'list',
 	'import' => 'upload',
 	'settings' => 'settings',
-	'get-the-app' => 'smartphone',
 	'denied' => 'shield-off',
 ];
 $iconName = $headerIcons[$pageId] ?? 'file-text';

@@ -116,13 +116,6 @@ class PageController extends Controller
 
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function getTheApp(): TemplateResponse
-	{
-		return $this->page('get-the-app');
-	}
-
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function settingsIndex(): Response
 	{
 		$user = $this->userSession->getUser();
@@ -226,7 +219,6 @@ class PageController extends Controller
 			'audit' => $this->l->t('History'),
 			'import' => $this->l->t('Import'),
 			'settings' => $this->sections->label($this->l, $section !== '' ? $section : SettingsSectionCatalog::DEFAULT_SECTION),
-			'get-the-app' => $this->l->t('Get the app'),
 			default => $this->l->t('ContractCheck'),
 		};
 	}
@@ -240,7 +232,6 @@ class PageController extends Controller
 			'reports' => $this->l->t('Costs and deadlines as CSV or PDF.'),
 			'audit' => $this->l->t('Every change, recorded.'),
 			'import' => $this->l->t('Bring in contracts from a CSV file.'),
-			'get-the-app' => $this->l->t('ContractCheck for Android — deadlines in your pocket.'),
 			default => '',
 		};
 	}
@@ -285,7 +276,6 @@ class PageController extends Controller
 			['audit', $l->t('History'), 'contractcheck.page.audit', 'list'],
 			['import', $l->t('Import'), 'contractcheck.page.import', 'upload'],
 			['settings', $l->t('Settings'), 'contractcheck.page.settingsIndex', 'settings'],
-			['get-the-app', $l->t('Get the app'), 'contractcheck.page.getTheApp', 'smartphone'],
 		];
 		$out = [];
 		foreach ($items as [$id, $label, $route, $icon]) {

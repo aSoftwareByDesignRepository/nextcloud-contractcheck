@@ -16,12 +16,7 @@ $appFeedbackCssPrefix = 'cc';
 $appFeedbackLanguageCode = method_exists($l, 'getLanguageCode') ? (string)$l->getLanguageCode() : 'en';
 
 $mainItems = [];
-$tailItems = [];
 foreach ($navItems as $item) {
-	if (($item['id'] ?? '') === 'get-the-app') {
-		$tailItems[] = $item;
-		continue;
-	}
 	if (($item['id'] ?? '') === 'settings') {
 		continue; // settings group rendered from settingsNav
 	}
@@ -76,25 +71,6 @@ foreach ($navItems as $item) {
 				<?php endforeach; ?>
 			</ul>
 		</section>
-		<?php if ($tailItems !== []): ?>
-		<section class="cc-nav__group" aria-labelledby="cc-nav-companion">
-			<h3 class="cc-nav__group-label" id="cc-nav-companion"><?php p($l->t('Mobile')); ?></h3>
-			<ul class="cc-nav__list">
-				<?php foreach ($tailItems as $item): ?>
-					<li class="cc-nav__item<?php if (!empty($item['active'])): ?> is-active<?php endif; ?>">
-						<a class="cc-nav__link<?php if (!empty($item['active'])): ?> is-active<?php endif; ?>"
-							href="<?php p($item['href']); ?>"
-							<?php if (!empty($item['active'])): ?>aria-current="page"<?php endif; ?>>
-							<span class="cc-nav__icon" aria-hidden="true"><?php print_unescaped(IconCatalog::render($item['icon'])); ?></span>
-							<span class="cc-nav__label">
-								<span class="cc-nav__name"><?php p($item['label']); ?></span>
-							</span>
-						</a>
-					</li>
-				<?php endforeach; ?>
-			</ul>
-		</section>
-		<?php endif; ?>
 	</div>
 	<?php include __DIR__ . '/../parts/feedback-nav-footer.php'; ?>
 </nav>
