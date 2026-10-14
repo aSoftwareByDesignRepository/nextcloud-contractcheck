@@ -31,7 +31,9 @@ use Psr\Log\LoggerInterface;
 
 class UpgradeBackupService
 {
-	private const LOCK_KEY = 'contractcheck-upgrade-backup';
+	// Public on purpose: this key is the coordination contract — the deadline
+	// scan job takes a SHARED lock on it so restores (exclusive) block scans.
+	public const LOCK_KEY = 'contractcheck-upgrade-backup';
 
 	public function __construct(
 		private readonly IDBConnection $db,
