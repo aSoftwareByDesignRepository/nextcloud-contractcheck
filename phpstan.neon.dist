@@ -1,0 +1,55 @@
+# PHPStan config for contractcheck app
+# Run: ./vendor/bin/phpstan analyse -c phpstan.neon.dist lib/
+# With Nextcloud bootstrap: ./vendor/bin/phpstan analyse -c phpstan.neon.dist -a phpstan-bootstrap.php lib/
+
+parameters:
+    level: 8
+    paths:
+        - lib
+    # Defensive runtime checks (is_array, ??, instanceof) are intentional —
+    # docblock shapes describe the contract, not input certainty.
+    treatPhpDocTypesAsCertain: false
+    scanFiles:
+        - stubs/nextcloud-internal.php
+    excludePaths:
+        - lib/Migration
+        - stubs
+    ignoreErrors:
+        # Nextcloud response generics (S/T/H) provide little value here and
+        # create substantial framework-noise across controllers.
+        - '#does not specify its types: S, H#'
+        - '#does not specify its types: S, T, H#'
+        - '#does not specify its types: S, C, H#'
+        - '~Parameter #2 \$statusCode of class OCP\\AppFramework\\Http\\JSONResponse constructor expects S of~'
+        - '~Parameter #1 \$data of class OCP\\AppFramework\\Http\\DataResponse constructor expects T of OCP\\AppFramework\\Http\\DataResponseType~'
+        # OCP Entity magic accessors (__call) — setters/getters exist at runtime.
+        - '~Call to an undefined method OCA\\ContractCheck\\Db\\~'
+        # Entity properties get their type via addType() at runtime
+        # (sibling-app convention); no static @var needed.
+        - path: lib/Db
+          message: '~Property .* has no type specified~'
+        - '~extends generic class OCP\\AppFramework\\Db\\QBMapper but does not specify its types: T~'
+        - '~should return .* but returns OCP\\AppFramework\\Db\\Entity~'
+        - '~should return .* but returns list<OCP\\AppFramework\\Db\\Entity>~'
+        - '~Call to an undefined method OCP\\AppFramework\\Db\\Entity::~'
+        # Multi-version getUserFolder() catch: newer OCP stubs no longer
+        # declare NotFoundException, older supported releases still throw it.
+        - '~Dead catch - OCP\\Files\\NotFoundException is never thrown in the try block~'
+        # UpgradeBackupCatalog::APPDATA_FOLDERS is intentionally empty —
+        # ContractCheck has no appdata files. The copy/restore machinery is
+        # kept verbatim for family parity; dead-code findings under the empty
+        # constant are accepted scaffolding, not bugs.
+        - '~Call to function in_array\(\) with arguments string, array\{\} and true will always evaluate to false~'
+        - '~Unreachable statement - code above always terminates~'
+        - '~Empty array passed to foreach~'
+        - '~Method OCA\\ContractCheck\\Service\\UpgradeBackupService::copyFolderTree\(\) is unused~'
+        - '~Method OCA\\ContractCheck\\Service\\UpgradeBackupService::restoreAppDataFolders\(\) returns void but does not have any side effects~'
+        # PDF page-break flag is mutated inside the $ensure closure —
+        # PHPStan cannot see closure-captured mutation.
+        - path: lib/Service/SimplePdfBuilder.php
+          message: '~If condition is always false~'
+        # AppFeedbackLinks is a verbatim-synced support file — its
+        # defensive is_array on the request map is intentional.
+        - path: lib/Support/AppFeedbackLinks.php
+          message: '~Call to function is_array\(\) with array will always evaluate to true~'
+    reportUnmatchedIgnoredErrors: false

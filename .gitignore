@@ -1,0 +1,12 @@
+/vendor/
+/node_modules/
+/build/
+/.phpunit.result.cache
+/coverage/
+/test-results/
+/playwright-report/
+/.infection/
+*.original
+.atlas-runtime-seed.tmp.php
+e2e/.env
+/.phpunit.cache/

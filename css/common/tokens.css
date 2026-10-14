@@ -1,0 +1,257 @@
+/* Auto-adapted from arbeitszeitcheck/css/common/tokens.css for ContractCheck shell parity. Do not invent divergent layout rules here. */
+/*
+ * ContractCheck design tokens (--cc-*).
+ * Colors derive from Nextcloud theme variables; no raw hex in feature CSS.
+ * Spacing/typography on :root; theme colors on body + themed app surfaces
+ * (NC sets --color-* on body [data-theme-*]).
+ */
+:root {
+	--cc-space-1: 4px;
+	--cc-space-2: 8px;
+	--cc-space-3: 12px;
+	--cc-space-4: 16px;
+	--cc-space-5: 24px;
+	--cc-space-6: 32px;
+	--cc-space-7: 48px;
+	--cc-space-8: 64px;
+
+	/* Legacy --space-* aliases used by ported AZC layout/dialog sheets */
+	--space-1: var(--cc-space-1);
+	--space-2: var(--cc-space-2);
+	--space-3: var(--cc-space-3);
+	--space-4: var(--cc-space-4);
+	--space-5: var(--cc-space-5);
+	--space-6: var(--cc-space-6);
+	--space-7: var(--cc-space-7);
+	--space-8: var(--cc-space-8);
+	--space-10: 80px;
+	--space-12: 96px;
+
+	/* Radii — design-system scale, bound to NC --border-radius-* when present */
+	--cc-radius-sm: var(--border-radius, 6px);
+	--cc-radius-md: var(--border-radius-element, var(--border-radius-large, 12px));
+	--cc-radius-lg: var(--border-radius-large, 16px);
+	--cc-radius-pill: var(--border-radius-pill, 999px);
+
+	/* Legacy --radius-* used by ported app-layout / dialogs sheets */
+	--radius-base: var(--cc-radius-sm);
+	--radius-lg: var(--cc-radius-md);
+	--radius-xl: var(--cc-radius-lg);
+	--radius-2xl: var(--cc-radius-lg);
+	--radius-full: var(--cc-radius-pill);
+
+	/* Floor 0.875rem (14px) — no type below 14px on mobile (responsive directive) */
+	--cc-fs-xs: 0.875rem;
+	--cc-fs-sm: 0.875rem;
+	--cc-fs-md: 1rem;
+	--cc-fs-lg: 1.125rem;
+	--cc-fs-xl: 1.5rem;
+	--cc-fs-2xl: 1.875rem;
+
+	--cc-line-tight: 1.2;
+	--cc-line-base: 1.45;
+
+	--cc-breakpoint-sm: 480px;
+	--cc-breakpoint-md: 768px;
+	--cc-breakpoint-lg: 1024px;
+
+	/* Inline SVG catalogue (IconCatalog / AzcCatalog) */
+	--cc-icon-sm: 1rem;
+	--cc-icon-md: 1.125rem;
+	--cc-icon-lg: 1.375rem;
+	--cc-icon-well: 2.25rem;
+	--cc-icon-stroke: 2;
+
+	--cc-tab-num: tabular-nums;
+	/* Touch targets (WCAG 2.5.5 / design-system) */
+	--cc-touch: 44px;
+	--cc-touch-lg: 48px;
+
+	/*
+	 * QR / barcode canvas must stay light for scannability in every theme.
+	 * This is the only intentional non-theme surface in ContractCheck feature CSS.
+	 */
+	--cc-qr-canvas: #ffffff;
+}
+
+/*
+ * Theme-dependent tokens MUST resolve where Nextcloud sets --color-* (body /
+ * [data-theme-*]) and on themed app surfaces. Resolving color-mix only on
+ * :root can fall back to light surfaces while text inherits dark-theme ink.
+ */
+body,
+#content.app-contractcheck,
+#app-content.cc-app,
+.cc-app,
+.cc-dialog,
+.cc-modal,
+.cc-toast-region,
+.cc-toasts,
+.cc-license-modal {
+	/* Fixed overlays (panels, backdrops, mobile nav) sit below NC #header */
+	--cc-overlay-top: var(--header-height, 50px);
+	--cc-overlay-height: calc(100dvh - var(--header-height, 50px));
+
+	--cc-bg-soft: color-mix(in srgb, var(--color-main-background) 96%, var(--color-main-text) 4%);
+	--cc-bg-card: var(--color-main-background);
+	--cc-bg-stripe: color-mix(in srgb, var(--color-main-background) 92%, var(--color-main-text) 8%);
+	--cc-text: var(--color-main-text);
+	--cc-muted: var(--color-text-maxcontrast);
+	--cc-border: color-mix(in srgb, var(--color-main-text) 12%, transparent);
+	/* Boundaries of cards/controls/callouts/dialogs need >=3:1 vs the adjacent
+	   surface (WCAG 1.4.11): NC's --color-border-maxcontrast is theme-tuned for
+	   exactly that (dark + high-contrast themes included). The faint 24% mix
+	   measured ~1.3:1 — below the floor in every theme. */
+	--cc-border-strong: var(--color-border-maxcontrast, color-mix(in srgb, var(--color-main-text) 24%, transparent));
+	/* Interactive controls need >=3:1 (WCAG 1.4.11): maxcontrast is NC's own
+	   input border; --color-border / --cc-border stay surface-only. */
+	--cc-form-border: var(--color-border-maxcontrast, var(--cc-border-strong));
+	/* Filled controls (secondary/ghost/summary buttons): the border sits on a
+	   mid-gray fill, so it must read against BOTH fill and page — maxcontrast
+	   lands ~2.9:1 on the 18%-ink secondary fill. Ink-tuned maxcontrast text
+	   token clears 3:1 against both in every theme. */
+	--cc-control-border: var(--color-text-maxcontrast, var(--color-border-maxcontrast, var(--cc-border-strong)));
+
+	/* Primary / focus — track NC accent for custom branding */
+	--cc-primary: var(--color-primary-element);
+	--cc-primary-text: var(--color-primary-element-text);
+	--cc-focus: 3px solid var(--color-primary-element);
+	--cc-focus-offset: 2px;
+
+	/* Mix with main background — not transparent — so callouts stay visible on all NC themes */
+	--cc-tint-success: color-mix(in srgb, var(--color-success-text, var(--color-success)) 18%, var(--color-main-background));
+	--cc-tint-warning: color-mix(in srgb, var(--color-warning-text, var(--color-warning)) 22%, var(--color-main-background));
+	--cc-tint-danger: color-mix(in srgb, var(--color-error-text, var(--color-error)) 18%, var(--color-main-background));
+	/* Alias used by badges/callouts/toasts — mix into main-bg (never transparent) so dark themes stay visible */
+	--cc-tint-critical: var(--cc-tint-danger);
+	--cc-tint-info: color-mix(in srgb, var(--color-primary-element) 16%, var(--color-main-background));
+
+	/*
+	 * Solid danger CTA fill (design-system §3.3 / WCAG 1.4.3).
+	 * NC 30+ maps --color-error to a pale tint — never put on-fill text on that.
+	 */
+	--cc-danger-fill: var(--color-element-error, var(--color-error));
+	--cc-danger-on-fill: var(--color-primary-element-text, var(--color-primary-text));
+	--cc-danger-ink: var(--color-error-text, var(--color-error));
+
+	/*
+	 * Notification icon wells — pale tint + semantic stroke (see .cc-page-header__icon).
+	 * NC *-text tokens are tuned per theme for contrast on main-background.
+	 */
+	--cc-notif-fg-info: var(--color-primary-element);
+	--cc-notif-fg-warning: var(--color-warning-text, var(--color-warning));
+	--cc-notif-fg-success: var(--color-success-text, var(--color-success));
+	--cc-notif-fg-danger: var(--color-error-text, var(--color-error));
+
+	--cc-shadow-sm: 0 1px 2px color-mix(in srgb, var(--color-main-text) 8%, transparent);
+	--cc-shadow-md: 0 8px 24px color-mix(in srgb, var(--color-main-text) 12%, transparent);
+	--cc-shadow-lg: 0 1rem 3rem color-mix(in srgb, var(--color-main-text) 28%, transparent);
+
+	/* Overlay scrims — theme ink, never hardcoded #000 */
+	--cc-scrim: color-mix(in srgb, var(--color-main-text) 45%, transparent);
+	--cc-scrim-strong: color-mix(in srgb, var(--color-main-text) 55%, transparent);
+
+	/*
+	 * Legacy --contractcheck-* aliases (shell dialogs / app-layout ported from AZC).
+	 * Feature CSS should prefer --cc-*; every alias maps to NC/--cc-* so
+	 * undefined custom properties never blank out surfaces in any theme.
+	 */
+	--contractcheck-color-modal-background: var(--cc-bg-card);
+	--contractcheck-color-modal-border: var(--cc-border);
+	--contractcheck-color-modal-footer-background: var(--cc-bg-soft);
+	--contractcheck-color-background: var(--color-main-background);
+	--contractcheck-color-background-elevated: var(--cc-bg-card);
+	--contractcheck-color-background-secondary: var(--cc-bg-soft);
+	--contractcheck-color-background-tertiary: var(--cc-bg-soft);
+	--contractcheck-color-text: var(--cc-text);
+	--contractcheck-color-text-muted: var(--cc-muted);
+	--contractcheck-color-text-maxcontrast: var(--cc-muted);
+	--contractcheck-color-text-secondary: var(--cc-muted);
+	--contractcheck-color-text-tertiary: var(--cc-muted);
+	--contractcheck-color-primary: var(--color-primary-element);
+	--contractcheck-color-primary-element: var(--color-primary-element);
+	--contractcheck-color-primary-light: color-mix(in srgb, var(--color-primary-element) 28%, transparent);
+	--contractcheck-color-border: var(--cc-border);
+	--contractcheck-color-border-focus: var(--color-primary-element);
+	--contractcheck-color-border-warning: var(--color-warning-text, var(--color-warning));
+	--contractcheck-color-error: var(--cc-danger-ink);
+	--contractcheck-color-error-light: color-mix(in srgb, var(--cc-danger-ink) 28%, transparent);
+	--contractcheck-color-success-light: color-mix(in srgb, var(--color-success-text, var(--color-success)) 28%, transparent);
+	--contractcheck-color-warning-light: color-mix(in srgb, var(--color-warning-text, var(--color-warning)) 28%, transparent);
+	--contractcheck-color-form-required: var(--cc-danger-ink);
+	--contractcheck-color-form-label: var(--cc-text);
+	--contractcheck-color-form-background: var(--color-main-background);
+	--contractcheck-color-form-border: var(--color-border-maxcontrast, var(--cc-border-strong));
+	--contractcheck-color-form-border-focus: var(--color-primary-element);
+	--contractcheck-color-form-border-error: var(--cc-danger-ink);
+	--contractcheck-color-form-border-success: var(--color-success-text, var(--color-success));
+	--contractcheck-color-table-border: var(--cc-border);
+	--contractcheck-color-table-header-background: var(--color-background-dark, var(--cc-bg-stripe));
+	--contractcheck-font-family-sans: var(--font-face, inherit);
+	--contractcheck-font-size-sm: var(--cc-fs-sm);
+	--contractcheck-font-size-base: var(--cc-fs-md);
+	--contractcheck-font-size-lg: var(--cc-fs-lg);
+	--contractcheck-font-size-xl: var(--cc-fs-xl);
+	--contractcheck-font-size-3xl: var(--cc-fs-2xl);
+	--contractcheck-font-weight-medium: 500;
+	--contractcheck-font-weight-semibold: 600;
+	--contractcheck-font-weight-bold: 700;
+	--contractcheck-letter-spacing-tight: -0.02em;
+	--contractcheck-line-height-tight: var(--cc-line-tight);
+	--contractcheck-line-height-normal: var(--cc-line-base);
+	--contractcheck-line-height-relaxed: 1.6;
+}
+
+/* Bright accent fills on dark themes fail AA with white ink — darken fill + use main-text. */
+body[data-theme-dark],
+body[data-theme-dark-highcontrast],
+body[data-theme-dark] #content.app-contractcheck,
+body[data-theme-dark-highcontrast] #content.app-contractcheck {
+	--cc-danger-fill: color-mix(
+		in srgb,
+		var(--color-element-error, var(--color-error)) 40%,
+		var(--color-main-background)
+	);
+	--cc-danger-on-fill: var(--color-main-text);
+}
+
+/* NC high-contrast themes: stronger borders / shadows for 3:1 UI chrome */
+body[data-theme-light-highcontrast],
+body[data-theme-dark-highcontrast],
+body[data-theme-light-highcontrast] #content.app-contractcheck,
+body[data-theme-dark-highcontrast] #content.app-contractcheck {
+	--cc-border: color-mix(in srgb, var(--color-main-text) 32%, transparent);
+	/* HC themes push --color-border-maxcontrast to near-ink — keep it first so
+	   boundary chrome stays >=3:1 against HC surfaces. */
+	--cc-border-strong: var(--color-border-maxcontrast, color-mix(in srgb, var(--color-main-text) 48%, transparent));
+	--cc-shadow-sm: 0 0 0 1px var(--cc-border-strong);
+	--cc-shadow-md: 0 0 0 2px var(--cc-border-strong);
+	--contractcheck-color-border: var(--cc-border);
+	--contractcheck-color-modal-border: var(--cc-border);
+}
+
+@media (prefers-contrast: more) {
+	:root {
+		--cc-icon-stroke: 2.25;
+	}
+
+	body,
+	#content.app-contractcheck,
+	#app-content.cc-app,
+	.cc-app,
+	.cc-dialog,
+	.cc-modal,
+	.cc-toast-region,
+	.cc-toasts,
+	.cc-license-modal {
+		--cc-border: color-mix(in srgb, var(--color-main-text) 28%, transparent);
+		--cc-border-strong: var(--color-border-maxcontrast, color-mix(in srgb, var(--color-main-text) 40%, transparent));
+		--cc-shadow-sm: 0 0 0 1px var(--cc-border-strong);
+		--cc-shadow-md: 0 0 0 1px var(--cc-border-strong);
+	}
+}
+
+/* Alias for dead-name ref (literal fallback masked it). */
+body {
+	--cc-bg: var(--cc-bg-card);
+}

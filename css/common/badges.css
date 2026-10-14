@@ -1,0 +1,52 @@
+/*
+ * ContractCheck badges — SnackCheck/AZC info pill + leading cue (WCAG 1.4.1).
+ */
+#content.app-contractcheck .cc-badge,
+#app-content.cc-app .cc-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--cc-space-1, 4px);
+	min-height: 0;
+	padding: var(--cc-space-1, 4px) var(--cc-space-2, 8px);
+	font-size: var(--cc-fs-xs, 0.75rem);
+	font-weight: 700;
+	line-height: 1.35;
+	border-radius: var(--cc-radius-pill, 999px);
+	border: none;
+	background: var(--cc-tint-info);
+	color: var(--cc-text, var(--color-main-text));
+	box-sizing: border-box;
+}
+
+/* Leading dot for brand / scope pills (status badges use .cc-badge__dot) */
+#content.app-contractcheck .cc-brand .cc-badge::before,
+#content.app-contractcheck .cc-scope-strip__badge::before,
+#app-content.cc-app .cc-scope-strip__badge::before {
+	content: '';
+	display: inline-block;
+	width: 0.45em;
+	height: 0.45em;
+	border-radius: 50%;
+	flex-shrink: 0;
+	background: var(--cc-primary, var(--color-primary-element));
+}
+
+#content.app-contractcheck .cc-badge--neutral,
+#app-content.cc-app .cc-badge--neutral {
+	background: var(--cc-tint-info);
+	color: var(--cc-text, var(--color-main-text));
+}
+
+#content.app-contractcheck .cc-badge__dot,
+#app-content.cc-app .cc-badge__dot {
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 50%;
+	flex: 0 0 auto;
+	background: var(--color-border-maxcontrast, var(--cc-muted));
+}
+
+#content.app-contractcheck .cc-scope-strip__badge,
+#app-content.cc-app .cc-scope-strip__badge {
+	font-size: var(--cc-fs-xs, 0.75rem);
+}

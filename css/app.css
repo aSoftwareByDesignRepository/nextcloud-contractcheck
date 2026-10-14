@@ -1,0 +1,1088 @@
+/* ContractCheck app surfaces — tokens live in css/common/tokens.css
+ * (spacing/type scale, NC theme colors, tint + control vars).
+ * Mobile-first; ≥768px / ≥1024px widen. WCAG 2.1 AA: 44px touch targets,
+ * visible focus, forced-colors + reduced-motion variants at the bottom.
+ */
+
+/*
+ * The HTML `hidden` attribute alone loses to component display rules
+ * (DESIGN-SYSTEM §3: NC `section { display:block }` and flex utilities win).
+ * One scoped guard keeps every toggle honest.
+ */
+#app-content.cc-app [hidden] {
+	display: none !important;
+}
+
+/* ── Layout primitives ─────────────────────────────────────── */
+
+#app-content.cc-app .cc-card-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--cc-space-4);
+	margin-block: var(--cc-space-4);
+}
+
+@media (min-width: 768px) {
+	#app-content.cc-app .cc-card-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+#app-content.cc-app .cc-panel {
+	background: var(--cc-bg-card);
+	border: 1px solid var(--cc-border);
+	border-radius: var(--cc-radius-lg);
+	padding: var(--cc-space-4);
+	display: flex;
+	flex-direction: column;
+	gap: var(--cc-space-3);
+	min-width: 0; /* grid overflow guard */
+}
+
+#app-content.cc-app .cc-panel--wide {
+	grid-column: 1 / -1;
+}
+
+#app-content.cc-app .cc-panel__title {
+	display: flex;
+	align-items: center;
+	gap: var(--cc-space-2);
+	margin: 0;
+	font-size: var(--cc-fs-lg);
+	line-height: var(--cc-line-tight);
+}
+
+#app-content.cc-app .cc-panel__title svg {
+	width: var(--cc-icon-md);
+	height: var(--cc-icon-md);
+	stroke-width: var(--cc-icon-stroke);
+	color: var(--cc-muted);
+	flex-shrink: 0;
+}
+
+/* ── Stat strip ────────────────────────────────────────────── */
+
+#app-content.cc-app .cc-stat-row {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--cc-space-3);
+	margin-block: var(--cc-space-4);
+}
+
+@media (min-width: 768px) {
+	#app-content.cc-app .cc-stat-row {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+}
+
+#app-content.cc-app a.cc-stat {
+	text-decoration: none;
+	color: inherit;
+}
+#app-content.cc-app a.cc-stat:hover,
+#app-content.cc-app a.cc-stat:focus-visible {
+	border-color: var(--color-primary, var(--color-primary-element));
+}
+
+#app-content.cc-app .cc-stat {
+	background: var(--cc-bg-card);
+	border: 1px solid var(--cc-border);
+	border-left: 4px solid var(--cc-border-strong);
+	border-radius: var(--cc-radius-md);
+	padding: var(--cc-space-3) var(--cc-space-4);
+	display: flex;
+	flex-direction: column;
+	gap: var(--cc-space-1);
+}
+
+#app-content.cc-app .cc-stat--warn { border-left-color: var(--color-warning, #eca700); }
+#app-content.cc-app .cc-stat--danger { border-left-color: var(--color-error, #e9322d); }
+
+#app-content.cc-app .cc-stat__value {
+	font-size: var(--cc-fs-2xl);
+	font-weight: 700;
+	line-height: var(--cc-line-tight);
+	font-variant-numeric: var(--cc-tab-num);
+}
+
+#app-content.cc-app .cc-stat__label {
+	font-size: var(--cc-fs-sm);
+	color: var(--cc-muted);
+}
+
+/* ── Badges (variants beyond the shared --neutral) ─────────── */
+
+#app-content.cc-app .cc-badge--success {
+	background: var(--cc-tint-success);
+	color: var(--color-success-text, var(--color-success));
+}
+
+#app-content.cc-app .cc-badge--warn {
+	background: var(--cc-tint-warning);
+	color: var(--color-warning-text, var(--color-warning, #8a6d00));
+}
+
+#app-content.cc-app .cc-badge--danger {
+	background: var(--cc-tint-danger);
+	color: var(--color-error-text, var(--color-error));
+}
+
+/* ── Buttons (variants beyond shared primary/secondary/danger/ghost/sm) ── */
+
+#app-content.cc-app .cc-btn--warn {
+	background: var(--cc-tint-warning);
+	color: var(--color-warning-text, var(--color-warning, #8a6d00));
+	border: 1px solid var(--cc-border-strong);
+}
+
+#app-content.cc-app .cc-btn--small {
+	min-height: 36px;
+	padding: var(--cc-space-1) var(--cc-space-3);
+	font-size: var(--cc-fs-sm);
+}
+
+#app-content.cc-app .cc-btn-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--cc-space-3);
+}
+
+/* ── Form primitives ───────────────────────────────────────── */
+
+#app-content.cc-app .cc-fieldset {
+	border: 1px solid var(--cc-border);
+	border-radius: var(--cc-radius-md);
+	padding: var(--cc-space-4);
+	margin: 0 0 var(--cc-space-4);
+	display: flex;
+	flex-direction: column;
+	gap: var(--cc-space-4);
+}
+
+#app-content.cc-app .cc-fieldset legend {
+	font-weight: 600;
+	padding: 0 var(--cc-space-2);
+}
+
+#app-content.cc-app .cc-field {
+	display: flex;
+	flex-direction: column;
+	gap: var(--cc-space-1);
+	min-width: 0;
+	flex: 1 1 auto;
+}
+
+#app-content.cc-app .cc-field-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--cc-space-3);
+}
+
+#app-content.cc-app .cc-field-row > .cc-field {
+	flex: 1 1 180px;
+}
+
+#app-content.cc-app .cc-label {
+	font-weight: 600;
+	font-size: var(--cc-fs-sm);
+}
+
+#app-content.cc-app .cc-input,
+#app-content.cc-app .cc-select,
+#app-content.cc-app .cc-textarea {
+	width: 100%;
+	min-height: var(--cc-touch);
+	padding: var(--cc-space-2) var(--cc-space-3);
+	border: 1px solid var(--cc-form-border);
+	border-radius: var(--cc-radius-sm);
+	background: var(--cc-bg-card);
+	color: var(--cc-text);
+	font-size: var(--cc-fs-md);
+	font-family: inherit;
+	box-sizing: border-box;
+}
+
+#app-content.cc-app .cc-textarea {
+	min-height: 5.5rem;
+	resize: vertical;
+}
+
+#app-content.cc-app .cc-input:focus-visible,
+#app-content.cc-app .cc-select:focus-visible,
+#app-content.cc-app .cc-textarea:focus-visible {
+	outline: var(--cc-focus);
+	outline-offset: var(--cc-focus-offset);
+	border-color: var(--cc-primary);
+}
+
+#app-content.cc-app .cc-input[aria-invalid="true"],
+#app-content.cc-app .cc-select[aria-invalid="true"],
+#app-content.cc-app .cc-textarea[aria-invalid="true"] {
+	border-color: var(--color-error);
+}
+
+#app-content.cc-app .cc-input--amount { max-width: 11rem; font-variant-numeric: var(--cc-tab-num); }
+#app-content.cc-app .cc-input--currency { max-width: 5.5rem; text-transform: uppercase; }
+
+#app-content.cc-app .cc-field__hint {
+	margin: 0;
+	font-size: var(--cc-fs-sm);
+	color: var(--cc-muted);
+}
+
+#app-content.cc-app .cc-form-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--cc-space-3);
+	margin-block-start: var(--cc-space-4);
+}
+
+/* Checkbox chips (lead-day pickers) — large touch targets, no color-only cue */
+
+#app-content.cc-app .cc-check-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--cc-space-2);
+}
+
+#app-content.cc-app .cc-check {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--cc-space-2);
+	min-height: var(--cc-touch);
+	padding: var(--cc-space-1) var(--cc-space-3);
+	border: 1px solid var(--cc-control-border);
+	border-radius: var(--cc-radius-pill);
+	cursor: pointer;
+	background: var(--cc-bg-card);
+	font-size: var(--cc-fs-md);
+	user-select: none;
+}
+
+#app-content.cc-app .cc-check input {
+	width: 1.125rem;
+	height: 1.125rem;
+	accent-color: var(--cc-primary);
+	margin: 0;
+}
+
+#app-content.cc-app .cc-check:has(input:checked) {
+	background: var(--cc-tint-info);
+	border-color: var(--cc-primary);
+	font-weight: 600;
+}
+
+#app-content.cc-app .cc-check:focus-within {
+	outline: var(--cc-focus);
+	outline-offset: var(--cc-focus-offset);
+}
+
+/* Inline add-forms (cost rows, pickers) */
+
+#app-content.cc-app .cc-inline-form {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--cc-space-2);
+	align-items: center;
+}
+
+#app-content.cc-app .cc-inline-form .cc-input { flex: 1 1 140px; width: auto; }
+#app-content.cc-app .cc-inline-form .cc-select { width: auto; }
+
+/* ── Toolbar (search + filters above lists) ────────────────── */
+
+#app-content.cc-app .cc-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: var(--cc-space-3);
+	margin-block: var(--cc-space-4);
+}
+
+#app-content.cc-app .cc-toolbar__search { flex: 1 1 220px; }
+#app-content.cc-app .cc-toolbar__actions {
+	display: flex;
+	gap: var(--cc-space-2);
+	margin-inline-start: auto;
+}
+#app-content.cc-app .cc-toolbar__archived { align-self: center; }
+
+/* ── Tables ────────────────────────────────────────────────── */
+
+#app-content.cc-app .cc-table-wrap {
+	overflow-x: auto;
+	border: 1px solid var(--cc-border);
+	border-radius: var(--cc-radius-md);
+	background: var(--cc-bg-card);
+}
+
+#app-content.cc-app .cc-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: var(--cc-fs-md);
+}
+
+#app-content.cc-app .cc-table th {
+	text-align: start;
+	font-weight: 600;
+	font-size: var(--cc-fs-sm);
+	color: var(--cc-muted);
+	padding: var(--cc-space-3) var(--cc-space-4);
+	border-bottom: 1px solid var(--cc-border-strong);
+	white-space: nowrap;
+}
+
+#app-content.cc-app .cc-table td {
+	padding: var(--cc-space-3) var(--cc-space-4);
+	border-bottom: 1px solid var(--cc-border);
+	vertical-align: middle;
+}
+
+#app-content.cc-app .cc-table tbody tr:last-child td { border-bottom: none; }
+#app-content.cc-app .cc-table tbody tr:hover { background: var(--cc-bg-soft); }
+#app-content.cc-app .cc-table--compact td,
+#app-content.cc-app .cc-table--compact th {
+	padding: var(--cc-space-2) var(--cc-space-3);
+}
+
+#app-content.cc-app .cc-table__actions {
+	text-align: end;
+	white-space: nowrap;
+}
+
+#app-content.cc-app .cc-table__actions .cc-btn { margin-inline-start: var(--cc-space-1); }
+#app-content.cc-app .cc-num { font-variant-numeric: var(--cc-tab-num); text-align: end; }
+
+/* ── Deadline list (dashboard panels) ──────────────────────── */
+
+#app-content.cc-app .cc-deadline-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+#app-content.cc-app .cc-deadline-list__item + .cc-deadline-list__item {
+	border-top: 1px solid var(--cc-border);
+}
+
+#app-content.cc-app .cc-deadline-list__link {
+	display: flex;
+	align-items: center;
+	gap: var(--cc-space-3);
+	padding: var(--cc-space-3) var(--cc-space-2);
+	min-height: var(--cc-touch);
+	border-radius: var(--cc-radius-sm);
+	text-decoration: none;
+	color: var(--cc-text);
+}
+
+#app-content.cc-app .cc-deadline-list__link:hover {
+	background: var(--cc-bg-soft);
+}
+
+#app-content.cc-app .cc-deadline-list__link:focus-visible {
+	outline: var(--cc-focus);
+	outline-offset: var(--cc-focus-offset);
+}
+
+#app-content.cc-app .cc-deadline-list__title {
+	font-weight: 600;
+	flex-shrink: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#app-content.cc-app .cc-deadline-list__meta {
+	font-size: var(--cc-fs-sm);
+	color: var(--cc-muted);
+	white-space: nowrap;
+}
+
+#app-content.cc-app .cc-deadline-list__link .cc-badge {
+	margin-inline-start: auto;
+	flex-shrink: 0;
+}
+
+/* ── Contract hero (detail header) ─────────────────────────── */
+
+#app-content.cc-app .cc-hero {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--cc-space-4);
+	align-items: flex-start;
+	justify-content: space-between;
+	background: var(--cc-bg-card);
+	border: 1px solid var(--cc-border);
+	border-radius: var(--cc-radius-lg);
+	padding: var(--cc-space-5);
+}
+
+#app-content.cc-app .cc-hero__main { min-width: 0; flex: 1 1 240px; }
+
+#app-content.cc-app .cc-hero__title {
+	margin: 0 0 var(--cc-space-1);
+	font-size: var(--cc-fs-xl);
+	line-height: var(--cc-line-tight);
+	overflow-wrap: anywhere;
+}
+
+#app-content.cc-app .cc-hero__meta {
+	margin: 0 0 var(--cc-space-2);
+	color: var(--cc-muted);
+}
+
+#app-content.cc-app .cc-hero__badges {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--cc-space-2);
+}
+
+#app-content.cc-app .cc-hero__deadline {
+	flex: 0 1 auto;
+	min-width: 200px;
+	background: var(--cc-bg-soft);
+	border: 1px solid var(--cc-border);
+	border-radius: var(--cc-radius-md);
+	padding: var(--cc-space-3) var(--cc-space-4);
+}
+
+#app-content.cc-app .cc-hero__cancel-by {
+	margin: 0;
+	font-size: var(--cc-fs-lg);
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	gap: var(--cc-space-2);
+}
+
+#app-content.cc-app .cc-hero__deadline-note {
+	margin: var(--cc-space-1) 0 0;
+	font-size: var(--cc-fs-sm);
+	color: var(--cc-muted);
+}
+
+#app-content.cc-app .cc-detail-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--cc-space-2);
+	margin-block: var(--cc-space-3);
+}
+
+/* ── Definition list (detail facts) ────────────────────────── */
+
+#app-content.cc-app .cc-dl {
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+#app-content.cc-app .cc-dl__row {
+	display: flex;
+	gap: var(--cc-space-3);
+	padding: var(--cc-space-2) 0;
+	border-bottom: 1px solid var(--cc-border);
+}
+
+#app-content.cc-app .cc-dl__row:last-child { border-bottom: none; }
+
+#app-content.cc-app .cc-dl__row dt {
+	flex: 0 0 9rem;
+	font-weight: 600;
+	color: var(--cc-muted);
+	font-size: var(--cc-fs-sm);
+	align-self: center;
+}
+
+#app-content.cc-app .cc-dl__row dd {
+	margin: 0;
+	flex: 1;
+	overflow-wrap: anywhere;
+}
+
+#app-content.cc-app .cc-cost-rollup {
+	margin: 0;
+	font-size: var(--cc-fs-lg);
+	font-weight: 700;
+	font-variant-numeric: var(--cc-tab-num);
+}
+
+/* ── Document + event lists ────────────────────────────────── */
+
+#app-content.cc-app .cc-doc-list,
+#app-content.cc-app .cc-event-list {
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+#app-content.cc-app .cc-doc-list { list-style: none; }
+#app-content.cc-app .cc-event-list { padding-inline-start: var(--cc-space-5); }
+
+#app-content.cc-app .cc-doc-list__item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--cc-space-2);
+	padding: var(--cc-space-2) 0;
+	border-bottom: 1px solid var(--cc-border);
+}
+
+#app-content.cc-app .cc-doc-list__item:last-child { border-bottom: none; }
+#app-content.cc-app .cc-doc-list__name {
+	font-weight: 600;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	flex: 1 1 160px;
+}
+
+#app-content.cc-app .cc-event-list__item {
+	padding: var(--cc-space-1) 0;
+	display: flex;
+	gap: var(--cc-space-3);
+	align-items: baseline;
+}
+
+#app-content.cc-app .cc-event-list__type { font-weight: 600; }
+
+/* ── Pickers (combobox + chips) ────────────────────────────── */
+
+#app-content.cc-app .cc-picker {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: var(--cc-space-2);
+}
+
+#app-content.cc-app .cc-picker__chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--cc-space-2);
+}
+
+#app-content.cc-app .cc-picker__chips:empty { display: none; }
+
+#app-content.cc-app .cc-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--cc-space-1);
+	padding: var(--cc-space-1) var(--cc-space-2) var(--cc-space-1) var(--cc-space-3);
+	border: 1px solid var(--cc-border-strong);
+	border-radius: var(--cc-radius-pill);
+	background: var(--cc-bg-soft);
+	font-size: var(--cc-fs-sm);
+	max-width: 100%;
+}
+
+#app-content.cc-app .cc-chip__label {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#app-content.cc-app .cc-chip__remove {
+	min-width: var(--cc-touch);
+	min-height: var(--cc-touch);
+	margin: calc(-1 * var(--cc-space-1)) calc(-1 * var(--cc-space-1)) calc(-1 * var(--cc-space-1)) 0;
+	border: none;
+	background: transparent;
+	color: var(--cc-muted);
+	font-size: var(--cc-fs-lg);
+	line-height: 1;
+	cursor: pointer;
+	border-radius: var(--cc-radius-pill);
+}
+
+#app-content.cc-app .cc-chip__remove:hover { color: var(--cc-danger-ink); }
+#app-content.cc-app .cc-chip__remove:focus-visible {
+	outline: var(--cc-focus);
+	outline-offset: var(--cc-focus-offset);
+}
+
+#app-content.cc-app .cc-picker__results {
+	position: absolute;
+	inset-inline: 0;
+	top: 100%;
+	z-index: 20;
+	margin: var(--cc-space-1) 0 0;
+	padding: var(--cc-space-1);
+	list-style: none;
+	background: var(--cc-bg-card);
+	border: 1px solid var(--cc-border-strong);
+	border-radius: var(--cc-radius-md);
+	box-shadow: var(--cc-shadow-md);
+	max-height: 16rem;
+	overflow-y: auto;
+}
+
+#app-content.cc-app .cc-picker__result {
+	padding: var(--cc-space-2) var(--cc-space-3);
+	min-height: var(--cc-touch);
+	display: flex;
+	align-items: center;
+	border-radius: var(--cc-radius-sm);
+	cursor: pointer;
+}
+
+#app-content.cc-app .cc-picker__result:hover,
+#app-content.cc-app .cc-picker__result:focus {
+	background: var(--cc-tint-info);
+	outline: none;
+}
+
+/* ── Callouts (reuses tint tokens; border + icon, not color-only) ── */
+
+#app-content.cc-app .cc-callout {
+	border: 1px solid var(--cc-border);
+	border-inline-start: 4px solid var(--cc-primary);
+	border-radius: var(--cc-radius-md);
+	padding: var(--cc-space-4);
+	margin-block: var(--cc-space-4);
+	background: var(--cc-tint-info);
+}
+
+#app-content.cc-app .cc-callout--warning {
+	border-inline-start-color: var(--color-warning, #eca700);
+	background: var(--cc-tint-warning);
+}
+
+#app-content.cc-app .cc-callout__title {
+	margin: 0 0 var(--cc-space-2);
+	font-size: var(--cc-fs-lg);
+}
+
+/* ── Misc text / state helpers ─────────────────────────────── */
+
+#app-content.cc-app .cc-empty {
+	padding: var(--cc-space-5);
+	text-align: center;
+	color: var(--cc-muted);
+	background: var(--cc-bg-soft);
+	border: 1px dashed var(--cc-border-strong);
+	border-radius: var(--cc-radius-md);
+	margin: 0;
+}
+
+#app-content.cc-app .cc-loading {
+	padding: var(--cc-space-5);
+	color: var(--cc-muted);
+}
+
+#app-content.cc-app .cc-muted { color: var(--cc-muted); }
+#app-content.cc-app .cc-text--danger { color: var(--cc-danger-ink); }
+
+#app-content.cc-app .cc-link {
+	color: var(--cc-primary);
+	text-decoration: none;
+	font-weight: 600;
+}
+
+#app-content.cc-app .cc-link:hover { text-decoration: underline; }
+#app-content.cc-app .cc-link:focus-visible {
+	outline: var(--cc-focus);
+	outline-offset: var(--cc-focus-offset);
+	border-radius: var(--cc-radius-sm);
+}
+
+#app-content.cc-app .cc-copy-row {
+	display: flex;
+	gap: var(--cc-space-2);
+}
+
+#app-content.cc-app .cc-copy-row .cc-input { flex: 1; }
+
+#app-content.cc-app .cc-steps {
+	margin: 0;
+	padding-inline-start: var(--cc-space-5);
+	display: flex;
+	flex-direction: column;
+	gap: var(--cc-space-2);
+}
+
+#app-content.cc-app .cc-import-result { margin-block-start: var(--cc-space-4); }
+
+/* ── Native dialog (party modal) ───────────────────────────── */
+
+#app-content.cc-app dialog.cc-dialog {
+	border: 1px solid var(--cc-border-strong);
+	border-radius: var(--cc-radius-lg);
+	padding: var(--cc-space-5);
+	width: min(34rem, calc(100vw - 2 * var(--cc-space-4)));
+	max-height: 85dvh;
+	overflow-y: auto;
+	background: var(--cc-bg-card);
+	color: var(--cc-text);
+}
+
+#app-content.cc-app dialog.cc-dialog::backdrop {
+	background: var(--cc-scrim);
+}
+
+#app-content.cc-app dialog.cc-dialog form {
+	display: flex;
+	flex-direction: column;
+	gap: var(--cc-space-3);
+}
+
+#app-content.cc-app .cc-dialog__title {
+	margin: 0 0 var(--cc-space-2);
+	font-size: var(--cc-fs-xl);
+}
+
+/* ── Responsive: tables scroll; hero + toolbar stack on phones ── */
+
+@media (max-width: 767px) {
+	/* ≤768px (Nextcloud mobile boundary): row-action buttons get the same
+	   44px touch floor as primary controls — 36px is a desktop-pointer
+	   compromise, unusable on touchscreens. */
+	.cc-btn--small { min-height: var(--cc-touch, 44px); min-width: var(--cc-touch, 44px); }
+
+	#app-content.cc-app .cc-hero { flex-direction: column; }
+	#app-content.cc-app .cc-hero__deadline { width: 100%; }
+	#app-content.cc-app .cc-dl__row { flex-direction: column; gap: 0; }
+	#app-content.cc-app .cc-dl__row dt { flex-basis: auto; }
+	#app-content.cc-app .cc-inline-form { flex-direction: column; align-items: stretch; }
+	#app-content.cc-app .cc-inline-form .cc-input,
+	#app-content.cc-app .cc-inline-form .cc-select { width: 100%; max-width: 100%; }
+}
+
+/* ── Forced colors + reduced motion ────────────────────────── */
+
+@media (forced-colors: active) {
+	#app-content.cc-app .cc-panel,
+	#app-content.cc-app .cc-stat,
+	#app-content.cc-app .cc-hero,
+	#app-content.cc-app .cc-check,
+	#app-content.cc-app .cc-chip,
+	#app-content.cc-app .cc-callout,
+	#app-content.cc-app .cc-picker__results {
+		border: 1px solid ButtonBorder;
+	}
+	#app-content.cc-app .cc-check:has(input:checked) {
+		outline: 2px solid Highlight;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#app-content.cc-app .cc-deadline-list__link,
+	#app-content.cc-app .cc-picker__result,
+	#app-content.cc-app .cc-chip__remove {
+		transition: none;
+	}
+}
+
+/* === app-feedback:cc start === */
+#app-navigation .cc-nav-footer,
+.cc-nav .cc-nav-footer,
+.cc-app-nav .cc-nav-footer {
+	margin-top: auto;
+	flex-shrink: 0;
+	min-width: 0;
+	width: 100%;
+	box-sizing: border-box;
+	padding: var(--cc-space-2, 0.5rem) var(--cc-space-3, 0.75rem)
+		max(var(--cc-space-3, 0.75rem), env(safe-area-inset-bottom, 0px));
+	border-top: 1px solid var(--cc-border, color-mix(in srgb, var(--color-main-text) 12%, var(--color-main-background)));
+	background: transparent;
+	z-index: 1;
+}
+
+.cc-nav-footer__popover {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--cc-space-2, 0.5rem);
+}
+
+/* Scoped under #content: bare .{p}-nav-footer__trigger loses to NC core
+ * `#app-content button` / `#app-navigation button` min-height rules
+ * (var(--default-clickable-area) → 34px) — Atlas touch-target defect. */
+#content .cc-nav-footer__trigger {
+	display: inline-flex;
+	gap: var(--cc-space-3, 0.75rem);
+	min-height: 44px;
+	min-width: 44px;
+	padding: var(--cc-space-2, 0.5rem) var(--cc-space-3, 0.75rem);
+	border-radius: var(--cc-radius-sm, 6px);
+	box-sizing: border-box;
+	border: none;
+	background: none;
+	color: var(--color-main-text);
+	font: inherit;
+	cursor: pointer;
+	align-items: center;
+	justify-content: center;
+	white-space: nowrap;
+}
+
+.cc-nav-footer__trigger:hover {
+	background: color-mix(in srgb, var(--color-primary-element) 8%, var(--color-main-background));
+}
+
+.cc-nav-footer__trigger:focus-visible {
+	outline: 3px solid var(--color-primary-element);
+	outline-offset: 2px;
+}
+
+.cc-nav-footer__trigger:focus:not(:focus-visible) {
+	outline: none;
+}
+
+.cc-nav-footer__trigger-icon .cc-icon {
+	width: 20px;
+	height: 20px;
+}
+
+.cc-nav-footer__menu {
+	position: absolute;
+	bottom: calc(100% + var(--cc-space-2, 0.5rem));
+	left: 50%;
+	transform: translateX(-50%);
+	min-width: max-content;
+	max-width: calc(100vw - 2rem);
+	list-style: none;
+	margin: 0;
+	padding: var(--cc-space-2, 0.5rem);
+	background: var(--color-main-background);
+	border: 1px solid var(--cc-border, var(--color-border));
+	border-radius: var(--cc-radius-md, 12px);
+	box-shadow:
+		0 2px 6px color-mix(in srgb, var(--color-main-text) 6%, transparent),
+		0 8px 24px color-mix(in srgb, var(--color-main-text) 10%, transparent);
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	z-index: 100;
+}
+
+.cc-nav-footer__menu[hidden] {
+	display: none;
+}
+
+#content .cc-nav-footer__menu-item {
+	display: flex;
+	align-items: center;
+	gap: var(--cc-space-3, 0.75rem);
+	min-height: 44px;
+	min-width: 44px;
+	padding: var(--cc-space-2, 0.5rem) var(--cc-space-3, 0.75rem);
+	border-radius: var(--cc-radius-sm, 6px);
+	color: var(--color-main-text);
+	text-decoration: none;
+	font-size: var(--cc-fs-sm, 0.875rem);
+	line-height: var(--cc-line-base, 1.45);
+	white-space: normal;
+	overflow-wrap: anywhere;
+}
+
+.cc-nav-footer__menu-item:hover {
+	background: color-mix(in srgb, var(--color-primary-element) 8%, var(--color-main-background));
+}
+
+.cc-nav-footer__menu-item:focus-visible {
+	outline: 3px solid var(--color-primary-element);
+	outline-offset: -2px;
+}
+
+.cc-nav-footer__menu-item:focus:not(:focus-visible) {
+	outline: none;
+}
+
+.cc-nav-footer__menu-icon .cc-icon {
+	width: 18px;
+	height: 18px;
+}
+
+.cc-nav-footer__note {
+	margin: 0;
+	font-size: var(--cc-fs-xs, 0.75rem);
+	line-height: 1.45;
+	color: var(--color-text-maxcontrast);
+	text-align: center;
+	overflow-wrap: anywhere;
+}
+
+@media (width < 480px) {
+	.cc-nav-footer__menu {
+		left: var(--cc-space-2, 0.5rem);
+		right: var(--cc-space-2, 0.5rem);
+		transform: none;
+		min-width: 0;
+	}
+}
+
+.cc-nav-footer__new-tab {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+#content .cc-nav-footer__toast-link {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	min-width: 44px;
+	margin-top: var(--cc-space-2, 0.5rem);
+	padding: 0;
+	font-size: var(--cc-fs-sm, 0.875rem);
+	line-height: 1.45;
+	color: var(--color-error-text, var(--color-main-text));
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+	overflow-wrap: anywhere;
+}
+
+.cc-nav-footer__toast-link:focus-visible {
+	outline: 2px solid var(--color-primary-element);
+	outline-offset: 2px;
+}
+
+.cc-nav-footer__toast-link:focus:not(:focus-visible) {
+	outline: none;
+}
+
+@media (prefers-contrast: more) {
+	#app-navigation .cc-nav-footer,
+	.cc-nav .cc-nav-footer,
+	.cc-app-nav .cc-nav-footer {
+		border-top-width: 2px;
+		border-top-color: var(--color-main-text);
+	}
+
+	.cc-nav-footer__menu {
+		border-width: 2px;
+	}
+
+	.cc-nav-footer__trigger:focus-visible,
+	.cc-nav-footer__menu-item:focus-visible,
+	.cc-nav-footer__toast-link:focus-visible {
+		outline-width: 3px;
+	}
+}
+
+@media (forced-colors: active) {
+	.cc-nav-footer__menu-item,
+	.cc-nav-footer__toast-link {
+		forced-color-adjust: none;
+		color: LinkText;
+	}
+
+	.cc-nav-footer__trigger:focus-visible,
+	.cc-nav-footer__menu-item:focus-visible,
+	.cc-nav-footer__toast-link:focus-visible {
+		outline: 3px solid Highlight;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.cc-nav-footer__trigger,
+	.cc-nav-footer__menu-item,
+	.cc-nav-footer__toast-link {
+		transition: none;
+	}
+}
+/* === app-feedback:cc end === */
+
+
+
+/* Toasts — app-owned container so kind+text dedup can reset the dismiss
+   timer (OC.Notification/Toastify stacks identical messages). Body-mounted:
+   keep clear of system chrome (home indicator / gesture bar). */
+.cc-toasts {
+	position: fixed;
+	bottom: calc(var(--cc-space-4) + env(safe-area-inset-bottom, 0px));
+	inset-inline-start: calc(var(--cc-space-4) + env(safe-area-inset-left, 0px));
+	inset-inline-end: calc(var(--cc-space-4) + env(safe-area-inset-right, 0px));
+	display: flex;
+	flex-direction: column;
+	gap: var(--cc-space-2);
+	z-index: 1200;
+	max-width: min(400px, calc(100vw - 2 * var(--cc-space-4)));
+}
+@media (min-width: 768px) {
+	.cc-toasts {
+		inset-inline-start: auto;
+		inset-inline-end: calc(var(--cc-space-4) + env(safe-area-inset-right, 0px));
+		max-width: min(400px, 90vw);
+	}
+}
+.cc-toast {
+	background: var(--color-main-background);
+	color: var(--color-main-text);
+	border: 1px solid var(--cc-border-strong);
+	border-left: 4px solid var(--color-primary-element);
+	padding: var(--cc-space-3) var(--cc-space-4);
+	border-radius: var(--cc-radius-md);
+	box-shadow: var(--cc-shadow-md);
+	display: flex;
+	gap: var(--cc-space-2);
+	align-items: center;
+}
+.cc-toast__text {
+	color: inherit;
+	flex: 1;
+	min-width: 0;
+}
+.cc-toast--success { border-left-color: var(--color-success-text, var(--color-success)); }
+.cc-toast--error { border-left-color: var(--color-error-text, var(--color-error)); }
+.cc-toast__feedback {
+	color: var(--color-text-link, var(--color-primary-element));
+	text-decoration: underline;
+	white-space: nowrap;
+}
+.cc-toast__close {
+	margin-left: auto;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: 0;
+	cursor: pointer;
+	padding: var(--cc-space-2);
+	min-height: 44px;
+	min-width: 44px;
+	box-sizing: border-box;
+	color: inherit;
+	border-radius: var(--cc-radius-md);
+}
+.cc-toast__close:hover {
+	background: var(--color-background-hover);
+}
+.cc-toast__close:focus-visible {
+	outline: 2px solid var(--color-main-text);
+	outline-offset: 2px;
+}
+
+/*
+ * Control-border baseline (WCAG 1.4.11 >= 3:1 vs background) — DESIGN-SYSTEM §3.6.0.
+ * NC core styles every button/input with the faint `--color-border-dark`, and its
+ * `button:disabled` rule (0,2,1) outranks page-level `.button.secondary` (0,2,0),
+ * so disabled controls silently lose their frame. This rule only re-colours
+ * borders that are already drawn — borderless icon buttons are unaffected —
+ * and state classes keep their semantic borders.
+ */
+#app-content input:not([type='range'], [type='hidden'], [type='color'], [type='file'], [type='image'], [type='submit'], [type='button'], [type='reset'], .form-input--error, .form-input--success, .form-input--warning, .has-error, [aria-invalid='true'], .has-error *),
+#app-content select:not(.form-input--error, .form-input--success, .form-input--warning, [aria-invalid='true'], .has-error *),
+#app-content textarea:not(.form-input--error, .form-input--success, .form-input--warning, [aria-invalid='true'], .has-error *),
+#app-content button:not(.primary, .error, .warning, .success, .danger, .button-vue),
+#app-content .button:not(.primary, .error, .warning, .success, .danger),
+.oc-dialog input:not([type='range'], [type='hidden'], [type='color'], [type='file']),
+.oc-dialog select,
+.oc-dialog textarea,
+.oc-dialog button:not(.primary, .error, .warning, .success, .danger, .button-vue),
+.oc-dialog .button:not(.primary, .error, .warning, .success, .danger) {
+	border-color: var(--cc-form-border, var(--color-border-maxcontrast, var(--color-border)));
+}

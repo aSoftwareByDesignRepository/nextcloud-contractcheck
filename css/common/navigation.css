@@ -1,0 +1,218 @@
+/**
+ * ContractCheck sidebar — SnackCheck/DeskCheck family chrome (brand + icon rows).
+ *
+ * Responsive: desktop (≥1024) sticky sidebar here. Phone/tablet drawer is
+ * owned by css/common/mobile-nav.css + js/common/mobile-nav.js (in-page Menu;
+ * #content overflow:hidden clips core #app-navigation-toggle — AZC#33).
+ */
+
+/* Base chrome (all viewports). Width/position for the in-flow desktop shell
+ * are applied at min-width: 1024px; mobile drawer rules live in mobile-nav.css. */
+#content.app-contractcheck > #app-navigation.cc-nav,
+#app-navigation.cc-nav {
+	display: flex;
+	flex-direction: column;
+	align-self: stretch;
+	min-height: 0;
+	max-height: none;
+	background: var(--cc-bg-card, var(--color-main-background));
+	border-inline-end: 1px solid var(--cc-border);
+	overflow: hidden;
+	box-sizing: border-box;
+	z-index: 100;
+}
+
+/* ≥1024px: restore sticky sidebar in the grid track (NC desktop layout) */
+@media (min-width: 1024px) {
+	#content.app-contractcheck > #app-navigation.cc-nav,
+	#app-navigation.cc-nav {
+		position: relative !important;
+		transform: none !important;
+		flex: 0 0 var(--cc-nav-width, 280px);
+		width: var(--cc-nav-width, 280px);
+		min-width: var(--cc-nav-width, 280px);
+		max-width: var(--cc-nav-width, 280px);
+		height: 100%;
+		overflow: hidden;
+	}
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-brand {
+	display: flex;
+	align-items: center;
+	gap: var(--cc-space-3);
+	padding: var(--cc-space-4);
+	border-bottom: 1px solid var(--cc-border);
+	flex-shrink: 0;
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-brand__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--cc-touch, 44px);
+	height: var(--cc-touch, 44px);
+	border-radius: var(--cc-radius-md);
+	background: var(--cc-tint-info);
+	color: var(--cc-primary, var(--color-primary-element));
+	flex-shrink: 0;
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-brand__icon-svg,
+#content.app-contractcheck #app-navigation.cc-nav .cc-brand__icon .cc-icon {
+	width: 1.5rem;
+	height: 1.5rem;
+	display: block;
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-brand__text {
+	min-width: 0;
+	display: grid;
+	gap: var(--cc-space-1);
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-brand__title {
+	margin: 0;
+	font-size: var(--cc-fs-md);
+	font-weight: 700;
+	line-height: var(--cc-line-tight);
+	color: var(--cc-text, var(--color-main-text));
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-brand__subtitle {
+	margin: 0;
+	color: var(--cc-muted);
+	font-size: var(--cc-fs-xs);
+	line-height: var(--cc-line-base);
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-brand .cc-badge {
+	justify-self: start;
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__body {
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__group {
+	padding: 0 var(--cc-space-2);
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__group + .cc-nav__group {
+	margin-top: var(--cc-space-2);
+	padding-top: var(--cc-space-2);
+	border-top: 1px solid var(--cc-border);
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__group-label {
+	margin: var(--cc-space-2) var(--cc-space-2) var(--cc-space-1);
+	font-size: var(--cc-fs-xs);
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--cc-muted);
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--cc-space-1);
+	list-style: none;
+	margin: 0;
+	padding: var(--cc-space-1) var(--cc-space-2) var(--cc-space-2);
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__item {
+	min-width: 0;
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__link {
+	display: grid;
+	grid-template-columns: 1.5rem 1fr;
+	gap: var(--cc-space-2);
+	align-items: center;
+	min-height: var(--cc-touch-lg, 48px);
+	padding: var(--cc-space-2) var(--cc-space-3);
+	border-radius: var(--cc-radius-sm);
+	text-decoration: none;
+	color: var(--cc-text, var(--color-main-text));
+	box-sizing: border-box;
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__link:hover {
+	background: var(--cc-bg-soft, var(--color-background-hover));
+	text-decoration: none;
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__link.is-active,
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__item.is-active .cc-nav__link {
+	background: var(--cc-tint-info);
+	color: var(--cc-text, var(--color-main-text));
+	font-weight: 700;
+	box-shadow: inset 3px 0 0 var(--cc-primary, var(--color-primary-element));
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__link:focus-visible {
+	outline: var(--cc-focus, 3px solid var(--color-primary-element));
+	outline-offset: var(--cc-focus-offset, 2px);
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.5rem;
+	height: 1.5rem;
+	color: inherit;
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__icon .cc-icon {
+	width: 1.25rem;
+	height: 1.25rem;
+	display: block;
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__label {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+	min-width: 0;
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__name {
+	display: block;
+	font-size: var(--cc-fs-md);
+	line-height: var(--cc-line-tight);
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__hint {
+	display: block;
+	font-size: var(--cc-fs-xs);
+	color: var(--cc-muted);
+	font-weight: 400;
+	line-height: var(--cc-line-base);
+}
+
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__item.is-active .cc-nav__hint,
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav__link.is-active .cc-nav__hint {
+	color: var(--cc-text, var(--color-main-text));
+	font-weight: 500;
+}
+
+/* Help footer sticks under scrollable body */
+#content.app-contractcheck #app-navigation.cc-nav .cc-nav-footer {
+	flex-shrink: 0;
+	margin-top: auto;
+	border-top: 1px solid var(--cc-border);
+}
+
+@media (forced-colors: active) {
+	#content.app-contractcheck #app-navigation.cc-nav .cc-nav__link.is-active,
+	#content.app-contractcheck #app-navigation.cc-nav .cc-nav__item.is-active .cc-nav__link {
+		outline: 2px solid CanvasText;
+		box-shadow: none;
+	}
+}

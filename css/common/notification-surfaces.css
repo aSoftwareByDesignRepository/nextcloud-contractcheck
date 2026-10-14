@@ -1,0 +1,557 @@
+/* Adapted from arbeitszeitcheck notification-surfaces.css (cc- prefix). */
+/**
+ * Notifications: callouts, alerts, toasts, inline-notice — theme-safe (WCAG 2.1 AA).
+ * Uses NC --color-*-text / *-rgb for contrast on light, dark, and custom themes.
+ * Icon wells: semantic fill + contrasting glyph (not low-contrast outline-only).
+ */
+
+/* Base callout geometry (modifiers set tint + accent border) */
+#app-content.cc-app .cc-callout:not(.cc-semantic-panel),
+.cc-nc-admin-settings .cc-callout,
+.modal-backdrop .cc-callout:not(.cc-semantic-panel) {
+	display: block;
+	padding: var(--cc-space-4);
+	margin: var(--cc-space-4) 0;
+	border-radius: var(--cc-radius-md);
+	border: 1px solid var(--cc-border-strong);
+	border-left-width: 5px;
+	border-left-color: var(--color-primary-element);
+	background: var(--cc-tint-info);
+	color: var(--color-main-text);
+	min-width: 0;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+/* ── Panel accents (visible border + tint on light, dark, custom NC themes) ── */
+#app-content.cc-app .cc-callout--info:not(.cc-semantic-panel),
+.cc-nc-admin-settings .cc-callout--info,
+.modal-backdrop .cc-callout--info:not(.cc-semantic-panel),
+#app-content.cc-app .inline-notice--info,
+.modal-backdrop .inline-notice--info,
+.toast--info {
+	border-color: var(--color-primary-element);
+	border-left-width: 5px;
+	border-left-color: var(--color-primary-element);
+	background: var(--cc-tint-info);
+}
+
+#app-content.cc-app .cc-callout--warning:not(.cc-semantic-panel),
+.cc-nc-admin-settings .cc-callout--warning,
+.modal-backdrop .cc-callout--warning:not(.cc-semantic-panel),
+#app-content.cc-app .inline-notice--warning,
+.modal-backdrop .inline-notice--warning,
+.toast--warning,
+#app-content.cc-app .alert--warning,
+.modal-backdrop .alert--warning {
+	border-color: var(--color-warning-text, var(--color-warning));
+	border-left-width: 5px;
+	border-left-color: var(--color-warning-text, var(--color-warning));
+	background: var(--cc-tint-warning);
+}
+
+#app-content.cc-app .cc-callout--success:not(.cc-semantic-panel),
+.cc-nc-admin-settings .cc-callout--success,
+.modal-backdrop .cc-callout--success:not(.cc-semantic-panel),
+.toast--success,
+#app-content.cc-app .alert--success,
+.modal-backdrop .alert--success {
+	border-color: var(--color-success-text, var(--color-success));
+	border-left-width: 5px;
+	border-left-color: var(--color-success-text, var(--color-success));
+	background: var(--cc-tint-success);
+}
+
+#app-content.cc-app .cc-callout--danger:not(.cc-semantic-panel),
+#app-content.cc-app .cc-callout--error:not(.cc-semantic-panel),
+.cc-nc-admin-settings .cc-callout--danger,
+.cc-nc-admin-settings .cc-callout--error,
+.modal-backdrop .cc-callout--danger:not(.cc-semantic-panel),
+.modal-backdrop .cc-callout--error:not(.cc-semantic-panel),
+.toast--error,
+#app-content.cc-app .alert--error,
+.modal-backdrop .alert--error {
+	border-color: var(--color-error-text, var(--color-error));
+	border-left-width: 5px;
+	border-left-color: var(--color-error-text, var(--color-error));
+	background: var(--cc-tint-danger);
+}
+
+#app-content.cc-app .cc-callout--neutral:not(.cc-semantic-panel),
+.modal-backdrop .cc-callout--neutral:not(.cc-semantic-panel) {
+	border-color: var(--cc-border-strong);
+	border-left-width: 2px;
+	background: color-mix(in srgb, var(--color-main-text) 5%, var(--color-main-background));
+}
+
+/* Semantic panel panel tints: common/semantic-surfaces.css */
+
+/* ── Icon wells: pale tint + semantic stroke (same model as .cc-page-header__icon) ── */
+.cc-notif-icon-well,
+#app-content.cc-app .cc-callout__icon,
+.modal-backdrop .cc-callout__icon,
+#app-content.cc-app .alert-icon,
+.modal-backdrop .alert-icon,
+.toast-icon,
+#app-content.cc-app .inline-notice__icon,
+.modal-backdrop .inline-notice__icon,
+.cc-status-icon-well {
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--cc-icon-well, 2.25rem);
+	height: var(--cc-icon-well, 2.25rem);
+	min-width: var(--cc-icon-well, 2.25rem);
+	min-height: var(--cc-icon-well, 2.25rem);
+	border-radius: var(--cc-radius-sm, 6px);
+	border: 2px solid var(--cc-border-strong, var(--color-border));
+	background: var(--color-main-background);
+	color: var(--color-main-text);
+	box-shadow: none;
+}
+
+.cc-notif-icon-well .cc-icon,
+.cc-notif-icon-well .cc-callout__icon-svg,
+.cc-notif-icon-well svg,
+#app-content.cc-app .cc-callout__icon .cc-icon,
+#app-content.cc-app .cc-callout__icon .cc-callout__icon-svg,
+#app-content.cc-app .cc-callout__icon-svg,
+.modal-backdrop .cc-callout__icon .cc-icon,
+.modal-backdrop .cc-callout__icon .cc-callout__icon-svg,
+.modal-backdrop .cc-callout__icon-svg,
+.alert-icon .cc-icon,
+.alert-icon svg,
+.toast-icon .cc-icon,
+.toast-icon svg,
+.toast-icon .toast__icon-svg,
+#app-content.cc-app .inline-notice__icon .cc-icon,
+#app-content.cc-app .inline-notice__icon .inline-notice__glyph,
+#app-content.cc-app .inline-notice__icon svg,
+.modal-backdrop .inline-notice__icon svg {
+	width: var(--cc-icon-lg, 1.375rem);
+	height: var(--cc-icon-lg, 1.375rem);
+	min-width: var(--cc-icon-lg, 1.375rem);
+	min-height: var(--cc-icon-lg, 1.375rem);
+	color: inherit;
+	stroke: currentColor;
+	fill: none;
+	opacity: 1;
+}
+
+/* Filled accent dots in IconCatalog (info / alert) */
+.cc-notif-icon-well svg circle[fill='currentColor'],
+.cc-notif-icon-well svg [fill='currentColor'],
+#app-content.cc-app .cc-callout__icon svg circle[fill='currentColor'],
+#app-content.cc-app .cc-callout__icon svg [fill='currentColor'],
+.toast-icon svg circle[fill='currentColor'],
+.toast-icon svg [fill='currentColor'] {
+	fill: currentColor;
+	stroke: none;
+}
+
+/* Variant wells — modifier class + legacy parent selectors */
+.cc-notif-icon-well--info,
+.cc-callout.cc-callout--info > .cc-callout__icon,
+.cc-callout.cc-callout--info > .cc-notif-icon-well,
+#app-content.cc-app .cc-semantic-panel--info .cc-callout__icon,
+.cc-nc-admin-settings .cc-callout--info .cc-callout__icon,
+.modal-backdrop .cc-callout--info .cc-callout__icon,
+#app-content.cc-app .alert--info .alert-icon,
+.modal-backdrop .alert--info .alert-icon,
+#app-content.cc-app .inline-notice--info .inline-notice__icon,
+.modal-backdrop .inline-notice--info .inline-notice__icon,
+.toast--info .toast-icon {
+	background: var(--cc-tint-info);
+	border-color: var(--cc-notif-fg-info);
+	color: var(--cc-notif-fg-info);
+}
+
+.cc-notif-icon-well--warning,
+.cc-callout.cc-callout--warning > .cc-callout__icon,
+.cc-callout.cc-callout--warning > .cc-notif-icon-well,
+#app-content.cc-app .cc-semantic-panel--warning .cc-callout__icon,
+.cc-nc-admin-settings .cc-callout--warning .cc-callout__icon,
+.modal-backdrop .cc-callout--warning .cc-callout__icon,
+#app-content.cc-app .alert--warning .alert-icon,
+.modal-backdrop .alert--warning .alert-icon,
+#app-content.cc-app .inline-notice--warning .inline-notice__icon,
+.modal-backdrop .inline-notice--warning .inline-notice__icon,
+.toast--warning .toast-icon {
+	background: var(--cc-tint-warning);
+	border-color: var(--cc-notif-fg-warning);
+	color: var(--cc-notif-fg-warning);
+}
+
+.cc-notif-icon-well--success,
+.cc-callout.cc-callout--success > .cc-callout__icon,
+.cc-callout.cc-callout--success > .cc-notif-icon-well,
+#app-content.cc-app .cc-semantic-panel--success .cc-callout__icon,
+.modal-backdrop .cc-callout--success .cc-callout__icon,
+#app-content.cc-app .alert--success .alert-icon,
+.modal-backdrop .alert--success .alert-icon,
+.toast--success .toast-icon {
+	background: var(--cc-tint-success);
+	border-color: var(--cc-notif-fg-success);
+	color: var(--cc-notif-fg-success);
+}
+
+.cc-notif-icon-well--danger,
+.cc-notif-icon-well--error,
+.cc-callout.cc-callout--danger > .cc-callout__icon,
+.cc-callout.cc-callout--danger > .cc-notif-icon-well,
+.cc-callout.cc-callout--error > .cc-callout__icon,
+.cc-callout.cc-callout--error > .cc-notif-icon-well,
+.cc-nc-admin-settings .cc-callout--danger .cc-callout__icon,
+.cc-nc-admin-settings .cc-callout--error .cc-callout__icon,
+.modal-backdrop .cc-callout--danger .cc-callout__icon,
+.modal-backdrop .cc-callout--error .cc-callout__icon,
+#app-content.cc-app .alert--error .alert-icon,
+.modal-backdrop .alert--error .alert-icon,
+.toast--error .toast-icon {
+	background: var(--cc-tint-danger);
+	border-color: var(--cc-notif-fg-danger);
+	color: var(--cc-notif-fg-danger);
+}
+
+.cc-notif-icon-well--neutral,
+.cc-callout.cc-callout--neutral > .cc-callout__icon,
+.cc-callout.cc-callout--neutral > .cc-notif-icon-well,
+.modal-backdrop .cc-callout--neutral .cc-callout__icon {
+	background: color-mix(in srgb, var(--color-main-text) 8%, var(--color-main-background));
+	border-color: var(--color-border-maxcontrast, var(--color-border));
+	color: var(--color-main-text);
+}
+
+#app-content.cc-app .cc-semantic-panel--success.cc-callout.auto-break-panel--disabled .cc-callout__icon {
+	background: color-mix(in srgb, var(--color-main-text) 10%, var(--color-main-background));
+	border-color: var(--color-border);
+	color: var(--color-main-text);
+}
+
+/* Body copy: main text only (AA); hints stay maxcontrast */
+#app-content.cc-app .cc-callout__title,
+.modal-backdrop .cc-callout__title,
+#app-content.cc-app .cc-callout__text,
+.modal-backdrop .cc-callout__text,
+#app-content.cc-app .alert-message,
+.modal-backdrop .alert-message,
+.toast-title,
+.toast-message,
+#app-content.cc-app .inline-notice__title,
+.modal-backdrop .inline-notice__title,
+#app-content.cc-app .inline-notice__text,
+.modal-backdrop .inline-notice__text {
+	color: var(--color-main-text);
+}
+
+#app-content.cc-app .cc-callout__hint,
+.modal-backdrop .cc-callout__hint {
+	color: var(--color-text-maxcontrast, var(--color-main-text));
+}
+
+/* Mobile-first: stack callout icon + body; ≥721px keeps horizontal row */
+#app-content.cc-app .cc-callout,
+.modal-backdrop .cc-callout,
+#app-content.cc-app .alert,
+.modal-backdrop .alert,
+#app-content.cc-app .inline-notice,
+.modal-backdrop .inline-notice,
+.toast {
+	flex-wrap: wrap;
+}
+
+#app-content.cc-app .cc-callout__icon,
+.modal-backdrop .cc-callout__icon,
+.toast-icon,
+#app-content.cc-app .alert-icon,
+.modal-backdrop .alert-icon,
+#app-content.cc-app .inline-notice__icon,
+.modal-backdrop .inline-notice__icon {
+	margin-bottom: var(--cc-space-1, 0.25rem);
+}
+
+@media (min-width: 721px) {
+	#app-content.cc-app .cc-callout__icon,
+	.modal-backdrop .cc-callout__icon,
+	.toast-icon,
+	#app-content.cc-app .alert-icon,
+	.modal-backdrop .alert-icon,
+	#app-content.cc-app .inline-notice__icon,
+	.modal-backdrop .inline-notice__icon {
+		margin-bottom: 0;
+	}
+}
+
+@media (prefers-contrast: more) {
+	#app-content.cc-app .cc-callout:not(.cc-semantic-panel),
+	.modal-backdrop .cc-callout:not(.cc-semantic-panel),
+	.toast,
+	#app-content.cc-app .alert,
+	.modal-backdrop .alert {
+		border-width: 3px;
+	}
+
+	#app-content.cc-app .cc-callout__icon,
+	.modal-backdrop .cc-callout__icon,
+	.toast-icon,
+	#app-content.cc-app .alert-icon,
+	.modal-backdrop .alert-icon {
+		border-width: 3px;
+	}
+
+	.cc-notif-icon-well .cc-icon,
+	.cc-notif-icon-well svg,
+	#app-content.cc-app .cc-callout__icon .cc-icon,
+	#app-content.cc-app .cc-callout__icon svg {
+		stroke-width: 3;
+	}
+}
+
+/* ── Legacy inline-notice (backward compat) ───────────────── */
+#app-content.cc-app .inline-notice-section,
+.modal-backdrop .inline-notice-section {
+	padding: 0;
+	background: transparent;
+	border: 0;
+	box-shadow: none;
+	margin-bottom: var(--cc-space-4, 1rem);
+}
+
+#app-content.cc-app .inline-notice,
+.modal-backdrop .inline-notice {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	gap: var(--cc-space-3, 0.75rem) var(--cc-space-4, 1rem);
+	padding: var(--cc-space-4, 1rem) var(--cc-space-5, 1.25rem);
+	border: 2px solid var(--cc-border-strong, var(--color-border));
+	border-radius: var(--cc-radius-md, 8px);
+	background: var(--color-main-background, var(--cc-bg));
+	box-shadow: var(--cc-shadow-sm);
+	color: var(--color-main-text, var(--cc-text));
+}
+
+#app-content.cc-app .inline-notice__content,
+.modal-backdrop .inline-notice__content {
+	flex: 1 1 12rem;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--cc-space-2, 0.5rem);
+}
+
+#app-content.cc-app .inline-notice__title,
+.modal-backdrop .inline-notice__title {
+	margin: 0;
+	font-size: var(--cc-fs-lg, 1.125rem);
+	font-weight: 600;
+	line-height: var(--cc-line-tight, 1.25);
+	color: var(--color-main-text, var(--cc-text));
+}
+
+#app-content.cc-app .inline-notice__text,
+.modal-backdrop .inline-notice__text {
+	margin: 0;
+	font-size: var(--cc-fs-md, 1rem);
+	line-height: var(--cc-line-base, 1.45);
+	max-width: 65ch;
+	color: var(--color-main-text, var(--cc-text));
+}
+
+#app-content.cc-app .inline-notice__actions,
+.modal-backdrop .inline-notice__actions {
+	flex-shrink: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--cc-space-2, 0.5rem);
+	margin: 0;
+}
+
+#app-content.cc-app .inline-notice__actions .cc-btn,
+#app-content.cc-app .inline-notice__actions .btn,
+.modal-backdrop .inline-notice__actions .cc-btn,
+.modal-backdrop .inline-notice__actions .btn {
+	min-height: 44px;
+	white-space: nowrap;
+}
+
+@media (max-width: 42rem) {
+	#app-content.cc-app .inline-notice,
+	.modal-backdrop .inline-notice {
+		flex-direction: column;
+	}
+
+	#app-content.cc-app .inline-notice__actions,
+	.modal-backdrop .inline-notice__actions {
+		width: 100%;
+	}
+
+	#app-content.cc-app .inline-notice__actions .cc-btn,
+	#app-content.cc-app .inline-notice__actions .btn,
+	.modal-backdrop .inline-notice__actions .cc-btn,
+	.modal-backdrop .inline-notice__actions .btn {
+		flex: 1 1 auto;
+		justify-content: center;
+	}
+}
+
+/* ── Toast container (MC parity: bottom-right) ───────────────── */
+.toast-container {
+	position: fixed;
+	bottom: calc(var(--cc-space-5, 1.5rem) + env(safe-area-inset-bottom, 0px));
+	right: calc(var(--cc-space-5, 1.5rem) + env(safe-area-inset-right, 0px));
+	top: auto;
+	z-index: var(--z-toast, 10000);
+	display: flex;
+	flex-direction: column-reverse;
+	gap: var(--cc-space-2, 0.5rem);
+	max-width: min(24rem, calc(100vw - 2rem));
+}
+
+/* ── Toast card (left accent, MC weight) ───────────────────── */
+.toast {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	gap: var(--cc-space-3, 0.75rem);
+	padding: var(--cc-space-3, 0.75rem) var(--cc-space-4, 1rem);
+	border: 1px solid var(--cc-border, var(--color-border));
+	border-left-width: 4px;
+	border-radius: var(--cc-radius-md, 12px);
+	background: var(--cc-bg-card, var(--color-main-background));
+	box-shadow: var(--cc-shadow-md, 0 8px 24px color-mix(in srgb, var(--color-main-text) 12%, transparent));
+	color: var(--color-main-text, var(--cc-text));
+	font-weight: 600;
+	max-width: 100%;
+	opacity: 0;
+	transform: translateY(0.75rem);
+	transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast--show {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+@keyframes toast-slide-in {
+	from {
+		transform: translateY(0.75rem);
+		opacity: 0;
+	}
+
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+.toast--removing {
+	animation: toast-slide-out 0.3s ease-in forwards;
+}
+
+@keyframes toast-slide-out {
+	from {
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+	to {
+		transform: translateY(0.75rem);
+		opacity: 0;
+	}
+}
+
+.toast-content {
+	flex: 1 1 auto;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--cc-space-1, 0.25rem);
+}
+
+.toast-title {
+	margin: 0;
+	font-size: var(--cc-fs-md, 1rem);
+	font-weight: 600;
+	line-height: var(--cc-line-tight, 1.25);
+	color: var(--color-main-text, var(--cc-text));
+}
+
+.toast-message {
+	margin: 0;
+	font-size: var(--cc-fs-md, 1rem);
+	line-height: var(--cc-line-base, 1.45);
+	color: var(--color-main-text, var(--cc-text));
+	max-width: 65ch;
+}
+
+.toast-close {
+	background: none;
+	border: none;
+	font-size: var(--cc-fs-lg, 1.25rem);
+	line-height: 1;
+	color: var(--color-main-text, var(--cc-text));
+	cursor: pointer;
+	padding: var(--cc-space-1, 0.25rem);
+	border-radius: var(--cc-radius-sm, 6px);
+	opacity: 0.85;
+	flex-shrink: 0;
+	min-width: 44px;
+	min-height: 44px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.toast-close:hover,
+.toast-close:focus-visible {
+	opacity: 1;
+	outline: 2px solid var(--color-primary-element);
+	outline-offset: 2px;
+}
+
+@media (max-width: 42rem) {
+	.toast-container {
+		left: calc(var(--cc-space-4, 1rem) + env(safe-area-inset-left, 0px));
+		right: calc(var(--cc-space-4, 1rem) + env(safe-area-inset-right, 0px));
+		bottom: calc(var(--cc-space-4, 1rem) + env(safe-area-inset-bottom, 0px));
+		max-width: none;
+	}
+}
+
+@media (forced-colors: active) {
+	#app-content.cc-app .cc-callout,
+	.modal-backdrop .cc-callout,
+	#app-content.cc-app .alert,
+	.modal-backdrop .alert,
+	.toast,
+	#app-content.cc-app .inline-notice,
+	.modal-backdrop .inline-notice {
+		border: 2px solid CanvasText;
+		background: Canvas;
+		color: CanvasText;
+	}
+
+	#app-content.cc-app .cc-callout__icon,
+	.modal-backdrop .cc-callout__icon,
+	.toast-icon,
+	#app-content.cc-app .alert-icon,
+	.modal-backdrop .alert-icon,
+	#app-content.cc-app .inline-notice__icon,
+	.modal-backdrop .inline-notice__icon {
+		border: 2px solid CanvasText;
+		background: Canvas;
+		color: CanvasText;
+		box-shadow: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.toast,
+	.toast--removing {
+		animation: none !important;
+		transition: none !important;
+	}
+}
