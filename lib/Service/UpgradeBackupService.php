@@ -31,8 +31,8 @@ use Psr\Log\LoggerInterface;
 
 class UpgradeBackupService
 {
-	// Public on purpose: this key is the coordination contract — the deadline
-	// scan job takes a SHARED lock on it so restores (exclusive) block scans.
+	/** Shared with DeadlineScanJob: the scan holds this lock SHARED so it
+	 *  never writes into tables while a restore holds it EXCLUSIVE. */
 	public const LOCK_KEY = 'contractcheck-upgrade-backup';
 
 	public function __construct(
@@ -168,6 +168,8 @@ class UpgradeBackupService
 			try {
 				$snapshots[] = $this->readManifest($this->getSnapshotFolder($snapshotId), $snapshotId);
 			} catch (\Throwable $e) {
+				// best-effort: one corrupt folder must not hide every good
+				// snapshot from the restore listing — skip it and log.
 				$this->logger->warning('ContractCheck: skipping unreadable upgrade backup folder', [
 					'app' => UpgradeBackupCatalog::APP_ID,
 					'folder' => $snapshotId,
@@ -221,7 +223,8 @@ class UpgradeBackupService
 			UpgradeBackupCatalog::existingBackupTables(fn (string $table): bool => $this->db->tableExists($table)),
 		);
 		$fkChecksDisabled = false;
-		$pgReplicaRole = false;
+		$pgTriggerTables = [];
+		$pgTriggersDisabled = [];
 		$sqliteFkDisabled = false;
 		$oracleConstraintsDeferred = false;
 
@@ -229,8 +232,12 @@ class UpgradeBackupService
 			$this->db->executeStatement('SET FOREIGN_KEY_CHECKS=0');
 			$fkChecksDisabled = true;
 		} elseif ($this->db->getDatabaseProvider() === IDBConnection::PLATFORM_POSTGRES) {
-			$this->db->executeStatement('SET session_replication_role = replica');
-			$pgReplicaRole = true;
+			// `SET session_replication_role = replica` requires superuser,
+			// which the Nextcloud DB user must not have in production.
+			// Per-table `DISABLE TRIGGER ALL` only needs table ownership and
+			// is transactional in PostgreSQL, so it runs inside the restore
+			// transaction and reverts automatically on rollback.
+			$pgTriggerTables = array_values(array_unique(array_merge($tablesToClear, $tables)));
 		} elseif ($this->db->getDatabaseProvider() === IDBConnection::PLATFORM_SQLITE) {
 			$this->db->executeStatement('PRAGMA foreign_keys = OFF');
 			$sqliteFkDisabled = true;
@@ -251,12 +258,34 @@ class UpgradeBackupService
 
 		$this->db->beginTransaction();
 		try {
+			foreach ($pgTriggerTables as $pgTable) {
+				try {
+					$this->db->executeStatement(
+						'ALTER TABLE ' . $this->quotePgIdent($this->tablePrefix() . $pgTable) . ' DISABLE TRIGGER ALL',
+					);
+					$pgTriggersDisabled[] = $pgTable;
+				} catch (\Throwable $e) {
+					// best-effort: missing ownership (e.g. shared/schema-managed
+					// installs) must not abort the restore — the FK-safe order
+					// from sortedRestoreTables still keeps it consistent.
+					$this->logger->warning('ContractCheck: PostgreSQL triggers could not be disabled for restore; relying on restore table order.', [
+						'exception' => $e,
+					]);
+				}
+			}
+
 			foreach (array_reverse($tablesToClear) as $table) {
 				$this->truncateTableIfExists($table);
 			}
 
 			foreach ($tables as $table) {
 				$this->restoreTableRows($folder, $table, $tableManifest[$table] ?? []);
+			}
+
+			foreach ($pgTriggersDisabled as $pgTable) {
+				$this->db->executeStatement(
+					'ALTER TABLE ' . $this->quotePgIdent($this->tablePrefix() . $pgTable) . ' ENABLE TRIGGER ALL',
+				);
 			}
 
 			$this->restorePreferences($folder);
@@ -268,9 +297,6 @@ class UpgradeBackupService
 		} finally {
 			if ($fkChecksDisabled) {
 				$this->db->executeStatement('SET FOREIGN_KEY_CHECKS=1');
-			}
-			if ($pgReplicaRole) {
-				$this->db->executeStatement('SET session_replication_role = DEFAULT');
 			}
 			if ($sqliteFkDisabled) {
 				$this->db->executeStatement('PRAGMA foreign_keys = ON');
@@ -646,6 +672,26 @@ class UpgradeBackupService
 		}
 	}
 
+	/**
+	 * Reads the table prefix from `IConfig` because the public
+	 * `IDBConnection` interface does not expose `getPrefix()`.
+	 */
+	private function tablePrefix(): string
+	{
+		return (string)$this->config->getSystemValue('dbtableprefix', 'oc_');
+	}
+
+	/**
+	 * Double-quote a Postgres identifier. Only used on the Postgres restore
+	 * branch; the input is whitelist-derived (prefix + BACKUP_TABLES name).
+	 * `IDBConnection` does not expose `quoteIdentifier()` (runtime-only on
+	 * `OC\DB\Connection`), so we quote locally.
+	 */
+	private function quotePgIdent(string $name): string
+	{
+		return '"' . str_replace('"', '""', $name) . '"';
+	}
+
 	private function truncateTableIfExists(string $table): void
 	{
 		if (!$this->db->tableExists($table) || !UpgradeBackupCatalog::isBackupTable($table)) {
@@ -679,7 +725,7 @@ class UpgradeBackupService
 
 	private function restorePreferences(Folder $snapshotFolder): void
 	{
-		/** @var list<array{userid: string, configkey: string, configvalue: string}> $rows */
+		/** @var list<array<string, mixed>> $rows */
 		$rows = json_decode($this->readFile($snapshotFolder, 'preferences.json'), true, 512, JSON_THROW_ON_ERROR);
 
 		$deleteQb = $this->db->getQueryBuilder();
@@ -757,6 +803,9 @@ class UpgradeBackupService
 		}
 	}
 
+	/**
+	 * @param array<string, mixed> $payload
+	 */
 	/**
 	 * @param array<array-key, mixed> $payload
 	 */

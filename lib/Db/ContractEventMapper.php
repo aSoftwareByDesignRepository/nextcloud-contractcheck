@@ -62,7 +62,10 @@ class ContractEventMapper extends QBMapper
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')->from($this->getTableName())
 			->where($qb->expr()->in('contract_id', $qb->createNamedParameter($contractIds, IQueryBuilder::PARAM_INT_ARRAY)))
-			->orderBy('seq', 'DESC')
+			// Global recency — ordering by the per-contract seq would interleave
+			// chains arbitrarily and let the cap drop every contract's seq=1
+			// 'created' row before newer events of unrelated contracts.
+			->orderBy('id', 'DESC')
 			->setMaxResults(max(1, min($limit, 500)));
 		if ($event !== null && $event !== '') {
 			$qb->andWhere($qb->expr()->eq('event', $qb->createNamedParameter($event)));

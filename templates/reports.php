@@ -24,7 +24,7 @@
 		<section class="cc-panel" aria-labelledby="cc-rollup-h">
 			<h3 id="cc-rollup-h" class="cc-panel__title"><?php p($l->t('Costs per year')); ?></h3>
 			<p class="cc-field__hint"><?php p($l->t('Annualized cost per contract — monthly ×12, quarterly ×4, yearly ×1, one-time excluded.')); ?></p>
-			<div class="cc-table-wrap"><table class="cc-table" id="cc-rollup-table">
+			<div class="cc-table-wrap"><table class="cc-table cc-table--responsive" id="cc-rollup-table">
 				<thead><tr>
 					<th scope="col"><?php p($l->t('Contract')); ?></th>
 					<th scope="col"><?php p($l->t('Per year')); ?></th>
@@ -34,10 +34,10 @@
 			<p id="cc-rollup-empty" class="cc-empty" hidden><?php p($l->t('No cost data visible for your role.')); ?></p>
 		</section>
 
-		<section class="cc-panel" aria-labelledby="cc-rollup-type-h">
+		<section class="cc-panel cc-panel--wide" aria-labelledby="cc-rollup-type-h">
 			<h3 id="cc-rollup-type-h" class="cc-panel__title"><?php p($l->t('Costs per category')); ?></h3>
 			<p class="cc-field__hint"><?php p($l->t('Annualized cost grouped by contract type.')); ?></p>
-			<div class="cc-table-wrap"><table class="cc-table" id="cc-rollup-type-table">
+			<div class="cc-table-wrap"><table class="cc-table cc-table--responsive" id="cc-rollup-type-table">
 				<thead><tr>
 					<th scope="col"><?php p($l->t('Category')); ?></th>
 					<th scope="col" class="cc-num"><?php p($l->t('Contracts')); ?></th>
@@ -49,10 +49,10 @@
 			<p id="cc-rollup-type-empty" class="cc-empty" hidden><?php p($l->t('No cost data visible for your role.')); ?></p>
 		</section>
 
-		<section class="cc-panel" aria-labelledby="cc-rollup-cc-h">
+		<section class="cc-panel cc-panel--wide" aria-labelledby="cc-rollup-cc-h">
 			<h3 id="cc-rollup-cc-h" class="cc-panel__title"><?php p($l->t('Costs per cost center')); ?></h3>
 			<p class="cc-field__hint"><?php p($l->t('Contracted vs. planned per year — planned budgets are set under Settings.')); ?></p>
-			<div class="cc-table-wrap"><table class="cc-table" id="cc-rollup-cc-table">
+			<div class="cc-table-wrap"><table class="cc-table cc-table--responsive" id="cc-rollup-cc-table">
 				<thead><tr>
 					<th scope="col"><?php p($l->t('Cost center')); ?></th>
 					<th scope="col" class="cc-num"><?php p($l->t('Contracts')); ?></th>

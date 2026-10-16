@@ -117,8 +117,12 @@ class SettingsService
 				$out[] = $d;
 			}
 		}
+		$out = array_values(array_unique($out));
+		// Read-side guard: rows stored before normalize sorted desc still
+		// return in the canonical order (ContractValidator::leadDays).
+		rsort($out, SORT_NUMERIC);
 
-		return $out === [] ? [60, 30] : array_values(array_unique($out));
+		return $out === [] ? [60, 30] : $out;
 	}
 
 	public function getOrgName(): string
@@ -311,7 +315,8 @@ class SettingsService
 		}
 		if (isset($in['defaultLeadDays']) && is_array($in['defaultLeadDays'])) {
 			$days = array_values(array_unique(array_filter($in['defaultLeadDays'], 'is_int')));
-			sort($days, SORT_NUMERIC);
+			// Descending — matches ContractValidator::leadDays and the UI chip order.
+			rsort($days, SORT_NUMERIC);
 			$out['defaultLeadDays'] = $days;
 		}
 		if (isset($in['orgName'])) {

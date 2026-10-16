@@ -14,7 +14,7 @@ import { join } from 'node:path'
  * login form. The real form login remains as fallback (first worker, CI
  * without globalSetup, expired session).
  */
-const SESSION_CACHE = join(tmpdir(), 'contractcheck-e2e-sessions.json')
+const SESSION_CACHE = process.env.E2E_STORAGE_STATE || join(tmpdir(), 'contractcheck-e2e-sessions.json')
 
 export function sessionCachePath() {
 	return SESSION_CACHE

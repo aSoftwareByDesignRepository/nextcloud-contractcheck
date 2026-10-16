@@ -28,7 +28,7 @@ $contractId = (string)($_['contractId'] ?? '');
 			<section class="cc-panel" id="cc-d-costs-panel" aria-labelledby="cc-d-costs-h" hidden>
 				<h3 id="cc-d-costs-h" class="cc-panel__title"><?php p($l->t('Costs')); ?></h3>
 				<p class="cc-cost-rollup" id="cc-d-rollup"></p>
-				<div class="cc-table-wrap"><table class="cc-table cc-table--compact" id="cc-d-costs-table">
+				<div class="cc-table-wrap"><table class="cc-table cc-table--compact cc-table--responsive" id="cc-d-costs-table">
 					<thead><tr>
 						<th scope="col"><?php p($l->t('Label')); ?></th>
 						<th scope="col"><?php p($l->t('Amount')); ?></th>

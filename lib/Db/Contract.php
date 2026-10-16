@@ -53,7 +53,11 @@ class Contract extends ContractCheckEntity
 {
 	protected $refNo;
 	protected $title = '';
-	protected $type = 'other';
+	// No 'other' default here: QBMapper::setter() skips columns whose value
+	// equals the property default, and the DB column has no default — a
+	// create with type 'other' then INSERTs without `type` and dies on a
+	// strict-1364. Validation guarantees a real type before insert.
+	protected $type;
 	protected $partnerId;
 	protected $ownerUid;
 	protected $scope = 'org';

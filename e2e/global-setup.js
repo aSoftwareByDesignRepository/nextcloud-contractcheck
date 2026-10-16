@@ -3,7 +3,7 @@ import { execFileSync } from 'child_process'
 import { dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
 import { request } from '@playwright/test'
-import { rememberSessionCookies } from './helpers/auth.js'
+import { rememberSessionCookies, sessionCachePath } from './helpers/auth.js'
 
 const nextcloudRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../../..')
 
@@ -66,6 +66,15 @@ async function primeSession(baseURL, username, password) {
 		}
 		const state = await context.storageState()
 		rememberSessionCookies(username, state.cookies)
+		// Honour E2E_STORAGE_STATE: concurrent farm lanes pass an isolated path
+		// so parallel suites never race on a shared .auth file. When unset we
+		// keep the tmpdir session cache (login() injects cookies per user).
+		const statePath = process.env.E2E_STORAGE_STATE
+		if (statePath && state.cookies.length) {
+			const { mkdirSync, writeFileSync } = await import('node:fs')
+			mkdirSync(dirname(resolve(statePath)), { recursive: true })
+			writeFileSync(resolve(statePath), JSON.stringify(state))
+		}
 		process.stdout.write(`[e2e globalSetup] primed session for "${username}"\n`)
 	} finally {
 		await context.dispose()
@@ -74,6 +83,10 @@ async function primeSession(baseURL, username, password) {
 
 export default async function globalSetup(config) {
 	clearLoginThrottling()
+
+	// E2E_STORAGE_STATE overrides the shared session-cache path (resolved in
+	// helpers/auth.js) so concurrent farm lanes can isolate their state file.
+	process.stdout.write(`[e2e globalSetup] session cache: ${sessionCachePath()}\n`)
 
 	const baseURL = (config.projects[0] && config.projects[0].use && config.projects[0].use.baseURL)
 		|| process.env.NC_BASE_URL

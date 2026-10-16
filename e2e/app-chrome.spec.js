@@ -76,4 +76,14 @@ test.describe('viewer role', () => {
 		await expect(page.locator('.cc-nav a[href*="/settings/access"]')).toHaveCount(0)
 		await expect(page.locator('.cc-nav a[href*="/settings/deadlines"]')).toHaveCount(0)
 	})
+
+	test('viewer gets no import affordance — nav hides it, deep link redirects', async ({ page }) => {
+		await login(page, viewer)
+		await page.goto('/apps/contractcheck/', { waitUntil: 'domcontentloaded' })
+		// importCsv is canEdit-gated; an enabled form for viewers is a dead affordance.
+		await expect(page.locator('.cc-nav a[href*="/import"]')).toHaveCount(0)
+		await page.goto('/apps/contractcheck/import', { waitUntil: 'domcontentloaded' })
+		await expect(page).toHaveURL(/\/(dashboard|apps\/contractcheck\/?$)/)
+		await expect(page.locator('#cc-import-form')).toHaveCount(0)
+	})
 })

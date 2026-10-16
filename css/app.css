@@ -129,12 +129,6 @@
 
 /* ── Buttons (variants beyond shared primary/secondary/danger/ghost/sm) ── */
 
-#app-content.cc-app .cc-btn--warn {
-	background: var(--cc-tint-warning);
-	color: var(--color-warning-text, var(--color-warning, #8a6d00));
-	border: 1px solid var(--cc-border-strong);
-}
-
 #app-content.cc-app .cc-btn--small {
 	min-height: 36px;
 	padding: var(--cc-space-1) var(--cc-space-3);
@@ -218,7 +212,9 @@
 #app-content.cc-app .cc-input[aria-invalid="true"],
 #app-content.cc-app .cc-select[aria-invalid="true"],
 #app-content.cc-app .cc-textarea[aria-invalid="true"] {
-	border-color: var(--color-error);
+	/* error-text ink, never the pale --color-error tint; the form-controls
+	   (2,4,0) rule is the one that actually wins inside #app-content. */
+	border-color: var(--cc-form-error, var(--color-error-text));
 }
 
 #app-content.cc-app .cc-input--amount { max-width: 11rem; font-variant-numeric: var(--cc-tab-num); }
@@ -299,7 +295,13 @@
 	margin-block: var(--cc-space-4);
 }
 
-#app-content.cc-app .cc-toolbar__search { flex: 1 1 220px; }
+#app-content.cc-app .cc-toolbar > .cc-field {
+	/* Fixed basis: native selects otherwise size to their longest option,
+	   so async-loaded options (parties, cost centers) re-lay out the
+	   toolbar and sibling-seeded long names can force a wrap. */
+	flex: 1 1 150px;
+}
+#app-content.cc-app .cc-toolbar__search { flex: 2 1 220px; }
 #app-content.cc-app .cc-toolbar__actions {
 	display: flex;
 	gap: var(--cc-space-2);
@@ -320,6 +322,12 @@
 	width: 100%;
 	border-collapse: collapse;
 	font-size: var(--cc-fs-md);
+	/* NC core reset sets `table { white-space: nowrap }` — inherited into
+	   every cell it made all content unbreakable, so auto layout's
+	   min-content exceeded .cc-table-wrap and the actions column scrolled
+	   offscreen. normal restores wrapping; overflow-wrap anywhere on the
+	   cells shrinks min-content below long IDs/partner names. */
+	white-space: normal;
 }
 
 #app-content.cc-app .cc-table th {
@@ -329,13 +337,31 @@
 	color: var(--cc-muted);
 	padding: var(--cc-space-3) var(--cc-space-4);
 	border-bottom: 1px solid var(--cc-border-strong);
-	white-space: nowrap;
+	/* Headers may wrap — nowrap made every column's min-content the full
+	   header width and pushed the table past .cc-table-wrap at desktop. */
+	overflow-wrap: anywhere;
 }
 
 #app-content.cc-app .cc-table td {
 	padding: var(--cc-space-3) var(--cc-space-4);
 	border-bottom: 1px solid var(--cc-border);
 	vertical-align: middle;
+	/* anywhere-wrap shrinks min-content below long partner names / contract
+	   IDs so the table always fits width:100% — no desktop scroll trap. */
+	overflow-wrap: anywhere;
+}
+
+/* Atomic carve-outs: anywhere-wrap may shrink a column to one token, but
+   must never split a token mid-word. Cells holding a pill (Status, Event,
+   cancel-by chip) keep wrapping at spaces only; single-token cells (dates)
+   and money cells (.cc-num) stay on one line. */
+#app-content.cc-app .cc-table td:has(.cc-badge) {
+	overflow-wrap: normal;
+}
+
+#app-content.cc-app .cc-table td.cc-nowrap {
+	white-space: nowrap;
+	overflow-wrap: normal;
 }
 
 #app-content.cc-app .cc-table tbody tr:last-child td { border-bottom: none; }
@@ -351,7 +377,7 @@
 }
 
 #app-content.cc-app .cc-table__actions .cc-btn { margin-inline-start: var(--cc-space-1); }
-#app-content.cc-app .cc-num { font-variant-numeric: var(--cc-tab-num); text-align: end; }
+#app-content.cc-app .cc-num { font-variant-numeric: var(--cc-tab-num); text-align: end; white-space: nowrap; }
 
 /* ── Deadline list (dashboard panels) ──────────────────────── */
 
@@ -400,6 +426,12 @@
 	font-size: var(--cc-fs-sm);
 	color: var(--cc-muted);
 	white-space: nowrap;
+	/* Long partner names must ellipsize here — without min-width:0 the flex
+	   item can't shrink below content width and shoves the status badge
+	   (flex-shrink:0, margin-inline-start:auto) fully off the card. */
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 #app-content.cc-app .cc-deadline-list__link .cc-badge {
@@ -681,6 +713,10 @@
 	color: var(--cc-primary);
 	text-decoration: none;
 	font-weight: 600;
+	/* WCAG 2.5.8: cell/title links are the row's click target — 24px floor */
+	display: inline-flex;
+	align-items: center;
+	min-block-size: 24px;
 }
 
 #app-content.cc-app .cc-link:hover { text-decoration: underline; }
@@ -709,7 +745,7 @@
 
 /* ── Native dialog (party modal) ───────────────────────────── */
 
-#app-content.cc-app dialog.cc-dialog {
+dialog.cc-dialog {
 	border: 1px solid var(--cc-border-strong);
 	border-radius: var(--cc-radius-lg);
 	padding: var(--cc-space-5);
@@ -720,19 +756,33 @@
 	color: var(--cc-text);
 }
 
-#app-content.cc-app dialog.cc-dialog::backdrop {
+dialog.cc-dialog::backdrop {
 	background: var(--cc-scrim);
 }
 
-#app-content.cc-app dialog.cc-dialog form {
+dialog.cc-dialog form {
 	display: flex;
 	flex-direction: column;
 	gap: var(--cc-space-3);
 }
 
-#app-content.cc-app .cc-dialog__title {
+dialog.cc-dialog .cc-dialog__title {
 	margin: 0 0 var(--cc-space-2);
 	font-size: var(--cc-fs-xl);
+}
+
+dialog.cc-dialog .cc-dialog__text {
+	margin: 0;
+	color: var(--cc-text);
+}
+
+/* Top-layer confirm dialog (CC.confirmDialog): unscoped so the actions row
+   also lays out when the dialog lands on <body> outside #app-content. */
+dialog.cc-dialog .cc-form-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--cc-space-3);
+	margin-block-start: var(--cc-space-4);
 }
 
 /* ── Responsive: tables scroll; hero + toolbar stack on phones ── */

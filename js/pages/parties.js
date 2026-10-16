@@ -5,28 +5,30 @@
 
 	var body = document.getElementById('cc-parties-body');
 	var empty = document.getElementById('cc-parties-empty');
+	var emptyDefault = empty.textContent;
 	var searchEl = document.getElementById('cc-party-search');
 	var archivedEl = document.getElementById('cc-party-archived');
 	var dialog = document.getElementById('cc-party-dialog');
 	var form = document.getElementById('cc-party-form');
 	var newBtn = document.getElementById('cc-party-new');
 	var guard = CC.busyGuard(form.querySelector('button[type="submit"]'));
+	var colLbl = CC.colLabels(document.getElementById('cc-parties-table'));
 	var aborter = null;
 
 	if (CC.role.manager) newBtn.hidden = false;
 
 	function row(p) {
 		var tr = CC.el('tr', {});
-		tr.appendChild(CC.el('td', {}, [CC.el('strong', { text: p.name })]));
-		tr.appendChild(CC.el('td', { text: p.contactName || '—' }));
-		tr.appendChild(CC.el('td', { text: p.contactEmail || '—' }));
-		var st = CC.el('td', {});
+		tr.appendChild(CC.el('td', { 'data-label': colLbl[0] }, [CC.el('strong', { text: p.name })]));
+		tr.appendChild(CC.el('td', { 'data-label': colLbl[1], text: p.contactName || '—' }));
+		tr.appendChild(CC.el('td', { 'data-label': colLbl[2], text: p.contactEmail || '—' }));
+		var st = CC.el('td', { 'data-label': colLbl[3] });
 		st.appendChild(CC.el('span', {
 			class: 'cc-badge ' + (p.archived ? 'cc-badge--neutral' : 'cc-badge--success'),
 			text: p.archived ? t('archived') : t('active')
 		}));
 		tr.appendChild(st);
-		var act = CC.el('td', { class: 'cc-table__actions' });
+		var act = CC.el('td', { 'data-label': colLbl[4], class: 'cc-table__actions' });
 		if (CC.role.manager) {
 			var edit = CC.el('button', { type: 'button', class: 'cc-btn cc-btn--secondary cc-btn--small', text: t('Edit') });
 			edit.addEventListener('click', function () { openDialog(p); });
@@ -55,6 +57,11 @@
 			.then(function (list) {
 				body.innerHTML = '';
 				list.forEach(function (p) { body.appendChild(row(p)); });
+				if (list.length === 0) {
+					empty.textContent = searchEl.value.trim() === ''
+						? emptyDefault
+						: t('No parties match these filters.');
+				}
 				empty.hidden = list.length > 0;
 			}).catch(function (e) {
 				if (e && e.name === 'AbortError') return;
@@ -79,6 +86,15 @@
 
 	document.getElementById('cc-p-cancel').addEventListener('click', function () {
 		dialog.close();
+	});
+	// Manual Escape path: NC's notifications app preventDefault()s the global
+	// Escape keydown, which can suppress the native dialog `cancel` event.
+	dialog.addEventListener('keydown', function (ev) {
+		if (ev.key === 'Escape' && dialog.open) {
+			ev.preventDefault();
+			ev.stopPropagation();
+			dialog.close();
+		}
 	});
 	newBtn.addEventListener('click', function () { openDialog(null); });
 

@@ -6,12 +6,14 @@
 	var empty = document.getElementById('cc-rollup-empty');
 	function rollupRows(tbody, rows, labelFn) {
 		var body = document.getElementById(tbody);
+		var colLbl = CC.colLabels(body && body.closest('table'));
 		body.innerHTML = '';
 		rows.forEach(function (r) {
 			var tr = CC.el('tr', {});
-			tr.appendChild(CC.el('td', { text: labelFn(r) }));
-			tr.appendChild(CC.el('td', { class: 'cc-num', text: String(r.contracts) }));
-			tr.appendChild(CC.el('td', { class: 'cc-num', text: CC.fmtRollupParts(r) }));
+			tr.appendChild(CC.el('td', { 'data-label': colLbl[0], text: labelFn(r) }));
+			tr.appendChild(CC.el('td', { 'data-label': colLbl[1], class: 'cc-num', text: String(r.contracts) }));
+			tr.appendChild(CC.el('td', { 'data-label': colLbl[2], class: 'cc-num', text: CC.fmtCentsMap(r.annual_cents) }));
+			tr.appendChild(CC.el('td', { 'data-label': colLbl[3], class: 'cc-num', text: CC.fmtCentsMap(r.once_cents) }));
 			body.appendChild(tr);
 		});
 		return body;
@@ -29,20 +31,21 @@
 	}
 	CC.api('/api/contracts?limit=500').then(function (list) {
 		var body = document.getElementById('cc-rollup-body');
+		var colLbl = CC.colLabels(body.closest('table'));
 		body.innerHTML = '';
 		var rows = list.filter(function (c) {
 			return c.costs && c.costs.entry_count > 0;
 		});
 		rows.forEach(function (c) {
 			var tr = CC.el('tr', {});
-			var td = CC.el('td', {});
+			var td = CC.el('td', { 'data-label': colLbl[0] });
 			td.appendChild(CC.el('a', {
 				class: 'cc-link',
 				href: CC.appBase() + '/contracts/' + c.id,
 				text: c.title
 			}));
 			tr.appendChild(td);
-			tr.appendChild(CC.el('td', { class: 'cc-num', text: CC.fmtRollup(c.costs) }));
+			tr.appendChild(CC.el('td', { 'data-label': colLbl[1], class: 'cc-num', text: CC.fmtRollup(c.costs) }));
 			body.appendChild(tr);
 		});
 		empty.hidden = rows.length > 0;
@@ -57,15 +60,16 @@
 
 	CC.api('/api/reports/rollup?groupBy=costCenter').then(function (res) {
 		var body = document.getElementById('cc-rollup-cc-body');
+		var colLbl = CC.colLabels(body.closest('table'));
 		body.innerHTML = '';
 		(res.rows || []).forEach(function (r) {
 			var tr = CC.el('tr', {});
-			tr.appendChild(CC.el('td', { text: r.key === '' ? t('(no cost center)') : r.key }));
-			tr.appendChild(CC.el('td', { class: 'cc-num', text: String(r.contracts) }));
-			tr.appendChild(CC.el('td', { class: 'cc-num', text: CC.fmtRollupParts(r) }));
+			tr.appendChild(CC.el('td', { 'data-label': colLbl[0], text: r.key === '' ? t('(no cost center)') : r.key }));
+			tr.appendChild(CC.el('td', { 'data-label': colLbl[1], class: 'cc-num', text: String(r.contracts) }));
+			tr.appendChild(CC.el('td', { 'data-label': colLbl[2], class: 'cc-num', text: CC.fmtRollupParts(r) }));
 			var planned = r.planned_cents;
-			tr.appendChild(CC.el('td', { class: 'cc-num', text: planned === null || planned === undefined ? '—' : CC.fmtCents(planned, 'EUR') }));
-			var diffTd = CC.el('td', { class: 'cc-num' });
+			tr.appendChild(CC.el('td', { 'data-label': colLbl[3], class: 'cc-num', text: planned === null || planned === undefined ? '—' : CC.fmtCents(planned, 'EUR') }));
+			var diffTd = CC.el('td', { 'data-label': colLbl[4], class: 'cc-num' });
 			var curs = r.annual_cents ? Object.keys(r.annual_cents) : [];
 			var eurOnly = curs.length === 0 || (curs.length === 1 && curs[0] === 'EUR');
 			if (planned !== null && planned !== undefined && eurOnly) {

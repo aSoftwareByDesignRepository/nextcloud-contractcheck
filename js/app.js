@@ -41,6 +41,19 @@
 		return node;
 	}
 
+	/* Column labels for the ≤768px card reflow (.cc-table--responsive paints
+	   attr(data-label) before each cell). Read them from the live thead so the
+	   label always matches the translated header — never a second vocabulary. */
+	function colLabels(table) {
+		var labels = [];
+		if (table) {
+			table.querySelectorAll('thead th').forEach(function (th) {
+				labels.push((th.textContent || '').trim());
+			});
+		}
+		return labels;
+	}
+
 	/* ---------- API ---------- */
 
 	function ApiError(payload, status) {
@@ -132,10 +145,14 @@
 	}
 
 	function fmtRollupParts(rollup) {
-		if (!rollup || !rollup.annual_cents) return '—';
+		return fmtCentsMap(rollup && rollup.annual_cents);
+	}
+
+	function fmtCentsMap(map) {
+		if (!map) return '—';
 		var parts = [];
-		Object.keys(rollup.annual_cents).forEach(function (cur) {
-			parts.push(fmtCents(rollup.annual_cents[cur], cur));
+		Object.keys(map).forEach(function (cur) {
+			parts.push(fmtCents(map[cur], cur));
 		});
 		return parts.length ? parts.join(' / ') : '—';
 	}
@@ -160,7 +177,56 @@
 			terminated: 'cc-badge--warn', expired: 'cc-badge--danger',
 			archived: 'cc-badge--neutral'
 		};
-		return el('span', { class: 'cc-badge ' + (map[status] || 'cc-badge--neutral'), text: status });
+		return el('span', {
+			class: 'cc-badge ' + (map[status] || 'cc-badge--neutral'),
+			text: enumLabel('status', status)
+		});
+	}
+
+	// Display labels for stable enum tokens (API values are snake_case and
+	// never meant to be rendered). Mirrors ContractValidator, ContractEvent,
+	// ContractDocument::KINDS and CostRollup::INTERVALS.
+	var ENUM_LABELS = {
+		status: {
+			draft: 'Draft', active: 'Active', terminated: 'Terminated',
+			expired: 'Expired', archived: 'Archived'
+		},
+		type: {
+			rent: 'Rent', leasing: 'Leasing', service: 'Service',
+			insurance: 'Insurance', maintenance: 'Maintenance', grant: 'Grant',
+			employment_related: 'Employment-related', other: 'Other'
+		},
+		scope: {
+			org: 'Whole organization', dept: 'Owner’s group(s)',
+			restricted: 'Only owner & managers'
+		},
+		termKind: {
+			fixed: 'Fixed term', auto_renew: 'Auto-renewing', indefinite: 'Open-ended'
+		},
+		unit: { days: 'Days', months: 'Months', years: 'Years' },
+		interval: { monthly: 'monthly', quarterly: 'quarterly', yearly: 'yearly', once: 'once' },
+		noticeAnchor: {
+			contract_end: 'Contract end', month_end: 'End of month',
+			quarter_end: 'End of quarter', year_end: 'End of year', anytime: 'Any time'
+		},
+		docKind: {
+			contract: 'Contract', amendment: 'Amendment', termination: 'Termination',
+			invoice: 'Invoice', other: 'Other'
+		},
+		event: {
+			created: 'Created', updated: 'Updated', activated: 'Activated',
+			terminated: 'Terminated', expired: 'Expired', renewed: 'Renewed',
+			archived: 'Archived', reopened: 'Reopened',
+			doc_linked: 'Document linked', doc_unlinked: 'Document unlinked',
+			doc_missing: 'Document missing',
+			cost_added: 'Cost added', cost_updated: 'Cost updated', cost_removed: 'Cost removed',
+			reminder_sent: 'Reminder sent', imported: 'Imported'
+		}
+	};
+
+	function enumLabel(domain, value) {
+		var label = (ENUM_LABELS[domain] || {})[value];
+		return label === undefined ? String(value == null ? '' : value) : t(label);
 	}
 
 	function debounce(fn, ms) {
@@ -368,6 +434,73 @@
 		return Math.round(parseFloat(v) * 100);
 	}
 
+	/* ---------- dialogs ---------- */
+
+	var ccDlgSeq = 0;
+
+	/**
+	 * confirmDialog(title, message, opts) → Promise<bool>
+	 * confirmDialog(message, opts)         → Promise<bool> (shorthand)
+	 *   opts: { ok|confirmLabel, danger, cancelLabel }
+	 *
+	 * Replaces the banned window.confirm: a styled <dialog class="cc-dialog">
+	 * (top layer — keeps it above app chrome). Escape is handled by an
+	 * explicit keydown listener on the dialog itself because NC's
+	 * notifications app preventDefault()s the global Escape keydown, which
+	 * suppresses the native `cancel` event.
+	 */
+	function confirmDialog(title, message, opts) {
+		// 2-arg shorthand: confirmDialog(message, opts)
+		if (message !== null && typeof message === 'object') {
+			opts = message;
+			message = title;
+			title = undefined;
+		}
+		opts = opts || {};
+		return new Promise(function (resolve) {
+			var resolved = false;
+			var titleId = 'cc-confirm-title-' + (++ccDlgSeq);
+			var dlg = el('dialog', { class: 'cc-dialog confirm-dialog', 'aria-labelledby': titleId });
+			var h = el('h3', { class: 'cc-dialog__title', id: titleId, text: title || t('Please confirm') });
+			var bodyText = el('p', { class: 'cc-dialog__text', text: message || '' });
+			var actions = el('div', { class: 'cc-form-actions' });
+			var cancel = el('button', { type: 'button', class: 'cc-btn cc-btn--secondary', text: opts.cancelLabel || t('Cancel') });
+			var submit = el('button', {
+				type: 'button',
+				class: 'cc-btn ' + (opts.danger === false ? 'cc-btn--primary' : 'cc-btn--danger'),
+				text: opts.ok || opts.confirmLabel || t('Confirm')
+			});
+			actions.appendChild(submit);
+			actions.appendChild(cancel);
+			dlg.appendChild(h);
+			dlg.appendChild(bodyText);
+			dlg.appendChild(actions);
+			// Append inside the app root when present so #app-content-scoped
+			// rules (cc-btn--danger fill, cc-form-actions) still match — DOM
+			// placement does not affect top-layer modal rendering.
+			(document.querySelector('#app-content.cc-app') || document.body).appendChild(dlg);
+
+			function done(ok) {
+				if (resolved) return;
+				resolved = true;
+				resolve(ok);
+				if (dlg.open) dlg.close();
+				dlg.remove();
+				if (back && document.contains(back)) back.focus();
+			}
+			var back = document.activeElement;
+
+			submit.addEventListener('click', function () { done(true); });
+			cancel.addEventListener('click', function () { done(false); });
+			dlg.addEventListener('cancel', function (ev) { ev.preventDefault(); done(false); });
+			dlg.addEventListener('keydown', function (ev) {
+				if (ev.key === 'Escape') { ev.preventDefault(); ev.stopPropagation(); done(false); }
+			});
+			dlg.showModal();
+			submit.focus();
+		});
+	}
+
 	/* ---------- busy guard (async submit, re-entry prevention) ---------- */
 
 	function busyGuard(btn) {
@@ -405,15 +538,19 @@
 		fmtCents: fmtCents,
 		fmtRollup: fmtRollup,
 		fmtRollupParts: fmtRollupParts,
+		fmtCentsMap: fmtCentsMap,
 		daysBadge: daysBadge,
 		statusBadge: statusBadge,
+		enumLabel: enumLabel,
 		debounce: debounce,
 		toast: toast,
 		handleError: handleError,
 		initPicker: initPicker,
+		confirmDialog: confirmDialog,
 		getLeadDays: getLeadDays,
 		setLeadDays: setLeadDays,
 		parseAmount: parseAmount,
+		colLabels: colLabels,
 		busyGuard: busyGuard
 	};
 })();

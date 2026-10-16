@@ -42,8 +42,18 @@ test.describe('visual regression', () => {
 
 	test('contracts list: filter toolbar layout', async ({ page }) => {
 		await login(page, admin)
+		// Toolbar controls hydrate asynchronously: partner + cost-center options
+		// arrive via /api/parties + /api/contracts/filters — a snapshot taken
+		// mid-load captures collapsed selects and is non-deterministic.
+		const metaDone = Promise.all([
+			page.waitForResponse((r) => r.url().includes('/api/parties'), { timeout: 15_000 }),
+			page.waitForResponse((r) => r.url().includes('/api/contracts/filters'), { timeout: 15_000 }),
+		])
 		await page.goto('/apps/contractcheck/contracts', { waitUntil: 'domcontentloaded' })
 		await expect(page.locator('#cc-contracts-loading')).toBeHidden({ timeout: 15_000 })
+		await metaDone
+		await page.evaluate(() => document.fonts.ready)
+		await page.waitForTimeout(200) // options apply in the same microtask; settle layout
 		// Scope to the toolbar: the table body height varies with row count
 		// when sibling specs create fixtures in parallel — data rows are not
 		// stable visual-regression surface, the controls are.

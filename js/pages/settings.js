@@ -167,28 +167,41 @@
 		});
 
 		document.getElementById('cc-feed-mint').addEventListener('click', function () {
-			if (hasToken && !window.confirm(
-				t('Replace the existing feed link? The old link stops working immediately.'))) return;
 			if (!mintGuard.start()) return;
-			CC.api('/api/feed/token', { method: 'POST' }).then(function (r) {
-				hasToken = true;
-				urlInput.value = r.url;
-				hint.textContent = t('This URL is shown once — save it now.');
-				revokeBtn.hidden = false;
-				CC.toast('success', t('New feed link generated.'));
-			}).catch(CC.handleError).finally(function () { mintGuard.end(); });
+			var proceed = hasToken
+				? CC.confirmDialog(
+					t('Please confirm'),
+					t('Replace the existing feed link? The old link stops working immediately.'),
+					{ confirmLabel: t('Replace'), danger: true })
+				: Promise.resolve(true);
+			proceed.then(function (ok) {
+				if (!ok) return;
+				CC.api('/api/feed/token', { method: 'POST' }).then(function (r) {
+					hasToken = true;
+					urlInput.value = r.url;
+					hint.textContent = t('This URL is shown once — save it now.');
+					revokeBtn.hidden = false;
+					CC.toast('success', t('New feed link generated.'));
+				}).catch(CC.handleError);
+			}).finally(function () { mintGuard.end(); });
 		});
 
 		revokeBtn.addEventListener('click', function () {
-			if (!window.confirm(t('Revoke the feed link? Calendar subscriptions using it stop updating.'))) return;
 			if (!revokeGuard.start()) return;
-			CC.api('/api/feed/token', { method: 'DELETE' }).then(function () {
-				hasToken = false;
-				urlInput.value = '';
-				hint.textContent = t('Generate a link below first.');
-				revokeBtn.hidden = true;
-				CC.toast('success', t('Feed link revoked.'));
-			}).catch(CC.handleError).finally(function () { revokeGuard.end(); });
+			CC.confirmDialog(
+				t('Please confirm'),
+				t('Revoke the feed link? Calendar subscriptions using it stop updating.'),
+				{ confirmLabel: t('Revoke'), danger: true }
+			).then(function (ok) {
+				if (!ok) return;
+				CC.api('/api/feed/token', { method: 'DELETE' }).then(function () {
+					hasToken = false;
+					urlInput.value = '';
+					hint.textContent = t('Generate a link below first.');
+					revokeBtn.hidden = true;
+					CC.toast('success', t('Feed link revoked.'));
+				}).catch(CC.handleError);
+			}).finally(function () { revokeGuard.end(); });
 		});
 	}
 })();

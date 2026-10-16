@@ -15,6 +15,7 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\PublicPage;
+use OCP\AppFramework\Http\DataDisplayResponse;
 use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\Http\TextPlainResponse;
 use OCP\IRequest;
@@ -42,7 +43,9 @@ class FeedController extends Controller
 		if ($result === null) {
 			return new TextPlainResponse('Not found.', Http::STATUS_NOT_FOUND);
 		}
-		$response = new TextPlainResponse($result['ics'], Http::STATUS_OK, ['Content-Type' => 'text/calendar; charset=utf-8']);
+		// TextPlainResponse hard-overrides Content-Type to text/plain —
+		// DataDisplayResponse honours the calendar subtype clients expect.
+		$response = new DataDisplayResponse($result['ics'], Http::STATUS_OK, ['Content-Type' => 'text/calendar; charset=utf-8']);
 		$response->addHeader('Content-Disposition', 'inline; filename="contractcheck-deadlines.ics"');
 		// Calendar clients re-fetch — allow short caching, never intermediaries.
 		$response->cacheFor(900, false, false);

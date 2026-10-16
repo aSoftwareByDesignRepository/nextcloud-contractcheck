@@ -30,7 +30,7 @@
 	</div>
 
 	<div class="cc-table-wrap">
-		<table class="cc-table" id="cc-audit-table">
+		<table class="cc-table cc-table--responsive" id="cc-audit-table">
 			<thead><tr>
 				<th scope="col"><?php p($l->t('When')); ?></th>
 				<th scope="col"><?php p($l->t('Event')); ?></th>

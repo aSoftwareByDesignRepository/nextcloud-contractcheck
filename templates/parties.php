@@ -23,7 +23,7 @@
 
 	<div class="cc-card-grid">
 		<div class="cc-table-wrap cc-panel--wide">
-			<table class="cc-table" id="cc-parties-table">
+			<table class="cc-table cc-table--responsive" id="cc-parties-table">
 				<thead><tr>
 					<th scope="col"><?php p($l->t('Name')); ?></th>
 					<th scope="col"><?php p($l->t('Contact')); ?></th>

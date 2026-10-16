@@ -44,11 +44,12 @@
 				var table = document.getElementById('cc-import-errors-wrap');
 				var body = document.getElementById('cc-import-errors-body');
 				body.innerHTML = '';
+				var errLabels = CC.colLabels(document.getElementById('cc-import-errors'));
 				errors.forEach(function (err) {
 					var tr = CC.el('tr', {});
-					tr.appendChild(CC.el('td', { text: String(err.line) }));
-					tr.appendChild(CC.el('td', { text: err.field || '—' }));
-					tr.appendChild(CC.el('td', { text: err.message }));
+					tr.appendChild(CC.el('td', { 'data-label': errLabels[0] || '', text: String(err.line) }));
+					tr.appendChild(CC.el('td', { 'data-label': errLabels[1] || '', text: err.field || '—' }));
+					tr.appendChild(CC.el('td', { 'data-label': errLabels[2] || '', text: err.message }));
 					body.appendChild(tr);
 				});
 				table.hidden = errors.length === 0;
@@ -56,11 +57,12 @@
 				var wTable = document.getElementById('cc-import-warnings-wrap');
 				var wBody = document.getElementById('cc-import-warnings-body');
 				wBody.innerHTML = '';
+				var wLabels = CC.colLabels(document.getElementById('cc-import-warnings'));
 				warnings.forEach(function (w) {
 					var tr = CC.el('tr', {});
-					tr.appendChild(CC.el('td', { text: String(w.line) }));
-					tr.appendChild(CC.el('td', { text: w.field || '—' }));
-					tr.appendChild(CC.el('td', { text: w.message }));
+					tr.appendChild(CC.el('td', { 'data-label': wLabels[0] || '', text: String(w.line) }));
+					tr.appendChild(CC.el('td', { 'data-label': wLabels[1] || '', text: w.field || '—' }));
+					tr.appendChild(CC.el('td', { 'data-label': wLabels[2] || '', text: w.message }));
 					wBody.appendChild(tr);
 				});
 				wTable.hidden = warnings.length === 0;

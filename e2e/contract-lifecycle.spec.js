@@ -36,7 +36,7 @@ test.describe('contract lifecycle', () => {
 		await expect(page.locator('#cc-hero-deadline')).not.toBeEmpty()
 
 		// --- Edit round-trip (CAS succeeds on fresh revision) ---
-		await page.getByRole('link', { name: /edit/i }).click()
+		await page.locator('#cc-detail-actions a[href$="/edit"]').click()
 		await page.waitForURL(/\/edit$/, { timeout: 15_000 })
 		await expect(page.locator('#cc-f-title')).toHaveValue(title, { timeout: 15_000 })
 		await page.fill('#cc-f-title', `${title} v2`)
@@ -51,6 +51,21 @@ test.describe('contract lifecycle', () => {
 		})
 		expect(stale.status).toBe(409)
 		expect(stale.json?.success).toBe(false)
+
+		// --- Terminate via shared confirm dialog: open → Escape keeps state → confirm ---
+		// Structural selector: the only danger-class action on an active contract.
+		await page.locator('#cc-detail-actions button.cc-btn--danger').click()
+		const dlg = page.locator('dialog.cc-dialog.confirm-dialog[open]')
+		await expect(dlg).toBeVisible()
+		await page.keyboard.press('Escape')
+		await expect(dlg).toBeHidden()
+		await expect(page.locator('#cc-hero-badges')).toContainText(/active/i)
+		// Re-open and confirm this time.
+		await page.locator('#cc-detail-actions button.cc-btn--danger').click()
+		await expect(dlg).toBeVisible()
+		await dlg.locator('.cc-btn--danger').click()
+		await expect(dlg).toBeHidden()
+		await expect(page.locator('#cc-hero-badges')).toContainText(/terminated/i, { timeout: 15_000 })
 
 		await archiveContract(page, id)
 	})

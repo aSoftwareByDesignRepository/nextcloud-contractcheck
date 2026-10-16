@@ -109,8 +109,15 @@ class PageController extends Controller
 
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function import(): TemplateResponse
+	public function import(): Response
 	{
+		// Import is manager-only (importCsv requires canEdit). Deep links for
+		// viewers redirect to the dashboard — same convention as manager-only
+		// settings sections — instead of rendering a form that can never save.
+		$user = $this->userSession->getUser();
+		if ($user === null || !$this->access->isManager($user->getUID())) {
+			return new RedirectResponse($this->urlGenerator->linkToRoute('contractcheck.page.dashboard'));
+		}
 		return $this->page('import');
 	}
 
@@ -183,7 +190,7 @@ class PageController extends Controller
 		return new TemplateResponse('contractcheck', 'main', [
 			'page' => $page,
 			'extra' => $extra,
-			'nav' => $this->nav($page),
+			'nav' => $this->nav($page, $manager),
 			'settingsNav' => $this->settingsNav($section, $manager),
 			'settingsSection' => $section,
 			'roleLabel' => $roleLabel,
@@ -265,7 +272,7 @@ class PageController extends Controller
 	}
 
 	/** @return list<array{id:string,label:string,href:string,icon:string,active:bool}> */
-	private function nav(string $active): array
+	private function nav(string $active, bool $manager = true): array
 	{
 		$l = $this->l;
 		$items = [
@@ -279,6 +286,9 @@ class PageController extends Controller
 		];
 		$out = [];
 		foreach ($items as [$id, $label, $route, $icon]) {
+			if (!$manager && $id === 'import') {
+				continue; // importCsv is canEdit-gated — no dead affordance for viewers
+			}
 			$out[] = [
 				'id' => $id,
 				'label' => $label,

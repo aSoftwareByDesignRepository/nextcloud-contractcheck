@@ -50,14 +50,15 @@
   z-index: var(--z-modal);
 }
 
-/* Native <dialog> must stay hidden until showModal() sets [open] */
-#content.app-contractcheck dialog.cc-dialog:not([open]),
-#app-content.cc-app dialog.cc-dialog:not([open]) {
-	display: none;
+/* Native <dialog> must stay hidden until showModal() sets [open].
+   UNSCOPED on purpose: a <dialog> renders in the top layer and may be
+   appended to <body> by JS — a #content/#app-content prefix here is a
+   dead selector that ships the dialog unstyled. */
+dialog.cc-dialog:not([open]) {
+	display: none !important;
 }
 
-#content.app-contractcheck dialog.cc-dialog[open],
-#app-content.cc-app dialog.cc-dialog[open] {
+dialog.cc-dialog[open] {
 	display: flex;
 	margin: auto;
 	position: fixed;

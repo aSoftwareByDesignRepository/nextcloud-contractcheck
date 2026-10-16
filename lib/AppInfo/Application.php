@@ -16,6 +16,8 @@ use OCA\ContractCheck\Repair\BackupBeforeUpdate;
 use OCA\ContractCheck\Repair\EnsureContractCheckSchema;
 use OCA\ContractCheck\Repair\UninstallDropTables;
 use OCA\ContractCheck\Service\UpgradeBackupService;
+use OCA\ContractCheck\Service\AccessService;
+use OCA\ContractCheck\Support\NavGate;
 use OCP\App\IAppManager;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -75,5 +77,16 @@ class Application extends App implements IBootstrap
 
 	public function boot(IBootContext $context): void
 	{
+		$app = $context->getAppContainer();
+		// Menu entry only for users with app access — a static <navigation>
+		// entry would advertise the app to users the door denies.
+		NavGate::register(
+			$app,
+			'contractcheck.page.index',
+			'app.svg',
+			'ContractCheck',
+			10,
+			static fn(string $uid): bool => $app->get(AccessService::class)->hasAppAccess($uid),
+		);
 	}
 }

@@ -645,8 +645,97 @@
 	}
 
 	/* Card reflow: every field + action reachable without sideways scrolling */
-	#app-content.cc-app .table-container:has(.cc-table--responsive) {
+	#app-content.cc-app .table-container:has(.cc-table--responsive),
+	#app-content.cc-app .cc-table-wrap:has(.cc-table--responsive) {
 		overflow-x: visible;
+	}
+
+	/* .cc-table opts into the identical card reflow — same transform as
+	   .table.cc-table--responsive below, mirrored for the app's own class. */
+	#app-content.cc-app .cc-table.cc-table--responsive,
+	#app-content.cc-app .cc-table.cc-table--responsive tbody,
+	#app-content.cc-app .cc-table.cc-table--responsive tr,
+	#app-content.cc-app .cc-table.cc-table--responsive td {
+		display: block;
+		width: 100%;
+	}
+
+	#app-content.cc-app .cc-table.cc-table--responsive {
+		min-width: 0;
+		border-collapse: collapse;
+	}
+
+	#app-content.cc-app .cc-table.cc-table--responsive thead {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	#app-content.cc-app .cc-table.cc-table--responsive tbody tr {
+		margin-bottom: var(--cc-space-4, 1rem);
+		padding: var(--cc-space-3, 0.75rem) var(--cc-space-4, 1rem);
+		border: 1px solid var(--cc-border, var(--color-border));
+		border-radius: var(--cc-radius-sm, 8px);
+		background: var(--cc-bg-card, var(--color-main-background));
+	}
+
+	#app-content.cc-app .cc-table.cc-table--responsive tbody tr:last-child {
+		margin-bottom: 0;
+	}
+
+	#app-content.cc-app .cc-table.cc-table--responsive tbody td {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: var(--cc-space-4, 1rem);
+		padding: var(--cc-space-2, 0.5rem) 0;
+		border-bottom: 1px solid var(--cc-border, var(--color-border));
+		text-align: right;
+		max-width: none;
+		overflow: visible;
+		white-space: normal;
+		text-overflow: clip;
+	}
+
+	#app-content.cc-app .cc-table.cc-table--responsive tbody td:last-child {
+		border-bottom: none;
+		padding-bottom: 0;
+	}
+
+	#app-content.cc-app .cc-table.cc-table--responsive tbody td::before {
+		content: attr(data-label);
+		flex: 0 0 auto;
+		text-align: left;
+		font-weight: 600;
+		color: var(--cc-muted, var(--color-text-maxcontrast));
+	}
+
+	#app-content.cc-app .cc-table.cc-table--responsive tbody td.cc-table__actions {
+		flex-direction: column;
+		align-items: stretch;
+		text-align: left;
+	}
+
+	#app-content.cc-app .cc-table.cc-table--responsive tbody td.cc-table__actions .cc-btn {
+		width: 100%;
+		justify-content: center;
+		min-height: 44px;
+	}
+
+	#app-content.cc-app .cc-table.cc-table--responsive tbody td[colspan] {
+		display: block;
+		justify-content: center;
+		text-align: center;
+	}
+
+	#app-content.cc-app .cc-table.cc-table--responsive tbody td[colspan]::before {
+		content: none;
 	}
 
 	#app-content.cc-app .table.cc-table--responsive,

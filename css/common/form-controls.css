@@ -7,7 +7,10 @@
 #content.app-contractcheck {
 	--cc-form-bg: var(--color-main-background);
 	--cc-form-fg: var(--color-main-text);
-	--cc-form-border: var(--color-border, var(--cc-border, color-mix(in srgb, var(--color-main-text) 18%, transparent)));
+	/* Must equal tokens.css --cc-form-border: --color-border-maxcontrast keeps
+	   the >=3:1 control boundary (WCAG 1.4.11); the old --color-border value
+	   shadowed the shared token weaker on this scope. */
+	--cc-form-border: var(--color-border-maxcontrast, var(--cc-border-strong));
 	--cc-form-border-focus: var(--color-primary-element);
 	/* Soft halo is decorative only — WCAG 2.4.11 focus contrast comes from solid --cc-focus outline */
 	--cc-form-ring: color-mix(in srgb, var(--color-primary-element) 28%, transparent);
@@ -143,17 +146,25 @@
 	opacity: 1;
 }
 
-/* Error / success states (AZ) */
+/* Error / success states (AZ). The .cc-* class selectors are required — the
+   base control rule carries :not(.cc-sr-only) (2,3,x) which would otherwise
+   beat a bare-element [aria-invalid] rule and leave the error border gray. */
 #content.app-contractcheck #app-content .form-input--error,
 #content.app-contractcheck #app-content input[aria-invalid="true"],
 #content.app-contractcheck #app-content select[aria-invalid="true"],
-#content.app-contractcheck #app-content textarea[aria-invalid="true"] {
+#content.app-contractcheck #app-content textarea[aria-invalid="true"],
+#content.app-contractcheck #app-content .cc-input[aria-invalid="true"],
+#content.app-contractcheck #app-content .cc-select[aria-invalid="true"],
+#content.app-contractcheck #app-content .cc-textarea[aria-invalid="true"] {
 	border-color: var(--cc-form-error);
 }
 #content.app-contractcheck #app-content .form-input--error:focus,
 #content.app-contractcheck #app-content input[aria-invalid="true"]:focus,
 #content.app-contractcheck #app-content select[aria-invalid="true"]:focus,
-#content.app-contractcheck #app-content textarea[aria-invalid="true"]:focus {
+#content.app-contractcheck #app-content textarea[aria-invalid="true"]:focus,
+#content.app-contractcheck #app-content .cc-input[aria-invalid="true"]:focus,
+#content.app-contractcheck #app-content .cc-select[aria-invalid="true"]:focus,
+#content.app-contractcheck #app-content .cc-textarea[aria-invalid="true"]:focus {
 	border-color: var(--cc-form-error);
 	box-shadow: 0 0 0 3px var(--cc-form-error-ring);
 }

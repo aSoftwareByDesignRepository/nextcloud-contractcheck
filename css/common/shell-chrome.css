@@ -201,7 +201,12 @@
 #content.app-contractcheck #app-content .cc-table-wrap {
 	border: 1px solid var(--cc-border, var(--color-border));
 	border-radius: var(--cc-radius-md, 12px);
-	overflow: hidden;
+	/* Must not be `overflow: hidden` on both axes: this selector (2,2,0)
+	   outranks the table-parity `overflow-x: auto` below and the wrap would
+	   clip wide tables with no way to scroll — row actions go unreachable
+	   on phones. y stays hidden (radius clip); x must stay scrollable. */
+	overflow-x: auto;
+	overflow-y: hidden;
 	background: var(--cc-bg-card, var(--color-main-background));
 }
 /* Empty states — AZ-like bordered soft panel (never page how-to guides) */
@@ -570,12 +575,52 @@
 .cc-app .btn--primary {
 	background: var(--color-primary-element);
 	color: var(--color-primary-element-text);
+	/* Border == fill: painted edge like .cc-btn--danger — the boundary is the
+	   fill vs the surface (WCAG 1.4.11), never a transparent border. */
+	border-color: var(--color-primary-element);
 }
 .cc-btn--secondary,
 .cc-app .btn--secondary {
 	background: color-mix(in srgb, var(--color-main-background) 82%, var(--color-main-text) 18%);
 	color: var(--cc-text);
 	border-color: var(--cc-control-border, var(--cc-border-strong));
+}
+/* NC core `button:not(.button-vue)` (0-1-1) repaints every <button> with
+   --color-primary-element-light + border:none, and its :hover/:focus leg
+   (0-2-1) repaints again — every single-class variant rule (0-1-0) loses,
+   so all <button> elements collapse to the identical pale tint. Same fix
+   as .cc-btn--danger: ID-scope + !important, full border shorthand (core
+   sets border-style:none, so border-color alone would paint nothing). */
+#app-content.cc-app .cc-btn--primary,
+#app-content-wrapper .cc-btn--primary,
+#app-content.cc-app .btn--primary,
+#app-content-wrapper .btn--primary {
+	background: var(--color-primary-element) !important;
+	color: var(--color-primary-element-text) !important;
+	border: 1px solid var(--color-primary-element) !important;
+}
+#app-content.cc-app .cc-btn--secondary,
+#app-content-wrapper .cc-btn--secondary,
+#app-content.cc-app .btn--secondary,
+#app-content-wrapper .btn--secondary {
+	background: color-mix(in srgb, var(--color-main-background) 82%, var(--color-main-text) 18%) !important;
+	color: var(--cc-text) !important;
+	border: 1px solid var(--cc-control-border, var(--cc-border-strong)) !important;
+}
+#app-content.cc-app .cc-btn--ghost,
+#app-content-wrapper .cc-btn--ghost {
+	background: transparent !important;
+	color: var(--cc-text) !important;
+	border: 1px solid var(--cc-control-border, var(--cc-border-strong)) !important;
+}
+/* Core hover repaint is also blocked by !important — restore hover feedback
+   the way .cc-btn--danger does (filter survives because core sets none). */
+.cc-btn--primary:hover,
+.cc-app .btn--primary:hover,
+.cc-btn--secondary:hover,
+.cc-app .btn--secondary:hover,
+.cc-btn--ghost:hover {
+	filter: brightness(0.94);
 }
 #app-content.cc-app .cc-btn--danger,
 #app-content-wrapper .cc-btn--danger,

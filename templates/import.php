@@ -25,7 +25,7 @@
 			</form>
 			<div id="cc-import-result" class="cc-import-result" hidden>
 				<p id="cc-import-summary" role="status"></p>
-				<div class="cc-table-wrap" id="cc-import-errors-wrap" hidden><table class="cc-table cc-table--compact" id="cc-import-errors">
+				<div class="cc-table-wrap" id="cc-import-errors-wrap" hidden><table class="cc-table cc-table--compact cc-table--responsive" id="cc-import-errors">
 					<thead><tr>
 						<th scope="col"><?php p($l->t('Line')); ?></th>
 						<th scope="col"><?php p($l->t('Field')); ?></th>
@@ -33,7 +33,7 @@
 					</tr></thead>
 					<tbody id="cc-import-errors-body"></tbody>
 				</table></div>
-				<div class="cc-table-wrap" id="cc-import-warnings-wrap" hidden><table class="cc-table cc-table--compact" id="cc-import-warnings">
+				<div class="cc-table-wrap" id="cc-import-warnings-wrap" hidden><table class="cc-table cc-table--compact cc-table--responsive" id="cc-import-warnings">
 					<thead><tr>
 						<th scope="col"><?php p($l->t('Line')); ?></th>
 						<th scope="col"><?php p($l->t('Field')); ?></th>

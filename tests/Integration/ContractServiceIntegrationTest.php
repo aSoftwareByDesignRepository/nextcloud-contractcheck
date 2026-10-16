@@ -100,6 +100,14 @@ final class ContractServiceIntegrationTest extends TestCase
 			parent::tearDown();
 			return;
 		}
+		// Child tables first — no FK cascade, so deleting parents alone
+		// orphans costs/documents/events/reminders/revisions rows.
+		foreach (['cc_costs', 'cc_documents', 'cc_events', 'cc_reminders', 'cc_revisions'] as $child) {
+			$this->db->executeStatement(
+				"DELETE FROM `*PREFIX*$child` WHERE contract_id IN "
+				. "(SELECT id FROM `*PREFIX*cc_contracts` WHERE created_by LIKE 'cc_itest%')"
+			);
+		}
 		$this->db->executeStatement(
 			"DELETE FROM `*PREFIX*cc_contracts` WHERE created_by LIKE 'cc_itest%'"
 		);

@@ -225,15 +225,20 @@
 				var b = CC.el('button', { type: 'button', class: 'cc-btn ' + (cls || 'cc-btn--secondary') });
 				b.textContent = label;
 				b.addEventListener('click', function () {
-					if (confirmMsg && !window.confirm(confirmMsg)) return;
 					b.disabled = true;
-					fn().then(function () {
-						b.disabled = false;
-						reload();
-						reloadEvents();
+					var proceed = confirmMsg
+						? CC.confirmDialog(t('Please confirm'), confirmMsg, { danger: cls === 'cc-btn--danger' })
+						: Promise.resolve(true);
+					proceed.then(function (ok) {
+						if (!ok) return;
+						return fn().then(function () {
+							reload();
+							reloadEvents();
+						});
 					}).catch(function (e) {
-						b.disabled = false;
 						CC.handleError(e);
+					}).finally(function () {
+						b.disabled = false;
 					});
 				});
 				box.appendChild(b);
@@ -249,11 +254,11 @@
 			}
 			if (c.status === 'active') {
 				add(t('Terminate'), function () { return transition(c, 'terminate'); },
-					'cc-btn--warn', t('Terminate this contract? Today is used as the termination date.'));
+					'cc-btn--danger', t('Terminate this contract? Today is used as the termination date.'));
 			}
 			if (c.status === 'draft' || c.status === 'terminated' || c.status === 'expired') {
 				add(t('Archive'), function () { return transition(c, 'archive'); },
-					'cc-btn--warn', t('Archive this contract? It can be restored later.'));
+					'cc-btn--danger', t('Archive this contract? It can be restored later.'));
 			}
 			if (c.status === 'archived') {
 				add(t('Restore'), function () { return transition(c, 'reopen'); });
@@ -267,13 +272,14 @@
 			document.getElementById('cc-d-rollup').textContent =
 				t('Annualized: ') + CC.fmtRollup(c.costs);
 			var body = document.getElementById('cc-d-costs-body');
+			var colLbl = CC.colLabels(document.getElementById('cc-d-costs-table'));
 			body.innerHTML = '';
 			(c.costEntries || []).forEach(function (entry) {
 				var row = CC.el('tr', {});
-				row.appendChild(CC.el('td', { text: entry.label }));
-				row.appendChild(CC.el('td', { class: 'cc-num', text: CC.fmtCents(entry.amountCents, entry.currency) }));
-				row.appendChild(CC.el('td', { text: t(entry.interval) }));
-				var td = CC.el('td', {});
+				row.appendChild(CC.el('td', { 'data-label': colLbl[0], text: entry.label }));
+				row.appendChild(CC.el('td', { 'data-label': colLbl[1], class: 'cc-num', text: CC.fmtCents(entry.amountCents, entry.currency) }));
+				row.appendChild(CC.el('td', { 'data-label': colLbl[2], class: 'cc-nowrap', text: CC.enumLabel('interval', entry.interval) }));
+				var td = CC.el('td', { 'data-label': colLbl[3], class: 'cc-table__actions' });
 				if (c.canEdit) {
 					var del = CC.el('button', {
 						type: 'button', class: 'cc-btn cc-btn--secondary cc-btn--small',
@@ -300,7 +306,7 @@
 				var li = CC.el('li', { class: 'cc-doc-list__item' });
 				var name = CC.el('span', { class: 'cc-doc-list__name', text: doc.name || doc.fileName || doc.path });
 				li.appendChild(name);
-				li.appendChild(CC.el('span', { class: 'cc-badge cc-badge--neutral', text: t(doc.kind || 'contract') }));
+				li.appendChild(CC.el('span', { class: 'cc-badge cc-badge--neutral', text: CC.enumLabel('docKind', doc.kind || 'contract') }));
 				if (doc.missing) {
 					li.appendChild(CC.el('span', { class: 'cc-badge cc-badge--danger', text: t('file missing') }));
 				}
@@ -325,11 +331,11 @@
 			ol.innerHTML = '';
 			(events || []).forEach(function (ev) {
 				var li = CC.el('li', { class: 'cc-event-list__item' });
-				li.appendChild(CC.el('span', { class: 'cc-event-list__type', text: t(ev.event) }));
+				li.appendChild(CC.el('span', { class: 'cc-event-list__type', text: CC.enumLabel('event', ev.event) }));
 				li.appendChild(CC.el('span', { class: 'cc-muted', text: (ev.createdAt || '').slice(0, 16).replace('T', ' ') + ' · ' + (ev.actorUid || '—') }));
 				ol.appendChild(li);
 			});
-			document.getElementById('cc-d-events-empty').hidden = !(events || []).length;
+			document.getElementById('cc-d-events-empty').hidden = (events || []).length > 0;
 		}
 
 		function render(c) {
@@ -340,27 +346,27 @@
 			var badges = document.getElementById('cc-hero-badges');
 			badges.innerHTML = '';
 			badges.appendChild(CC.statusBadge(c.status));
-			badges.appendChild(CC.el('span', { class: 'cc-badge cc-badge--neutral', text: t(c.type) }));
-			badges.appendChild(CC.el('span', { class: 'cc-badge cc-badge--neutral', text: t(c.scope) }));
+			badges.appendChild(CC.el('span', { class: 'cc-badge cc-badge--neutral', text: CC.enumLabel('type', c.type) }));
+			badges.appendChild(CC.el('span', { class: 'cc-badge cc-badge--neutral', text: CC.enumLabel('scope', c.scope) }));
 			renderDeadline(c.deadline);
 			renderActions(c);
 
 			var info = document.getElementById('cc-d-info');
 			info.innerHTML = '';
-			info.appendChild(dlRow(t('Type'), t(c.type)));
-			info.appendChild(dlRow(t('Visibility'), t(c.scope)));
+			info.appendChild(dlRow(t('Type'), CC.enumLabel('type', c.type)));
+			info.appendChild(dlRow(t('Visibility'), CC.enumLabel('scope', c.scope)));
 			if (c.ownerUid) info.appendChild(dlRow(t('Owner'), c.ownerUid));
 			info.appendChild(dlRow(t('Signed'), CC.fmtDate(c.signedAt)));
 			info.appendChild(dlRow(t('Start'), CC.fmtDate(c.startDate)));
 			info.appendChild(dlRow(t('End'), c.endDate ? CC.fmtDate(c.endDate) : t('open-ended')));
 			if (c.terminatedAt) info.appendChild(dlRow(t('Terminated'), CC.fmtDate(c.terminatedAt)));
 			if (c.termKind === 'auto_renew') {
-				info.appendChild(dlRow(t('Renews every'), (c.renewalValue || '—') + ' ' + t(c.renewalUnit || 'months')));
+				info.appendChild(dlRow(t('Renews every'), (c.renewalValue || '—') + ' ' + CC.enumLabel('unit', c.renewalUnit || 'months')));
 			}
 			if (c.noticeValue !== null && c.noticeValue !== undefined) {
-				info.appendChild(dlRow(t('Notice period'), c.noticeValue + ' ' + t(c.noticeUnit || 'months')));
+				info.appendChild(dlRow(t('Notice period'), c.noticeValue + ' ' + CC.enumLabel('unit', c.noticeUnit || 'months')));
 			}
-			info.appendChild(dlRow(t('Effective at'), t(c.noticeAnchor || 'contract_end')));
+			info.appendChild(dlRow(t('Effective at'), CC.enumLabel('noticeAnchor', c.noticeAnchor || 'contract_end')));
 			if (c.leadDays && c.leadDays.length) info.appendChild(dlRow(t('Remind before'), c.leadDays.join(', ') + ' ' + t('days')));
 			if (c.costCenter) info.appendChild(dlRow(t('Cost center'), c.costCenter));
 			if (c.tags && c.tags.length) info.appendChild(dlRow(t('Tags'), c.tags.join(', ')));

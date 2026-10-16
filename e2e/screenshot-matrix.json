@@ -1,0 +1,24 @@
+{
+	"prefix": "cck",
+	"outDir": "craft/web",
+	"viewports": [
+		{ "name": "mobile", "width": 320, "height": 800 },
+		{ "name": "tablet", "width": 768, "height": 800 },
+		{ "name": "desktop", "width": 1280, "height": 800 }
+	],
+	"surfaces": [
+		{ "id": "dashboard", "path": "/dashboard", "states": ["populated"], "dark": true },
+		{ "id": "contracts", "path": "/contracts", "states": ["populated", "empty"], "dark": true },
+		{ "id": "contract-new", "path": "/contracts/new", "states": ["current"], "dark": true },
+		{ "id": "contract-detail", "path": "/contracts/{contractId}", "states": ["populated"], "needsSeed": true, "dark": true },
+		{ "id": "contract-edit", "path": "/contracts/{contractId}/edit", "states": ["current"], "needsSeed": true },
+		{ "id": "parties", "path": "/parties", "states": ["populated", "empty"], "dark": true },
+		{ "id": "reports", "path": "/reports", "states": ["populated"], "needsSeed": true, "dark": true },
+		{ "id": "audit", "path": "/audit", "states": ["populated", "empty"] },
+		{ "id": "import", "path": "/import", "states": ["current"] },
+		{ "id": "settings-deadlines", "path": "/settings/deadlines", "states": ["current"], "dark": true },
+		{ "id": "settings-access", "path": "/settings/access", "states": ["current"] },
+		{ "id": "settings-feed", "path": "/settings/feed", "states": ["current"] },
+		{ "id": "settings-support", "path": "/settings/support", "states": ["current"] }
+	]
+}

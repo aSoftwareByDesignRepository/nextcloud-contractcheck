@@ -68,7 +68,7 @@
 	</div>
 
 	<div class="cc-table-wrap">
-		<table class="cc-table" id="cc-contracts-table">
+		<table class="cc-table cc-table--responsive" id="cc-contracts-table">
 			<caption class="cc-sr-only"><?php p($l->t('Contracts')); ?></caption>
 			<thead>
 				<tr>

@@ -83,15 +83,9 @@ Fehlerberichte und Ideen helfen — öffnen Sie ein GitHub Issue (https://github
 			<step>OCA\ContractCheck\Repair\UninstallDropTables</step>
 		</uninstall>
 	</repair-steps>
-	<navigations>
-		<navigation>
-			<name>ContractCheck</name>
-			<route>contractcheck.page.index</route>
-			<icon>app.svg</icon>
-			<order>10</order>
-			<type>link</type>
-		</navigation>
-	</navigations>
+	<!-- No <navigation> here: the menu entry is registered conditionally via
+	     NavGate — a static entry would advertise the app to users the
+	     access gate denies. -->
 	<dashboard>
 		<widget>OCA\ContractCheck\Dashboard\DeadlineWidget</widget>
 	</dashboard>
