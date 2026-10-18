@@ -31,9 +31,7 @@ use Psr\Log\LoggerInterface;
 
 class UpgradeBackupService
 {
-	/** Shared with DeadlineScanJob: the scan holds this lock SHARED so it
-	 *  never writes into tables while a restore holds it EXCLUSIVE. */
-	public const LOCK_KEY = 'contractcheck-upgrade-backup';
+	private const LOCK_KEY = 'contractcheck-upgrade-backup';
 
 	public function __construct(
 		private readonly IDBConnection $db,
