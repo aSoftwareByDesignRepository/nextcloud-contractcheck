@@ -33,6 +33,8 @@ const baseURL = process.env.NC_BASE_URL || 'http://127.0.0.1:8081'
 
 export default defineConfig({
 	testDir: 'e2e',
+	globalTeardown: './e2e/global-teardown.mjs',
+
 	globalSetup: './e2e/global-setup.js',
 	timeout: 60_000,
 	expect: { timeout: 15_000 },
