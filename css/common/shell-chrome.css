@@ -405,7 +405,7 @@
 	user-select: none;
 }
 #app-content.cc-app .cc-breadcrumb__link {
-	color: var(--color-primary-element);
+	color: var(--cc-accent-ink, var(--color-primary-element));
 	font-weight: 600;
 	text-decoration: none;
 	border-radius: var(--cc-radius-sm);
@@ -469,7 +469,7 @@
 	height: 56px;
 	border-radius: var(--cc-radius-md);
 	background: var(--cc-tint-info);
-	color: var(--color-primary-element);
+	color: var(--cc-accent-ink, var(--color-primary-element));
 }
 .cc-page-header__icon-svg {
 	width: 28px;
