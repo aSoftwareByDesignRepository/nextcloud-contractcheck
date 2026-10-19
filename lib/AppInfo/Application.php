@@ -70,6 +70,24 @@ class Application extends App implements IBootstrap
 			return new BackupBeforeUpdate($c->get(UpgradeBackupService::class));
 		});
 
+		// Session-CSRF guard: ambient cookie-session mutations must prove a
+		// valid requesttoken even when the client sets `OCS-APIRequest`
+		// (core passesCSRFCheck short-circuits on that client-controlled
+		// header — dutycheck 2026-09-29 lesson).
+		$context->registerService(\OCA\ContractCheck\Service\CsrfTokenValidator::class, function ($c): \OCA\ContractCheck\Service\CsrfTokenValidator {
+			return new \OCA\ContractCheck\Service\CsrfTokenValidator(
+				$c->get(\OC\Security\CSRF\CsrfTokenManager::class),
+			);
+		});
+		$context->registerService(\OCA\ContractCheck\Middleware\SessionCsrfMiddleware::class, function ($c): \OCA\ContractCheck\Middleware\SessionCsrfMiddleware {
+			return new \OCA\ContractCheck\Middleware\SessionCsrfMiddleware(
+				$c->get(\OCP\IRequest::class),
+				$c->get(\OCP\IUserSession::class),
+				$c->get(\OCA\ContractCheck\Service\CsrfTokenValidator::class),
+			);
+		});
+		$context->registerMiddleware(\OCA\ContractCheck\Middleware\SessionCsrfMiddleware::class);
+
 		$context->registerMiddleware(AccessMiddleware::class);
 		$context->registerNotifierService(Notifier::class);
 		$context->registerDashboardWidget(DeadlineWidget::class);

@@ -83,8 +83,9 @@
 
 	function ccApi(path, opts) {
 		opts = opts || {};
+		/* No OCS-APIRequest: that header opts the request out of core CSRF +
+		   strict-cookie checks. Session mutations ride requesttoken instead. */
 		var headers = {
-			'OCS-APIREQUEST': 'true',
 			'Accept': 'application/json',
 			'requesttoken': requestToken()
 		};
