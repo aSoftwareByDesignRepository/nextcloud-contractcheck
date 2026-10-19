@@ -1,4 +1,5 @@
 import { acquireSharedInstanceLock } from './shared-instance-lock.mjs'
+import { resetE2eUserState } from '../../_shared/e2e/reset-e2e-user-state.mjs'
 // @ts-check
 import { execFileSync } from 'child_process'
 import { dirname, resolve } from 'path'
@@ -84,6 +85,7 @@ async function primeSession(baseURL, username, password) {
 
 export default async function globalSetup(config) {
 	await acquireSharedInstanceLock('contractcheck')
+	resetE2eUserState()
 	clearLoginThrottling()
 
 	// E2E_STORAGE_STATE overrides the shared session-cache path (resolved in
