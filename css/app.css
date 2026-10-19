@@ -787,7 +787,7 @@ dialog.cc-dialog .cc-form-actions {
 
 /* ── Responsive: tables scroll; hero + toolbar stack on phones ── */
 
-@media (max-width: 767px) {
+@media (max-width: 767.98px) {
 	/* ≤768px (Nextcloud mobile boundary): row-action buttons get the same
 	   44px touch floor as primary controls — 36px is a desktop-pointer
 	   compromise, unusable on touchscreens. */
@@ -1078,13 +1078,15 @@ dialog.cc-dialog .cc-form-actions {
 	border-radius: var(--cc-radius-md);
 	box-shadow: var(--cc-shadow-md);
 	display: flex;
+	flex-wrap: wrap;
 	gap: var(--cc-space-2);
 	align-items: center;
 }
 .cc-toast__text {
 	color: inherit;
-	flex: 1;
+	flex: 1 1 auto;
 	min-width: 0;
+	overflow-wrap: anywhere;
 }
 .cc-toast--success { border-left-color: var(--color-success-text, var(--color-success)); }
 .cc-toast--error { border-left-color: var(--color-error-text, var(--color-error)); }

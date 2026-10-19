@@ -633,7 +633,7 @@
 	box-shadow: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768.98px) {
 	/* Dense list tables without card reflow: horizontal scroll */
 	#app-content.cc-app .table-container .table:not(.cc-table--matrix):not(.cc-table--responsive),
 	#app-content.cc-app .table-container .grid-table:not(.cc-table--matrix):not(.cc-table--responsive) {
