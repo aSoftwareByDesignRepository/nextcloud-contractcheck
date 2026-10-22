@@ -451,7 +451,7 @@
 	justify-content: flex-start;
 }
 /* ≥768px tablet+: icon | title | actions on one row (NC tablet / desktop) */
-@media (min-width: 768px) {
+@media (min-width: 769px) {
 	.cc-page-header__main {
 		grid-template-columns: 56px 1fr auto;
 		gap: var(--cc-space-4);
