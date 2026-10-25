@@ -151,6 +151,10 @@ foreach ($mutants as $m) {
 		fwrite(STDERR, "MISS  {$m['name']} — anchor not found in {$m['file']}\n");
 		continue;
 	}
+	// Baseline-green guard (lesson mutation_runner_baseline_red_false_kill):
+	// a kill-test that is red unmutated turns nonzero exits into fake kills.
+	require_once __DIR__ . '/MutationBaseline.php';
+	mutationBaselineSelfCheck(__FILE__);
 	file_put_contents($path, str_replace($m['find'], $m['repl'], $orig));
 	try {
 		exec('cd ' . escapeshellarg($root) . ' && php ' . escapeshellarg($phpunit)

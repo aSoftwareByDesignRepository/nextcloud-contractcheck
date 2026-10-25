@@ -158,6 +158,17 @@
 	padding: 0 var(--cc-space-2);
 }
 
+/* Stacked forms: the form owns the field rhythm — sibling .cc-field blocks
+   otherwise sit at 0px while label→input inside each field is larger. */
+#app-content.cc-app .cc-form {
+	display: flex;
+	flex-direction: column;
+	gap: var(--cc-space-3);
+}
+#app-content.cc-app .cc-form > .cc-btn {
+	align-self: flex-start;
+}
+
 #app-content.cc-app .cc-field {
 	display: flex;
 	flex-direction: column;

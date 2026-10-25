@@ -607,7 +607,8 @@ class ApiController extends Controller
 			$csv = $this->export->buildCsv($this->uid());
 
 			return new DataDownloadResponse($csv, 'contractcheck-contracts.csv', 'text/csv; charset=utf-8');
-		} catch (\Throwable) {
+		} catch (\Throwable $e) {
+			\OCP\Log\logger('contractcheck')->error('ApiController::exportCsv failed: ' . $e->getMessage(), ['exception' => $e]);
 			return new JSONResponse(['success' => false, 'error' => 'SERVER_ERROR', 'message' => 'Export failed', 'fields' => new \stdClass()], Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -619,7 +620,8 @@ class ApiController extends Controller
 			$pdf = $this->export->buildPdf($this->uid());
 
 			return new DataDownloadResponse($pdf, 'contractcheck-contracts.pdf', 'application/pdf');
-		} catch (\Throwable) {
+		} catch (\Throwable $e) {
+			\OCP\Log\logger('contractcheck')->error('ApiController::exportPdf failed: ' . $e->getMessage(), ['exception' => $e]);
 			return new JSONResponse(['success' => false, 'error' => 'SERVER_ERROR', 'message' => 'Export failed', 'fields' => new \stdClass()], Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
 	}

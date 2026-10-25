@@ -14,7 +14,7 @@ class ContainerServiceResolutionIntegrationTest extends TestCase
 {
 	protected function setUp(): void
 	{
-		if (!defined('CONTRACTCHECK_NC_BOOTSTRAPPED')) {
+		if (!class_exists(\OC::class) || !isset(\OC::$server)) {
 			$this->markTestSkipped('Nextcloud is not bootstrapped (set NEXTCLOUD_ROOT or run inside Docker).');
 		}
 	}

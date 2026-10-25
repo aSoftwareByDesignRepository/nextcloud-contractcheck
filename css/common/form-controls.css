@@ -260,6 +260,13 @@
 	margin-bottom: var(--cc-space-2, 0.5rem);
 }
 
+/* .cc-field is a flex column whose gap already spaces label→control —
+   an extra margin here widens label→input while sibling fields sit at 0,
+   which visually pairs each label with the control above it. */
+#content.app-contractcheck #app-content .cc-field > label {
+	margin-bottom: 0;
+}
+
 #content.app-contractcheck #app-content .cc-filter-field > .cc-filter-field__label {
 	display: block;
 	font-size: 0.8125rem;
