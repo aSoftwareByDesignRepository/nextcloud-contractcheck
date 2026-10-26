@@ -1,0 +1,12 @@
+# Norwegian Bokmål tokens the real-lexicon gate cannot resolve — reviewed
+# and confirmed legitimate nb vocabulary for contractcheck (2026-10-26).
+# One token per line, lowercase. Markers per gate contract:
+#   # loanword — accepted loanword compound (donor-dict presence expected)
+#   # shared   — valid shared Scandinavian form the donor check cannot
+#                distinguish from a bleed (2-char morpheme < gate MIN_LEN)
+#   # abbrev   — localized date-format placeholder letters
+
+åååå      # abbrev — Å=år year placeholder in localized date formats (ÅÅÅÅ-MM-DD), mirrors de JJJJ / pl RRRR
+kalenderfeed # loanword — kalender+feed compound; feed is established loanword in nb UI copy
+kalenderfeeden # loanword — definite form of kalenderfeed
+årskostnad # shared — år+kostnad compound; 'år' is below the gate MIN_LEN morpheme size so decomposition cannot see it

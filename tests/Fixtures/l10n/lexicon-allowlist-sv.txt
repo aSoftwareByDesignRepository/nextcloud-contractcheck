@@ -1,0 +1,13 @@
+# Swedish tokens the real-lexicon gate cannot resolve — reviewed and
+# confirmed legitimate sv vocabulary for contractcheck (2026-10-26).
+# One token per line, lowercase. Markers per gate contract:
+#   # loanword — accepted loanword compound (donor-dict presence expected)
+#   # abbrev   — localized date-format placeholder letters
+#   # reviewed — valid Swedish usage, OOV in flat wordlists
+
+åååå      # abbrev — Å=år year placeholder in localized date formats (ÅÅÅÅ-MM-DD), mirrors de JJJJ / pl RRRR
+engångs   # reviewed — engångs- bound morpheme used as standalone UI label (engångskostnad convention)
+feedlänk  # loanword — feed+länk compound; feed is the established loanword in this catalog
+feedlänken # loanword — definite form of feedlänk
+kalenderfeed # loanword — kalender+feed compound; flagged via da_DK donor dict but feed is an accepted sv loanword, consistent with feedlänk
+kalenderfeeden # loanword — definite form of kalenderfeed

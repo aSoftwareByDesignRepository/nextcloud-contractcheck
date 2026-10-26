@@ -1,0 +1,6 @@
+# Polish tokens the real-lexicon gate cannot resolve — reviewed and
+# confirmed legitimate pl vocabulary for contractcheck (2026-10-26).
+# One token per line, lowercase.
+#   # abbrev — localized date-format placeholder letters
+
+rrrr      # abbrev — R=rok year placeholder in localized date formats (RRRR-MM-DD), mirrors de JJJJ / sv ÅÅÅÅ

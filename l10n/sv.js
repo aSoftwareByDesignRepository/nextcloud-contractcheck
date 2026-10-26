@@ -126,7 +126,7 @@ OC.L10N.register(
 	"End of year" : "Årsskifte",
 	"Ends" : "Löper ut",
 	"Ends within 90 days" : "Löper ut inom 90 dagar",
-	"Enter an amount like 49,90" : "Ange ett beløp som 49,90",
+	"Enter an amount like 49,90" : "Ange ett belopp som 49,90",
 	"Enter the end date and the notice period — ContractCheck tells you when to cancel." : "Ange slutdatum och uppsägningstid — ContractCheck talar om när du ska säga upp.",
 	"Event" : "Händelse",
 	"Every change, recorded." : "Varje ändring registrerad.",

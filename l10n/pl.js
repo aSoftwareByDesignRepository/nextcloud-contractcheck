@@ -235,7 +235,7 @@ OC.L10N.register(
 	"Reminders" : "Przypomnienia",
 	"Remove" : "Usuń",
 	"Remove cost entry " : "Usuń pozycję kosztową ",
-	"Renewed" : "Odnawiona",
+	"Renewed" : "Odnowiona",
 	"Renews every" : "Odnawia się co",
 	"Rent" : "Najem",
 	"Replace" : "Zastąp",
