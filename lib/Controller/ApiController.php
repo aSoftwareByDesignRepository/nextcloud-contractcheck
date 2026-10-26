@@ -36,6 +36,7 @@ use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
+use Psr\Log\LoggerInterface;
 
 /**
  * Web JSON API — session-authenticated, CSRF-protected (Nextcloud default;
@@ -65,6 +66,7 @@ class ApiController extends Controller
 		private readonly ContractRevisionMapper $revisions,
 		private readonly IURLGenerator $urlGenerator,
 		private readonly Clock $clock,
+		private readonly LoggerInterface $logger,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -608,7 +610,7 @@ class ApiController extends Controller
 
 			return new DataDownloadResponse($csv, 'contractcheck-contracts.csv', 'text/csv; charset=utf-8');
 		} catch (\Throwable $e) {
-			\OCP\Log\logger('contractcheck')->error('ApiController::exportCsv failed: ' . $e->getMessage(), ['exception' => $e]);
+			$this->logger->error('ApiController::exportCsv failed: ' . $e->getMessage(), ['exception' => $e]);
 			return new JSONResponse(['success' => false, 'error' => 'SERVER_ERROR', 'message' => 'Export failed', 'fields' => new \stdClass()], Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -621,7 +623,7 @@ class ApiController extends Controller
 
 			return new DataDownloadResponse($pdf, 'contractcheck-contracts.pdf', 'application/pdf');
 		} catch (\Throwable $e) {
-			\OCP\Log\logger('contractcheck')->error('ApiController::exportPdf failed: ' . $e->getMessage(), ['exception' => $e]);
+			$this->logger->error('ApiController::exportPdf failed: ' . $e->getMessage(), ['exception' => $e]);
 			return new JSONResponse(['success' => false, 'error' => 'SERVER_ERROR', 'message' => 'Export failed', 'fields' => new \stdClass()], Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
 	}
