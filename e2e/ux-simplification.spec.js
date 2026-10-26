@@ -96,4 +96,37 @@ test.describe('ux simplification', () => {
 		const text = fs.readFileSync(path, 'utf8')
 		expect(text).toContain('title,type,partner,start,end,term,renewal,notice,anchor')
 	})
+
+	test('import summary substitutes the count — never a literal {n}', async ({ page }) => {
+		await login(page, admin)
+		await page.goto('/apps/contractcheck/import', { waitUntil: 'domcontentloaded' })
+		await expect(page.locator('#cc-import-form')).toBeVisible()
+
+		// Two valid rows → the plural branch, where {n} must be substituted.
+		const tag = `${Date.now()}-${Math.floor(Math.random() * 1e4)}`
+		const row = (title) =>
+			`"${title}","service","","2026-01-01","2028-12-31","auto_renew","12","3","contract_end","",""`
+		const csv = [
+			'title,type,partner,start,end,term,renewal,notice,anchor,cost_center,notes',
+			row(`ImpSum ${tag} A`),
+			row(`ImpSum ${tag} B`),
+		].join('\n') + '\n'
+		await page.locator('#cc-import-file').setInputFiles({
+			name: 'import.csv', mimeType: 'text/csv', buffer: Buffer.from(csv, 'utf8'),
+		})
+		await page.locator('#cc-import-submit').click()
+
+		// Digit assertion stays locale-safe — every translation carries {n}.
+		const summary = page.locator('#cc-import-summary')
+		await expect(summary).toBeVisible({ timeout: 15_000 })
+		await expect(summary).toContainText('2')
+		await expect(summary).not.toContainText('{n}')
+		await expect(page.locator('#cc-import-errors-wrap')).toBeHidden()
+
+		// Imported contracts leave the register — archive them again.
+		const list = await apiGet(page, '/api/contracts')
+		for (const c of list.filter((x) => (x.title || '').includes(`ImpSum ${tag}`))) {
+			await archiveContract(page, c.id)
+		}
+	})
 })

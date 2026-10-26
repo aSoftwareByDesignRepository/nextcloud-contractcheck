@@ -18,9 +18,14 @@
 	}
 	var role = (boot && boot.role) || { manager: false, costViewer: false };
 
-	function t(text) {
+	function t(text, vars) {
 		if (window.OC && OC.L10N && OC.L10N.translate) {
-			return OC.L10N.translate('contractcheck', text);
+			return OC.L10N.translate('contractcheck', text, vars);
+		}
+		if (vars) {
+			Object.keys(vars).forEach(function (k) {
+				text = text.split('{' + k + '}').join(String(vars[k]));
+			});
 		}
 		return text;
 	}
