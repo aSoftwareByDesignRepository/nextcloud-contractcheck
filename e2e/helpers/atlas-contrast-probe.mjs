@@ -134,6 +134,10 @@ const PROBES = [
 		rows: [
 			{ sel: '.cc-badge', kind: 'badge', what: 'text' },
 			{ sel: '.cc-section h3, .cc-card h3, #cc-main-content h2', kind: 'heading', what: 'text' },
+			// --cc-accent-ink (070824e): dark themes blend primary-element
+			// toward main-text so accent ink keeps WCAG AA on surfaces.
+			{ sel: '.cc-breadcrumb__link', kind: 'accent-ink', what: 'text' },
+			{ sel: '.cc-page-header__icon', kind: 'accent-ink-icon', what: 'text' },
 		],
 	},
 	{

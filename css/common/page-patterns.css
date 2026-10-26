@@ -488,6 +488,12 @@
 	margin-bottom: 0;
 	width: 100%;
 	table-layout: auto;
+	/* NC core reset forces table white-space:nowrap — inherited into every
+	   cell, nowrap cells keep their full min-content, so a wide cell
+	   pushes the actions column behind the overflow-x wrap. The alias
+	   families get the same wrap contract as .cc-table (app.css):
+	   cells may wrap; the actions group wraps via .cc-table-actions. */
+	white-space: normal;
 }
 
 /* Desktop: fill available width; scroll horizontally only when columns need more space */
