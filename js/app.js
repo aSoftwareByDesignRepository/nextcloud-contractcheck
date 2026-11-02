@@ -76,14 +76,24 @@
 	}
 
 	function appBase() {
+		// OC.generateUrl prefixes /index.php when pretty URLs are off
+		// (modRewriteWorking=false — typical on shared hosting).
+		if (window.OC && typeof OC.generateUrl === 'function') {
+			return OC.generateUrl('/apps/contractcheck');
+		}
+		// Last resort: index.php form routes on every install; webroot
+		// still covers subdirectory deployments.
 		var webroot = (window.OC && OC.getRootPath) ? OC.getRootPath() : '';
-		return webroot + '/apps/contractcheck';
+		return webroot + '/index.php/apps/contractcheck';
 	}
 
 	// Nextcloud's /f/<fileid> route resolves a file id to its Files location.
 	function fileUrl(fileId) {
+		if (window.OC && typeof OC.generateUrl === 'function') {
+			return OC.generateUrl('/f/{id}', { id: fileId });
+		}
 		var webroot = (window.OC && OC.getRootPath) ? OC.getRootPath() : '';
-		return webroot + '/f/' + encodeURIComponent(String(fileId));
+		return webroot + '/index.php/f/' + encodeURIComponent(String(fileId));
 	}
 
 	function ccApi(path, opts) {
