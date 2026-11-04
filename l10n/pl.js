@@ -64,7 +64,7 @@ OC.L10N.register(
 	"Contact" : "Kontakt",
 	"Contact person" : "Osoba kontaktowa",
 	"Contract" : "Umowa",
-	"Contract actions" : "Działania na umowie",
+	"Contract actions" : "Działania umowy",
 	"Contract deadlines" : "Terminy umów",
 	"Contract details" : "Szczegóły umowy",
 	"Contract end" : "Koniec umowy",

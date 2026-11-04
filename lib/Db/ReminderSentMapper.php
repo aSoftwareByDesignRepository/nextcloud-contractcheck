@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\ContractCheck\Db;
 
 use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\Exception as DbException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
@@ -62,7 +63,10 @@ class ReminderSentMapper extends QBMapper
 			$this->insert($row);
 
 			return true;
-		} catch (\Throwable) {
+		} catch (DbException $e) {
+			if ($e->getReason() !== DbException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+				throw $e;
+			}
 			// Row exists: confirmed → dedup; stale pending → reclaim below.
 		}
 

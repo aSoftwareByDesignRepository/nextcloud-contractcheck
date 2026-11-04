@@ -12,6 +12,7 @@ namespace OCA\ContractCheck\Middleware;
 use OCA\ContractCheck\Exception\AppAccessDeniedException;
 use OCA\ContractCheck\Service\AccessService;
 use OCA\ContractCheck\Support\AssetRegistrar;
+use OCA\ContractCheck\Support\SafeHomeUrl;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
@@ -73,7 +74,7 @@ class AccessMiddleware extends Middleware
 			AssetRegistrar::registerStyles();
 
 			return new TemplateResponse('contractcheck', 'access-denied', [
-				'homeUrl' => $this->urlGenerator->linkToRouteAbsolute('contractcheck.page.index'),
+				'homeUrl' => SafeHomeUrl::resolve($this->urlGenerator),
 			], 'user', Http::STATUS_FORBIDDEN);
 		}
 		throw $exception;

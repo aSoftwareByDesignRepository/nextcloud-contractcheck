@@ -105,6 +105,43 @@ final class AccessMiddlewareTest extends TestCase
 		self::assertSame(403, $resp->getStatus());
 	}
 
+	public function testDeniedPageHomeUrlTargetsPlatformHomeNotAppIndex(): void
+	{
+		// Regression: a homeUrl built from linkToRoute('contractcheck.page.index')
+		// sends the locked-out user straight back to the same 403.
+		$this->request->method('getRequestUri')->willReturn('/apps/contractcheck/');
+		$urls = $this->createMock(IURLGenerator::class);
+		$urls->method('linkToDefaultPageUrl')->willReturn('/index.php/apps/dashboard/');
+		$mw = new AccessMiddleware(
+			$this->access, $this->session, $this->request, $this->createMock(IL10N::class), $urls
+		);
+		$resp = $mw->afterException(
+			$this->createMock(PageController::class), 'index', new AppAccessDeniedException('x')
+		);
+		self::assertInstanceOf(TemplateResponse::class, $resp);
+		$params = $resp->getParams();
+		self::assertSame('/index.php/apps/dashboard/', $params['homeUrl']);
+		self::assertStringNotContainsString('contractcheck', (string)$params['homeUrl']);
+	}
+
+	public function testDeniedPageHomeUrlSurvivesDefaultPageThrow(): void
+	{
+		// NC35 can throw on linkToDefaultPageUrl — the 403 must never become a 500.
+		$this->request->method('getRequestUri')->willReturn('/apps/contractcheck/');
+		$urls = $this->createMock(IURLGenerator::class);
+		$urls->method('linkToDefaultPageUrl')->willThrowException(new \InvalidArgumentException('no href'));
+		$urls->method('getAbsoluteURL')->with('/')->willReturn('https://nc.example/');
+		$mw = new AccessMiddleware(
+			$this->access, $this->session, $this->request, $this->createMock(IL10N::class), $urls
+		);
+		$resp = $mw->afterException(
+			$this->createMock(PageController::class), 'index', new AppAccessDeniedException('x')
+		);
+		self::assertInstanceOf(TemplateResponse::class, $resp);
+		self::assertSame(403, $resp->getStatus());
+		self::assertSame('https://nc.example/', $resp->getParams()['homeUrl']);
+	}
+
 	public function testOtherExceptionsRethrown(): void
 	{
 		$this->request->method('getRequestUri')->willReturn('/apps/contractcheck/api/');

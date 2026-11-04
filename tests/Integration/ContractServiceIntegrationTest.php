@@ -302,11 +302,14 @@ final class ContractServiceIntegrationTest extends TestCase
 		// a stale pending claim as a crashed run would have left it.
 		$engine = new \OCA\ContractCheck\Domain\DeadlineEngine();
 		$instanceId = $engine->compute($this->contracts->ruleOf($active), $today)->instanceId($active->getId());
+		// lead_day=60, not 30: 'today +30d +3mo' lands daysLeft at ~30±month-
+		// length drift (e.g. 32 on 2026-11-04) — the 30-day window is not
+		// guaranteed inside, 60 always is.
 		$stale = (new \DateTimeImmutable())->sub(new \DateInterval('PT7200S'))->format('Y-m-d H:i:s');
 		$this->db->executeStatement(
 			"INSERT INTO `*PREFIX*cc_reminders` (contract_id, deadline_instance_id, lead_day, sent_at, pending)
 			 VALUES (?, ?, ?, ?, ?)",
-			[$active->getId(), $instanceId, 30, $stale, 1]
+			[$active->getId(), $instanceId, 60, $stale, 1]
 		);
 
 		$dispatched = $this->reminders->dispatchForContract($active, $today);
@@ -315,7 +318,7 @@ final class ContractServiceIntegrationTest extends TestCase
 		$row = $this->db->executeQuery(
 			"SELECT pending FROM `*PREFIX*cc_reminders`
 			 WHERE contract_id = ? AND deadline_instance_id = ? AND lead_day = ?",
-			[$active->getId(), $instanceId, 30]
+			[$active->getId(), $instanceId, 60]
 		)->fetch();
 		self::assertSame(0, (int)$row['pending'], 'delivered claim must be confirmed, not left pending');
 
@@ -324,7 +327,7 @@ final class ContractServiceIntegrationTest extends TestCase
 		$this->db->executeStatement(
 			"UPDATE `*PREFIX*cc_reminders` SET pending = 1, sent_at = ?
 			 WHERE contract_id = ? AND deadline_instance_id = ? AND lead_day = ?",
-			[$fresh, $active->getId(), $instanceId, 30]
+			[$fresh, $active->getId(), $instanceId, 60]
 		);
 		self::assertSame(0, $this->reminders->dispatchForContract($active, $today),
 			'fresh pending claim belongs to a live run — must dedup, not steal');
