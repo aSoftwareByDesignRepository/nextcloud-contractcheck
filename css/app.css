@@ -41,7 +41,7 @@
 }
 
 #app-content.cc-app .cc-panel {
-	background: var(--cc-bg-card);
+	background-color: var(--cc-bg-card);
 	border: 1px solid var(--cc-border);
 	border-radius: var(--cc-radius-lg);
 	padding: var(--cc-space-4);
@@ -97,7 +97,7 @@
 }
 
 #app-content.cc-app .cc-stat {
-	background: var(--cc-bg-card);
+	background-color: var(--cc-bg-card);
 	border: 1px solid var(--cc-border);
 	border-left: 4px solid var(--cc-border-strong);
 	border-radius: var(--cc-radius-md);
@@ -212,7 +212,9 @@
 	padding: var(--cc-space-2) var(--cc-space-3);
 	border: 1px solid var(--cc-form-border);
 	border-radius: var(--cc-radius-sm);
-	background: var(--cc-bg-card);
+	/* background-color only — the shorthand would reset the form-controls
+	   select chevron (background-image/position/repeat/size) to initial. */
+	background-color: var(--cc-bg-card);
 	color: var(--cc-text);
 	font-size: var(--cc-fs-md);
 	font-family: inherit;
@@ -273,7 +275,7 @@
 	border: 1px solid var(--cc-control-border);
 	border-radius: var(--cc-radius-pill);
 	cursor: pointer;
-	background: var(--cc-bg-card);
+	background-color: var(--cc-bg-card);
 	font-size: var(--cc-fs-md);
 	user-select: none;
 }
@@ -338,7 +340,7 @@
 	overflow-x: auto;
 	border: 1px solid var(--cc-border);
 	border-radius: var(--cc-radius-md);
-	background: var(--cc-bg-card);
+	background-color: var(--cc-bg-card);
 }
 
 #app-content.cc-app .cc-table {
@@ -470,7 +472,7 @@
 	gap: var(--cc-space-4);
 	align-items: flex-start;
 	justify-content: space-between;
-	background: var(--cc-bg-card);
+	background-color: var(--cc-bg-card);
 	border: 1px solid var(--cc-border);
 	border-radius: var(--cc-radius-lg);
 	padding: var(--cc-space-5);
@@ -668,7 +670,7 @@
 	margin: var(--cc-space-1) 0 0;
 	padding: var(--cc-space-1);
 	list-style: none;
-	background: var(--cc-bg-card);
+	background-color: var(--cc-bg-card);
 	border: 1px solid var(--cc-border-strong);
 	border-radius: var(--cc-radius-md);
 	box-shadow: var(--cc-shadow-md);
@@ -775,7 +777,7 @@ dialog.cc-dialog {
 	width: min(34rem, calc(100vw - 2 * var(--cc-space-4)));
 	max-height: 85dvh;
 	overflow-y: auto;
-	background: var(--cc-bg-card);
+	background-color: var(--cc-bg-card);
 	color: var(--cc-text);
 }
 
