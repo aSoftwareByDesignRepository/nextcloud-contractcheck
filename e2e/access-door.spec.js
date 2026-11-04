@@ -47,6 +47,22 @@ test.describe('access door', () => {
 			mkdirSync(OUT, { recursive: true })
 			await vpage.screenshot({ path: join(OUT, 'cck-access-denied-desktop.png') })
 
+			// Nav-track wallpaper gutter (shell_grid_nav_track_wallpaper_bleed):
+			// the denied page renders no #app-navigation — #app-content must span
+			// the full grid row, never leave an empty 280px nav track that bleeds
+			// the host wallpaper through as page chrome.
+			await expect(vpage.locator('#content > #app-navigation')).toHaveCount(0)
+			const contentBox = await vpage.locator('#app-content').boundingBox()
+			const shellBox = await vpage.locator('#content').boundingBox()
+			expect(contentBox?.x, '#app-content must start at the shell left edge').toBe(0)
+			expect(shellBox?.x).toBe(0)
+			const navTrackCovered = await vpage.evaluate(() => {
+				// Probe the middle of the former nav track (x=140 < 280px nav width).
+				const el = document.elementFromPoint(140, Math.floor(window.innerHeight / 2))
+				return el !== null && el.closest('#app-content') !== null
+			})
+			expect(navTrackCovered, 'former nav track must be covered by #app-content').toBe(true)
+
 			// The recovery CTA must point somewhere a denied user can actually go —
 			// never back at the app index (self-loop to the same 403).
 			const cta = vpage.locator('.cc-app--denied .cc-btn--primary')

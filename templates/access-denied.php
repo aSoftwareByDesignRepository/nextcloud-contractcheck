@@ -6,6 +6,8 @@
  * @var \OCP\IL10N $l
  */
 $homeUrl = (string)($_['homeUrl'] ?? '/');
+$message = (string)($_['message'] ?? $l->t('You do not have access to ContractCheck. Your account is not in a group allowed to use this app.'));
+$hint = (string)($_['hint'] ?? $l->t('Ask a ContractCheck manager or Nextcloud administrator to add you to an allowed group.'));
 $clientHints = $_['clientHints'] ?? ['locale' => 'en-US', 'htmlLang' => 'en-US', 'timezone' => 'UTC'];
 $htmlLang = (string)($clientHints['htmlLang'] ?? 'en-US');
 ?>
@@ -28,7 +30,8 @@ $htmlLang = (string)($clientHints['htmlLang'] ?? 'en-US');
 		</div>
 		<main id="cc-main-content" class="cc-main" tabindex="-1" aria-labelledby="cc-page-title">
 			<section class="cc-callout cc-callout--warning" role="alert">
-				<p><?php p($l->t('Only Nextcloud admins and ContractCheck app admins can use this app.')); ?></p>
+				<p><?php p($message); ?></p>
+				<p><?php p($hint); ?></p>
 				<p><a class="cc-btn cc-btn--primary" href="<?php p($homeUrl); ?>"><?php p($l->t('Back to Nextcloud')); ?></a></p>
 			</section>
 		</main>

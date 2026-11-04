@@ -13,6 +13,18 @@
 	display: none !important;
 }
 
+/*
+ * Nav-less surfaces (access-denied): the ≥1024px shell grid reserves a
+ * 280px nav track, but the denied page renders no #app-navigation — an
+ * empty first track would expose the host wallpaper as decorative page
+ * chrome (DS §0 reject). Nav-less surfaces span the full row instead.
+ */
+@media (min-width: 1024px) {
+	#content.app-contractcheck:not(:has(> #app-navigation)) > #app-content {
+		grid-column: 1 / -1;
+	}
+}
+
 /* ── Layout primitives ─────────────────────────────────────── */
 
 #app-content.cc-app .cc-card-grid {
