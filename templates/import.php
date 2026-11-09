@@ -13,7 +13,7 @@
 			<p class="cc-field__hint">
 				<?php p($l->t('One contract per row. Required column: title. Recognized columns: ref, type, partner, start, end, term, renewal, notice, anchor, cost_center, notes. Dates as YYYY-MM-DD or DD.MM.YYYY.')); ?>
 			</p>
-			<form id="cc-import-form" enctype="multipart/form-data" novalidate>
+			<form id="cc-import-form" class="cc-form" enctype="multipart/form-data" novalidate>
 				<div class="cc-field">
 					<label class="cc-label" for="cc-import-file"><?php p($l->t('CSV file')); ?></label>
 					<input type="file" id="cc-import-file" name="file" accept=".csv,text/csv" required />

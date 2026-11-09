@@ -4,7 +4,7 @@
 <section class="cc-contract-form" aria-labelledby="cc-form-heading">
 	<h2 id="cc-form-heading" class="cc-sr-only"><?php p($l->t('Contract details')); ?></h2>
 
-	<form id="cc-contract-form" novalidate>
+	<form id="cc-contract-form" class="cc-form" novalidate>
 		<input type="hidden" name="contractId" id="cc-f-id" value="<?php p((string)($_['contractId'] ?? '')); ?>" />
 		<input type="hidden" name="revision" id="cc-f-revision" value="" />
 

@@ -38,7 +38,7 @@
 	</div>
 
 	<dialog id="cc-party-dialog" class="cc-dialog" aria-labelledby="cc-party-dialog-title">
-		<form id="cc-party-form" method="dialog" novalidate>
+		<form id="cc-party-form" class="cc-form" method="dialog" novalidate>
 			<h3 id="cc-party-dialog-title" class="cc-dialog__title"><?php p($l->t('Party')); ?></h3>
 			<input type="hidden" name="partyId" id="cc-p-id" />
 			<div class="cc-field">

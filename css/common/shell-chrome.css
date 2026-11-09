@@ -540,7 +540,7 @@
 	padding: 0.5rem 2.25rem 0.5rem 0.75rem;
 	border: 1px solid var(--cc-border-strong);
 	border-radius: var(--cc-radius-sm);
-	background: var(--cc-bg-card);
+	background-color: var(--cc-bg-card);
 	color: var(--cc-text);
 	font: inherit;
 	font-weight: 600;
