@@ -37,6 +37,7 @@
 				if (k === 'class') node.className = attrs[k];
 				else if (k === 'text') node.textContent = attrs[k];
 				else if (k === 'html') node.innerHTML = attrs[k];
+				else if (k.slice(0, 2) === 'on' && typeof attrs[k] === 'function') node.addEventListener(k.slice(2).toLowerCase(), attrs[k]);
 				else node.setAttribute(k, attrs[k]);
 			});
 		}
