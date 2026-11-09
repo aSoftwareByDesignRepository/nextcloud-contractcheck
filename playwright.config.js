@@ -44,15 +44,36 @@ export default defineConfig({
 		screenshot: 'only-on-failure',
 	},
 	projects: [
-		{ name: 'chromium-1280', use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } } },
-		{ name: 'chromium-320', use: { ...devices['Desktop Chrome'], viewport: { width: 320, height: 640 } } },
+		{
+			name: 'chromium-1280',
+			testIgnore: 'access-door.spec.js',
+			use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
+		},
+		{
+			name: 'chromium-320',
+			testIgnore: 'access-door.spec.js',
+			use: { ...devices['Desktop Chrome'], viewport: { width: 320, height: 640 } },
+		},
 		{
 			name: 'chromium-store',
+			testIgnore: 'access-door.spec.js',
 			use: {
 				...devices['Desktop Chrome'],
 				viewport: { width: 1920, height: 1040 },
 				deviceScaleFactor: 1,
 			},
+		},
+		// The access-door spec narrows `allowedGroups` instance-wide: every
+		// non-admin fixture user is denied for the mutation window. Inside the
+		// parallel pool that races sibling specs (a ccsmoke-context load
+		// mid-window lands on the 403 page) — instance_wide_state_race. Run it
+		// once, serialized after the suite via `dependencies` (azc stateful-N
+		// precedent). Targeted local re-run: `--project=chromium-door --no-deps`.
+		{
+			name: 'chromium-door',
+			testMatch: 'access-door.spec.js',
+			dependencies: ['chromium-1280', 'chromium-320', 'chromium-store'],
+			use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
 		},
 	],
 })
