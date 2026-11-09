@@ -17,6 +17,7 @@ use OCA\ContractCheck\Exception\StateException;
 use OCA\ContractCheck\Exception\ValidationException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\DB\Exception as DbException;
 
 /**
  * Canonical JSON envelope (family api-security contract):
@@ -67,6 +68,11 @@ trait ApiJsonTrait
 		}
 		if ($e instanceof ForbiddenException || $e instanceof AppAccessDeniedException) {
 			return $this->fail('FORBIDDEN', 'Access denied.', [], Http::STATUS_FORBIDDEN);
+		}
+		// Unique-index races (concurrent snapshot/audit/link writes that lose
+		// the index) are retryable conflicts — never a bare 500.
+		if ($e instanceof DbException && $e->getReason() === DbException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+			return $this->fail('CONFLICT', 'Write conflict — reload and retry.', [], Http::STATUS_CONFLICT);
 		}
 
 		return $this->fail('SERVER_ERROR', 'Unexpected error', [], Http::STATUS_INTERNAL_SERVER_ERROR);

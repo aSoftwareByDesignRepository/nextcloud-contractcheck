@@ -19,6 +19,7 @@ use OCA\ContractCheck\Exception\ConflictException;
 use OCA\ContractCheck\Exception\NotFoundException;
 use OCA\ContractCheck\Exception\StateException;
 use OCA\ContractCheck\Exception\ValidationException;
+use OCP\DB\Exception as DbException;
 use OCP\IDBConnection;
 
 /**
@@ -114,6 +115,10 @@ class ContractService
 			$this->db->commit();
 		} catch (\Throwable $e) {
 			$this->db->rollBack();
+			if ($e instanceof DbException
+				&& $e->getReason() === DbException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+				throw new ConflictException('Write conflict — reload and retry.');
+			}
 			throw $e;
 		}
 
@@ -162,6 +167,10 @@ class ContractService
 			throw $e;
 		} catch (\Throwable $e) {
 			$this->db->rollBack();
+			if ($e instanceof DbException
+				&& $e->getReason() === DbException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+				throw new ConflictException('Write conflict — reload and retry.');
+			}
 			throw $e;
 		}
 
@@ -221,6 +230,10 @@ class ContractService
 			throw $e;
 		} catch (\Throwable $e) {
 			$this->db->rollBack();
+			if ($e instanceof DbException
+				&& $e->getReason() === DbException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+				throw new ConflictException('Write conflict — reload and retry.');
+			}
 			throw $e;
 		}
 
@@ -309,6 +322,13 @@ class ContractService
 		}
 	}
 
+	/**
+	 * unique-conflict:ok — the cc_rev_con_rev_uq (contract_id, revision)
+	 * insert delegates its race to the calling transaction catch, which
+	 * translates DbException REASON_UNIQUE_CONSTRAINT_VIOLATION into
+	 * ConflictException (409) after rollback; fromThrowable maps it to a
+	 * retryable CONFLICT payload at the boundary.
+	 */
 	private function snapshot(Contract $c, string $actorUid): void
 	{
 		$rev = new ContractRevision();

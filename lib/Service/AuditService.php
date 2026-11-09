@@ -11,6 +11,7 @@ namespace OCA\ContractCheck\Service;
 
 use OCA\ContractCheck\Db\ContractEvent;
 use OCA\ContractCheck\Db\ContractEventMapper;
+use OCP\DB\Exception as DbException;
 
 /**
  * Append-only audit writer — per-contract sequence, hash-chained
@@ -55,7 +56,13 @@ class AuditService
 		}
 	}
 
-	/** @param array<string, scalar|null> $payload */
+	/**
+	 * unique-conflict:ok — the cc_evt_con_seq_uq insert delegates its race
+	 * to record(): the only caller wraps append() in a retry loop that
+	 * re-reads the chain head after a REASON_UNIQUE_CONSTRAINT_VIOLATION.
+	 *
+	 * @param array<string, scalar|null> $payload
+	 */
 	private function append(int $contractId, string $event, ?string $actorUid, array $payload): void
 	{
 		$head = $this->mapper->findHead($contractId);
@@ -73,6 +80,11 @@ class AuditService
 
 	private static function isDuplicateKey(\Throwable $e): bool
 	{
+		if ($e instanceof DbException) {
+			return $e->getReason() === DbException::REASON_UNIQUE_CONSTRAINT_VIOLATION;
+		}
+		// Wrapped/driver-level throwables without a reason code fall back to
+		// the message sniff.
 		$msg = strtolower($e->getMessage() . ' ' . ($e->getPrevious()?->getMessage() ?? ''));
 
 		return str_contains($msg, 'unique') || str_contains($msg, 'duplicate');

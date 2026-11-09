@@ -41,6 +41,12 @@ use Psr\Log\LoggerInterface;
 /**
  * Web JSON API — session-authenticated, CSRF-protected (Nextcloud default;
  * mutating routes deliberately keep CSRF on).
+ *
+ * unique-conflict:ok — endpoint catches delegate write-race translation
+ * to ApiJsonTrait::fromThrowable (DbException
+ * REASON_UNIQUE_CONSTRAINT_VIOLATION → 409 CONFLICT) and to the service
+ * layer, which maps unique-index collisions to ConflictException inside
+ * its transaction catches.
  */
 class ApiController extends Controller
 {

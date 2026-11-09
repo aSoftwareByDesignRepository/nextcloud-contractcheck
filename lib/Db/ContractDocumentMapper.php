@@ -11,6 +11,7 @@ namespace OCA\ContractCheck\Db;
 
 use OCA\ContractCheck\Exception\NotFoundException;
 use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\Exception as DbException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
@@ -79,7 +80,12 @@ class ContractDocumentMapper extends QBMapper
 		try {
 			return $this->insert($doc);
 		} catch (\Throwable $e) {
-			// Unique-key race: another request linked the same file first.
+			// Only the unique-key race is idempotent — anything else is a
+			// real failure and must surface.
+			if (!($e instanceof DbException)
+				|| $e->getReason() !== DbException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+				throw $e;
+			}
 			$existing = $this->findEntities($qb);
 			if ($existing !== []) {
 				return $existing[0];
@@ -98,6 +104,12 @@ class ContractDocumentMapper extends QBMapper
 		return $qb->executeStatement();
 	}
 
+	/**
+	 * unique-conflict:ok — this UPDATE only SETs missing_since, which is not
+	 * a member of cc_doc_con_file_uq, so it cannot violate the unique index.
+	 * (deleteForContract is a DELETE; insertIgnore above carries the real
+	 * REASON_UNIQUE_CONSTRAINT_VIOLATION catch for the one insert site.)
+	 */
 	public function setMissingSince(int $id, ?\DateTimeInterface $since): int
 	{
 		$qb = $this->db->getQueryBuilder();
