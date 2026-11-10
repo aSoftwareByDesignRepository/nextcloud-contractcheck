@@ -172,7 +172,7 @@ OC.L10N.register(
 	"Managed under “Parties”." : "Gestito sotto «Controparti».",
 	"Manager" : "Gestore",
 	"Member" : "Membro",
-	"Menu" : "Menu",
+	"Menu" : "Menù",
 	"Missed windows" : "Finestre mancate",
 	"Missing documents" : "Documenti mancanti",
 	"Months" : "Mesi",
