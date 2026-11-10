@@ -1,5 +1,4 @@
 {
-	"pluralForm": "nplurals=1; plural=0;",
 	"translations": {
 		"(no cost center)": "（无成本中心）",
 		"(opens in a new tab)": "（在新标签页中打开）",
@@ -333,5 +332,6 @@
 		"yearly": "每年",
 		"— none —": "— 无 —",
 		"“Effective at” is the date your cancellation takes effect — e.g. 3 months’ notice to month end.": "“生效于”指解约生效的日期——例如提前 3 个月通知至月末。"
-	}
+	},
+	"pluralForm": "nplurals=1; plural=0;"
 }
