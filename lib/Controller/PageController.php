@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace OCA\ContractCheck\Controller;
 
+use OCA\ContractCheck\AppInfo\Application;
+use OCA\ContractCheck\ConfigTransfer\TransferReceiptStore;
 use OCA\ContractCheck\Service\AccessService;
 use OCA\ContractCheck\Service\SettingsSectionCatalog;
 use OCA\ContractCheck\Support\AssetRegistrar;
@@ -19,10 +21,12 @@ use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
+use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
+use OCP\Util;
 
 /**
  * Page controller — server-rendered app shell. All pages share main.php;
@@ -40,6 +44,8 @@ class PageController extends Controller
 		private readonly IL10N $l,
 		private readonly AccessService $access,
 		private readonly SettingsSectionCatalog $sections,
+		private readonly IGroupManager $groupManager,
+		private readonly TransferReceiptStore $transferReceipts,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -185,6 +191,14 @@ class PageController extends Controller
 		AssetRegistrar::register($page === 'contract-detail' || $page === 'contract-form' ? 'contract' : $page);
 
 		$section = (string)($extra['section'] ?? '');
+		if ($page === 'settings' && $section === 'transfer') {
+			// The shared transfer pack (js/transfer.js) sits at js/ root,
+			// not under pages/ — register it plus the app bridge and the
+			// pack stylesheet only for this section.
+			Util::addStyle(Application::APP_ID, 'common/transfer');
+			Util::addScript(Application::APP_ID, 'transfer-bridge');
+			Util::addScript(Application::APP_ID, 'transfer');
+		}
 		$roleLabel = $manager ? $this->l->t('Manager') : $this->l->t('Viewer');
 
 		return new TemplateResponse('contractcheck', 'main', [
@@ -211,6 +225,8 @@ class PageController extends Controller
 				'timezone' => date_default_timezone_get(),
 			],
 			'contractId' => $extra['contractId'] ?? null,
+			'isSystemAdmin' => $uid !== '' && $this->groupManager->isAdmin($uid),
+			'transferLastReceipt' => $this->transferReceipts->lastReceipt(),
 		]);
 	}
 
@@ -250,9 +266,10 @@ class PageController extends Controller
 			'deadlines' => $this->l->t('Reminder lead days'),
 			'access' => $this->l->t('Who can use the app'),
 			'feed' => $this->l->t('Calendar subscription'),
+			'transfer' => $this->l->t('Test → production'),
 			'support' => $this->l->t('Donations & enterprise'),
 		];
-		$icons = ['deadlines' => 'bell', 'access' => 'users', 'feed' => 'calendar', 'support' => 'heart-handshake'];
+		$icons = ['deadlines' => 'bell', 'access' => 'users', 'feed' => 'calendar', 'transfer' => 'upload', 'support' => 'heart-handshake'];
 		$out = [];
 		foreach (SettingsSectionCatalog::SECTIONS as $section) {
 			if (!$manager && in_array($section, SettingsSectionCatalog::MANAGER_ONLY_SECTIONS, true)) {

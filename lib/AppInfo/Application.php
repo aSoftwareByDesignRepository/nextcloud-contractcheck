@@ -88,6 +88,59 @@ class Application extends App implements IBootstrap
 		});
 		$context->registerMiddleware(\OCA\ContractCheck\Middleware\SessionCsrfMiddleware::class);
 
+		// ── Config & data transfer (test → production) ──────────────────
+		$context->registerService(\OCA\ContractCheck\ConfigTransfer\TransferManifest::class, fn () => new \OCA\ContractCheck\ConfigTransfer\TransferManifest());
+		$context->registerService(\OCA\ContractCheck\ConfigTransfer\TransferHooks::class, function ($c): \OCA\ContractCheck\ConfigTransfer\TransferHooks {
+			return new \OCA\ContractCheck\ConfigTransfer\TransferHooks(
+				$c->get(\OCA\ContractCheck\Service\SettingsService::class),
+				$c->get(AccessService::class),
+				$c->get(UpgradeBackupService::class),
+				$c->get(LoggerInterface::class),
+			);
+		});
+		$context->registerService(\OCA\ContractCheck\ConfigTransfer\TransferPendingStore::class, fn ($c) => new \OCA\ContractCheck\ConfigTransfer\TransferPendingStore($c->get(IRootFolder::class), $c->get(IConfig::class), 'contractcheck'));
+		$context->registerService(\OCA\ContractCheck\ConfigTransfer\TransferReceiptStore::class, fn ($c) => new \OCA\ContractCheck\ConfigTransfer\TransferReceiptStore($c->get(IConfig::class), 'contractcheck'));
+		$context->registerService(\OCA\ContractCheck\ConfigTransfer\TransferService::class, function ($c): \OCA\ContractCheck\ConfigTransfer\TransferService {
+			return new \OCA\ContractCheck\ConfigTransfer\TransferService(
+				$c->get(IDBConnection::class),
+				$c->get(IConfig::class),
+				$c->get(\OCP\IUserManager::class),
+				$c->get(\OCP\IGroupManager::class),
+				$c->get(IRootFolder::class),
+				$c->get(IAppManager::class),
+				$c->get(ILockingProvider::class),
+				$c->get(\OCP\IURLGenerator::class),
+				$c->get(LoggerInterface::class),
+				$c->get(\OCA\ContractCheck\ConfigTransfer\TransferManifest::class),
+				$c->get(\OCA\ContractCheck\ConfigTransfer\TransferHooks::class),
+				$c->get(\OCA\ContractCheck\ConfigTransfer\TransferPendingStore::class),
+				$c->get(\OCA\ContractCheck\ConfigTransfer\TransferReceiptStore::class),
+				'contractcheck',
+				$c->get(\OCP\IAppConfig::class),
+			);
+		});
+		$context->registerService(\OCA\ContractCheck\BackgroundJob\TransferApplyJob::class, function ($c): \OCA\ContractCheck\BackgroundJob\TransferApplyJob {
+			return new \OCA\ContractCheck\BackgroundJob\TransferApplyJob(
+				$c->get(\OCP\AppFramework\Utility\ITimeFactory::class),
+				$c->get(\OCA\ContractCheck\ConfigTransfer\TransferService::class),
+				$c->get(ILockingProvider::class),
+				$c->get(\OCP\BackgroundJob\IJobList::class),
+				$c->get(LoggerInterface::class),
+			);
+		});
+		$context->registerService(\OCA\ContractCheck\Controller\TransferApiController::class, function ($c): \OCA\ContractCheck\Controller\TransferApiController {
+			return new \OCA\ContractCheck\Controller\TransferApiController(
+				'contractcheck',
+				$c->get(\OCP\IRequest::class),
+				$c->get(\OCA\ContractCheck\ConfigTransfer\TransferHooks::class),
+				$c->get(\OCA\ContractCheck\ConfigTransfer\TransferService::class),
+				$c->get(\OCP\BackgroundJob\IJobList::class),
+				$c->get(\OCP\Security\Bruteforce\IThrottler::class),
+				$c->get(\OCP\IGroupManager::class),
+				$c->get(\OCP\IUserSession::class),
+			);
+		});
+
 		$context->registerMiddleware(AccessMiddleware::class);
 		$context->registerNotifierService(Notifier::class);
 		$context->registerDashboardWidget(DeadlineWidget::class);

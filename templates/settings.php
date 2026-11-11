@@ -103,6 +103,10 @@ $section = (string)($_['settingsSection'] ?? 'deadlines');
 	</section>
 	<?php endif; ?>
 
+	<?php if ($section === 'transfer'): ?>
+	<?php include __DIR__ . '/parts/settings/transfer.php'; ?>
+	<?php endif; ?>
+
 	<?php if ($section === 'support'): ?>
 	<section class="cc-panel" aria-labelledby="cc-set-support-h">
 		<h3 id="cc-set-support-h" class="cc-panel__title"><?php p($l->t('Support ContractCheck')); ?></h3>

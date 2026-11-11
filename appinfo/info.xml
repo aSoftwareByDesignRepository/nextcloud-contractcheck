@@ -75,6 +75,9 @@ Fehlerberichte und Ideen helfen — öffnen Sie ein GitHub Issue (https://github
 	</background-jobs>
 	<commands>
 		<command>OCA\ContractCheck\Command\UpgradeBackupCommand</command>
+		<command>OCA\ContractCheck\Command\ConfigExportCommand</command>
+		<command>OCA\ContractCheck\Command\ConfigImportCommand</command>
+		<command>OCA\ContractCheck\Command\ConfigReconcileCommand</command>
 	</commands>
 	<repair-steps>
 		<pre-migration>

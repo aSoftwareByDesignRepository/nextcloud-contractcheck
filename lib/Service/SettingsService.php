@@ -132,6 +132,33 @@ class SettingsService
 		return is_string($v) && $v !== '' ? $v : 'ContractCheck';
 	}
 
+	/**
+	 * Dry-run validation of a settings fragment for the config-transfer
+	 * engine — the same rules save() enforces, with no write (spec NN-08:
+	 * an import grants no validation bypass).
+	 *
+	 * @param array<string, mixed> $in
+	 */
+	public function validateSettingsInput(array $in): void
+	{
+		$this->validate($in);
+	}
+
+	/**
+	 * Canonical form of a settings fragment — the same normalize() the
+	 * save path applies, so an imported value lands byte-identical to a
+	 * UI save. The merge base is the current doc, exactly like save().
+	 *
+	 * @param array<string, mixed> $in
+	 * @return array<string, mixed>
+	 */
+	public function normalizeSettingsInput(array $in): array
+	{
+		$this->load();
+
+		return $this->normalize($in);
+	}
+
 	// ---- ICS feed tokens (appconfig, per user, revocable) ----
 
 	public function mintFeedToken(string $uid): string

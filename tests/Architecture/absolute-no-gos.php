@@ -65,16 +65,28 @@ if (preg_match('/\$_(GET|POST|REQUEST|COOKIE|FILES|SERVER)\b/', $lib)) {
 
 // SEC-01: wall-clock reads confined to Service/Clock.php.
 // Exemptions: Clock itself plus the two operational (non-domain) stamps —
-// support-report timestamp and backup snapshot IDs. Nothing else may read
-// the wall clock; deadline/cost/audit logic goes through Clock.
+// support-report timestamp and backup snapshot IDs — plus the synced
+// config-transfer pack (receipt/pending-record stamps are operational,
+// not domain math; the pack is governed by the shared gate, not this
+// app rule). Nothing else may read the wall clock; deadline/cost/audit
+// logic goes through Clock.
 $clockExempt = [
 	'Clock.php' => true,
 	'AppFeedbackLinks.php' => true,
 	'UpgradeBackupService.php' => true,
+	// synced config-transfer pack (apps/_shared/config-transfer)
+	'TransferService.php' => true,
+	'TransferPendingStore.php' => true,
+	'TransferReceiptStore.php' => true,
+	'TransferApiController.php' => true,
 ];
 $clockViolations = [];
 foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root . '/lib')) as $file) {
 	if (!$file->isFile() || !str_ends_with($file->getFilename(), '.php')) {
+		continue;
+	}
+	// The whole synced engine dir is pack-owned, like the named files above.
+	if (str_contains($file->getPathname(), '/lib/ConfigTransfer/')) {
 		continue;
 	}
 	if (isset($clockExempt[basename($file->getPathname())])) {

@@ -26,6 +26,7 @@ final class SettingsSectionCatalog
 		'deadlines',
 		'access',
 		'feed',
+		'transfer',
 		'support',
 	];
 
@@ -33,6 +34,7 @@ final class SettingsSectionCatalog
 	public const MANAGER_ONLY_SECTIONS = [
 		'deadlines',
 		'access',
+		'transfer',
 	];
 
 	public function isSection(string $section): bool
@@ -51,6 +53,7 @@ final class SettingsSectionCatalog
 			'deadlines' => $l->t('Deadlines'),
 			'access' => $l->t('Access & roles'),
 			'feed' => $l->t('Calendar feed'),
+			'transfer' => $l->t('Transfer configuration'),
 			'support' => $l->t('Support us'),
 			default => $l->t('Settings'),
 		};
@@ -67,6 +70,7 @@ final class SettingsSectionCatalog
 			'deadlines' => $l->t('Default reminder lead days for new contracts.'),
 			'access' => $l->t('Who can use ContractCheck and which groups manage contracts and see costs.'),
 			'feed' => $l->t('Subscribe to upcoming cancellation deadlines in your calendar app.'),
+			'transfer' => $l->t('Copy all settings, catalogues and data between a test and a production instance — one encrypted file, dry-run before anything is written.'),
 			'support' => $l->t('Help keep ContractCheck free — donations and enterprise contact.'),
 			default => '',
 		};

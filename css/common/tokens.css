@@ -63,6 +63,8 @@
 	--cc-icon-stroke: 2;
 
 	--cc-tab-num: tabular-nums;
+	/* Monospace stack — used by the synced transfer pack for key hashes/ids */
+	--cc-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 	/* Touch targets (WCAG 2.5.5 / design-system) */
 	--cc-touch: 44px;
 	--cc-touch-lg: 48px;
