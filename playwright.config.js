@@ -46,17 +46,17 @@ export default defineConfig({
 	projects: [
 		{
 			name: 'chromium-1280',
-			testIgnore: 'access-door.spec.js',
+			testIgnore: ['access-door.spec.js', 'craft-transfer.spec.js'],
 			use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
 		},
 		{
 			name: 'chromium-320',
-			testIgnore: 'access-door.spec.js',
+			testIgnore: ['access-door.spec.js', 'craft-transfer.spec.js'],
 			use: { ...devices['Desktop Chrome'], viewport: { width: 320, height: 640 } },
 		},
 		{
 			name: 'chromium-store',
-			testIgnore: 'access-door.spec.js',
+			testIgnore: ['access-door.spec.js', 'craft-transfer.spec.js'],
 			use: {
 				...devices['Desktop Chrome'],
 				viewport: { width: 1920, height: 1040 },
@@ -73,6 +73,18 @@ export default defineConfig({
 			name: 'chromium-door',
 			testMatch: 'access-door.spec.js',
 			dependencies: ['chromium-1280', 'chromium-320', 'chromium-store'],
+			use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
+		},
+		// The transfer apply legs rewrite the shared cc_settings CAS doc and
+		// upsert every business row — running them inside the parallel pool
+		// races settings-writing and contract-archiving specs
+		// (instance_wide_state_race). Serialize after everything, including
+		// the door window (same convention as chromium-door).
+		// Targeted local re-run: `--project=chromium-transfer --no-deps`.
+		{
+			name: 'chromium-transfer',
+			testMatch: 'craft-transfer.spec.js',
+			dependencies: ['chromium-door'],
 			use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } },
 		},
 	],
