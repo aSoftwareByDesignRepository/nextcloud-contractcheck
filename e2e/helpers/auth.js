@@ -139,10 +139,15 @@ export async function login(page, { username, password }) {
 	await userInput.waitFor({ state: 'visible', timeout: 30_000 })
 	await userInput.fill(username)
 	await passInput.fill(password)
-	await page.getByRole('button', { name: /log in|anmelden/i }).or(page.locator('input[type="submit"]')).first().click()
+	// Structural submit: the login page renders in the *instance* default
+	// language (pre-auth), which sibling lanes can flip — never match the
+	// button by EN|DE label (locale-safe selector contract).
+	await page.locator('form [type="submit"]').first().click()
 
 	// Fail fast on wrong credentials instead of waiting the full navigation timeout.
-	const wrong = page.getByText(/wrong login or password|falscher login|ungültige anmeldedaten/i)
+	const wrong = page
+		.getByText(/wrong login or password|falscher login|ungültige anmeldedaten/i)
+		.or(page.locator('#message:not(.hidden)'))
 	const leftLogin = page.waitForURL((url) => !url.pathname.includes('/login'), { timeout: 30_000 })
 	const sawWrong = wrong.first().waitFor({ state: 'visible', timeout: 30_000 }).then(() => 'wrong')
 	const winner = await Promise.race([
