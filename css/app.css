@@ -1143,6 +1143,26 @@ dialog.cc-dialog .cc-form-actions {
 	outline-offset: 2px;
 }
 
+/* Overlay control armor — same mechanism as the variant armor:
+ * <button class="cc-toast__close"> renders inside the body-mounted toast
+ * stack (#cc-toasts, outside .cc-app), so the scope list cannot reach it
+ * and the bare 0-1-0 class rule loses to core's button repaint
+ * (width:130px / pale fill / border / margin). The id/class-scoped
+ * selectors pin every repainted property !important
+ * (overlay_toast_button_armor_gap; donor shape: budgetcheck
+ * .bc-toasts button.bc-toast__close, whistlecheck #wc-toasts armor). */
+#cc-toasts button.cc-toast__close,
+.cc-toasts button.cc-toast__close {
+	width: auto !important;
+	margin: 0 !important;
+	margin-inline-start: auto !important;
+	padding: var(--cc-space-2) !important;
+	background: transparent !important;
+	border: 0 !important;
+	min-width: 44px;
+	min-height: 44px;
+}
+
 /*
  * Control-border baseline (WCAG 1.4.11 >= 3:1 vs background) — DESIGN-SYSTEM §3.6.0.
  * NC core styles every button/input with the faint `--color-border-dark`, and its
