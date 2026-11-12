@@ -82,6 +82,41 @@ async function assertToastCloseArmored(page) {
 	// the stack clears the bottom viewport edge (safe-area floor)
 	expect(m.hostY + m.hostH).toBeLessThanOrEqual(m.vpH + 1)
 }
+/** native_dialog_margin_reset_uncentered: NC core's html,body,…,dialog
+ * reset zeroes the UA 'margin:auto' that centers a top-layer <dialog> —
+ * a pack dialog without a margin re-declaration anchors to the viewport
+ * top-left. mode 'centered' proves the pack margin:auto restored both-axis
+ * centering over the dimmed backdrop. mode 'sheet' (≤480) asserts the
+ * honest painted contract on this app: the shared dialogs pack
+ * `dialog.cc-dialog[open]{margin:auto;position:fixed;inset:0;max-width:
+ * min(28rem,…)}` outranks the pack's ≤480 margin:0 full-bleed intent, so a
+ * centered floating card is the accepted shape — either way a flush
+ * top-left anchor (the class defect) fails. */
+async function assertDialogTopLayerGeometry(dialog, mode, where) {
+	const m = await dialog.evaluate((d) => {
+		const r = d.getBoundingClientRect()
+		return { l: r.left, t: r.top, w: r.width, h: r.height, vpW: window.innerWidth, vpH: window.innerHeight }
+	})
+	if (mode === 'centered') {
+		const expL = Math.max(0, (m.vpW - m.w) / 2)
+		const expT = Math.max(0, (m.vpH - m.h) / 2)
+		expect(Math.abs(m.l - expL),
+			`${where}: dialog left ${Math.round(m.l)} ≠ centered ${Math.round(expL)} — margin:auto did not survive the NC reset`)
+			.toBeLessThanOrEqual(2)
+		expect(Math.abs(m.t - expT),
+			`${where}: dialog top ${Math.round(m.t)} ≠ centered ${Math.round(expT)}`)
+			.toBeLessThanOrEqual(2)
+		expect(m.l, `${where}: flush-left top-left anchor regression`).toBeGreaterThan(1)
+	} else {
+		const isFullBleed = Math.abs(m.l) <= 1 && m.w >= m.vpW - 1
+		const isCenteredCard = m.l > 1
+			&& Math.abs(m.l - Math.max(0, (m.vpW - m.w) / 2)) <= 2
+			&& Math.abs(m.t - Math.max(0, (m.vpH - m.h) / 2)) <= 2
+		expect(isFullBleed || isCenteredCard,
+			`${where}: ≤480 dialog l=${Math.round(m.l)} t=${Math.round(m.t)} w=${Math.round(m.w)} vpW=${m.vpW} — neither full-bleed sheet nor centered card ⇒ top-layer anchor regressed`)
+			.toBeTruthy()
+	}
+}
 /** Authenticated request through the page's own cookie jar + the session
  * CSRF token the app middleware demands on non-GET. */
 async function authedPost(page, url, data) {
@@ -134,6 +169,7 @@ test.describe('craft transfer', () => {
 		// positional t() interpolation: localized values, never raw tokens
 		const fileLine = await page.locator('#cc-transfer-report-file').textContent()
 		expect(fileLine || '').not.toMatch(/\{\d+\}|%\d+\$s|%d(?!\w)/)
+		await assertDialogTopLayerGeometry(report, 'centered', 'report 1280')
 		await shot(page, 'cc-manager-transfer-report-dialog-light-1280')
 
 		// apply → progress dialog stays open while the job waits queued
@@ -141,6 +177,7 @@ test.describe('craft transfer', () => {
 		const progress = page.locator('#cc-transfer-progress')
 		await expect(progress).toBeVisible({ timeout: 10000 })
 		await expect(page.locator('#cc-transfer-progress-text')).not.toBeEmpty()
+		await assertDialogTopLayerGeometry(progress, 'centered', 'progress 1280')
 		await shot(page, 'cc-manager-transfer-progress-light-1280')
 
 		// app-namespaced class id — other apps' TransferApplyJob rows never match
@@ -234,11 +271,13 @@ test.describe('craft transfer', () => {
 				.toBeLessThanOrEqual(1)
 		}
 		await assertDialogFooterPainted('1280')
+		await assertDialogTopLayerGeometry(report, 'centered', 'replace-confirm 1280')
 
 		await shot(page, 'cc-manager-transfer-replace-confirm-light-1280')
 		await page.setViewportSize({ width: 375, height: 812 })
 		await page.waitForTimeout(300)
 		await assertDialogFooterPainted('375')
+		await assertDialogTopLayerGeometry(report, 'sheet', 'replace-confirm 375')
 		await shot(page, 'cc-manager-transfer-replace-confirm-light-375')
 		// Never apply — replace is destructive; close the dialog instead.
 		await page.keyboard.press('Escape')
