@@ -45,13 +45,11 @@ if ($base !== null) {
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-if (class_exists(\DG\BypassFinals::class)) {
-	\DG\BypassFinals::allowPaths([
-		'*/apps/contractcheck/lib/*',
-		'*/contractcheck/lib/*',
-	]);
-	\DG\BypassFinals::enable(bypassReadOnly: false);
-}
+// NOTE: DG\BypassFinals deliberately NOT enabled — its custom `file` stream
+// wrapper makes PHP 8.5 is_writable()/access() checks fall back to statbuf
+// mask simulation, which breaks core (OC\Snowflake\FileSequence throws
+// "directory exists but is not writable") on foreign-owned dirs. No test in
+// this suite mocks a final class; re-enable per-test if ever needed.
 
 if (!class_exists(\Test\TestCase::class)) {
 	eval('namespace Test; class TestCase extends \\PHPUnit\\Framework\\TestCase {}');
