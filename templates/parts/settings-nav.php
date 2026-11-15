@@ -4,21 +4,20 @@
  *
  * @var array $_
  * @var \OCP\IL10N $l
- * @var \OCA\ContractCheck\Service\SettingsSectionCatalog $catalog
  */
-$catalog = $_['sectionCatalog'];
-$current = (string)($_['settingsSection'] ?? '');
-$urls = $_['urls'] ?? [];
+$items = $_['settingsNav'] ?? [];
 ?>
+<?php if ($items !== []): ?>
 <nav class="cc-settings-nav" id="cc-settings-pages" aria-label="<?php p($l->t('Settings sections')); ?>">
-	<?php foreach (\OCA\ContractCheck\Service\SettingsSectionCatalog::SECTIONS as $slug):
-		$href = (string)($urls[$slug] ?? '#');
-		$active = $current === $slug;
+	<?php foreach ($items as $item):
+		$href = (string)($item['href'] ?? '#');
+		$active = !empty($item['active']);
 		?>
 		<a class="cc-settings-nav__link<?php if ($active): ?> is-active<?php endif; ?>"
 			href="<?php p($href); ?>"
 			<?php if ($active): ?>aria-current="page"<?php endif; ?>>
-			<?php p($catalog->navLabel($l, $slug)); ?>
+			<?php p((string)($item['label'] ?? '')); ?>
 		</a>
 	<?php endforeach; ?>
 </nav>
+<?php endif; ?>

@@ -5,6 +5,8 @@ $section = (string)($_['settingsSection'] ?? 'deadlines');
 <section class="cc-settings" aria-labelledby="cc-settings-heading" data-section="<?php p($section); ?>">
 	<h2 id="cc-settings-heading" class="cc-sr-only"><?php p($l->t('Settings')); ?></h2>
 
+	<?php include __DIR__ . '/parts/settings-nav.php'; ?>
+
 	<?php if ($section === 'deadlines'): ?>
 	<section class="cc-panel" aria-labelledby="cc-set-deadlines-h">
 		<h3 id="cc-set-deadlines-h" class="cc-panel__title"><?php p($l->t('Default reminders')); ?></h3>

@@ -42,9 +42,7 @@ include __DIR__ . '/navigation.php';
 	data-cc-page="<?php p($pageId); ?>"
 	data-cc-timezone="<?php p($timezone); ?>"
 	data-cc-settings-section="<?php p($settingsSection); ?>"
-	data-cc-urls="<?php print_unescaped($urlsJson); ?>"
-	data-cc-settings-version="<?php p((string)($_['settingsVersion'] ?? '')); ?>"
-	data-cc-is-nc-admin="<?php p(!empty($_['isNcAdmin']) ? '1' : '0'); ?>">
+	data-cc-urls="<?php print_unescaped($urlsJson); ?>">
 	<a class="cc-skip-link" href="#cc-main-content"><?php p($l->t('Skip to main content')); ?></a>
 	<div id="cc-live-region" class="cc-sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 	<div id="cc-alert-region" class="cc-sr-only" role="alert" aria-live="assertive" aria-atomic="true"></div>

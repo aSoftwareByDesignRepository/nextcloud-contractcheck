@@ -72,6 +72,59 @@
 	flex-shrink: 0;
 }
 
+/* In-page settings chip bar — complements the sidebar's settings group when
+   #app-navigation collapses (<1024). ≥1024 the sidebar owns section nav. */
+#app-content.cc-app .cc-settings-nav {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--cc-space-2);
+	margin: 0 0 var(--cc-space-5);
+	padding: 0 0 var(--cc-space-3);
+	border-bottom: 1px solid var(--cc-border);
+	min-width: 0;
+}
+
+#app-content.cc-app .cc-settings-nav__link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: var(--cc-touch);
+	padding: var(--cc-space-2) var(--cc-space-3);
+	border: 1px solid var(--cc-border);
+	border-radius: var(--cc-radius-sm);
+	background: var(--color-main-background);
+	color: var(--color-main-text);
+	text-decoration: none;
+	font-weight: 600;
+	font-size: var(--cc-fs-sm);
+	line-height: 1.2;
+	box-sizing: border-box;
+}
+
+#app-content.cc-app .cc-settings-nav__link:hover {
+	border-color: var(--color-primary-element);
+	background: var(--cc-bg-soft);
+	color: var(--color-main-text);
+}
+
+#app-content.cc-app .cc-settings-nav__link:focus-visible {
+	outline: var(--cc-focus);
+	outline-offset: var(--cc-focus-offset);
+}
+
+#app-content.cc-app .cc-settings-nav__link.is-active,
+#app-content.cc-app .cc-settings-nav__link[aria-current="page"] {
+	border-color: var(--color-primary-element);
+	background: var(--cc-tint-info);
+	color: var(--color-main-text);
+}
+
+@media (min-width: 1024px) {
+	#app-content.cc-app .cc-settings-nav {
+		display: none;
+	}
+}
+
 /* ── Stat strip ────────────────────────────────────────────── */
 
 #app-content.cc-app .cc-stat-row {
