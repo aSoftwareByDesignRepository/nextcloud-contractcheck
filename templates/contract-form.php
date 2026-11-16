@@ -61,7 +61,7 @@
 				<label class="cc-label" for="cc-f-scope"><?php p($l->t('Visibility')); ?></label>
 				<select class="cc-select" id="cc-f-scope" name="scope">
 					<option value="org" selected><?php p($l->t('Whole organization')); ?></option>
-					<option value="dept"><?php p($l->t('Owner’s group(s)')); ?></option>
+					<option value="dept"><?php p($l->t('Owner’s groups')); ?></option>
 					<option value="restricted"><?php p($l->t('Only owner & managers')); ?></option>
 				</select>
 				<p class="cc-field__hint"><?php p($l->t('Who may see this contract. Documents keep their own file permissions.')); ?></p>

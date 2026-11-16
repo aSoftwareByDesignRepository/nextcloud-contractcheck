@@ -1,12 +1,6 @@
 OC.L10N.register(
 	"contractcheck",
 	{
-	"%d row(s) need a value on this instance" : "%d rad(er) behöver ett värde på den här instansen",
-	"%d row(s) skipped and %d reference(s) unresolved — see the groups below." : "%d rad(er) hoppades över och %d referens(er) är olösta — se grupperna nedan.",
-	"(%d env-bound value(s) emptied)" : "(%d instansbundna värden tömda)",
-	"(%d filtered)" : "(%d filtrerade)",
-	"(%d secret(s) redacted)" : "(%d hemligheter maskerade)",
-	"(%d unresolved ref)" : "(%d olösta referenser)",
 	"(no cost center)" : "(inget kostnadsställe)",
 	"(opens in a new tab)" : "(öppnas i en ny flik)",
 	"(unknown — skipped)" : "(okänd — hoppades över)",
@@ -260,7 +254,6 @@ OC.L10N.register(
 	"Organizations can commission features or support: %s" : "Organisationer kan beställa funktioner eller support: %s",
 	"Other" : "Övrigt",
 	"Owner" : "Ägare",
-	"Owner’s group(s)" : "Ägarens grupp(er)",
 	"Parties" : "Motparter",
 	"Partner" : "Motpart",
 	"Party" : "Motpart",
@@ -381,7 +374,6 @@ OC.L10N.register(
 	"Viewer" : "Läser",
 	"Visibility" : "Synlighet",
 	"Waiting for the job…" : "Väntar på jobbet…",
-	"Warning: %d row(s) will be permanently deleted, then the file data is loaded." : "Varning: %d rad(er) raderas permanent, sedan läses filens data in.",
 	"Warnings" : "Varningar",
 	"Website" : "Webbplats",
 	"When" : "När",
@@ -428,6 +420,15 @@ OC.L10N.register(
 	"window missed — next " : "fönster missat — nästa ",
 	"yearly" : "årlig",
 	"— none —" : "— ingen —",
-	"“Effective at” is the date your cancellation takes effect — e.g. 3 months’ notice to month end." : "«Gäller från» är datumet då din uppsägning träder i kraft — t.ex. 3 månaders uppsägningstid till månadsslut."
+	"“Effective at” is the date your cancellation takes effect — e.g. 3 months’ notice to month end." : "«Gäller från» är datumet då din uppsägning träder i kraft — t.ex. 3 månaders uppsägningstid till månadsslut.",
+	"_1 row needs a value on this instance_::_%n rows need a value on this instance_" : ["%n rad behöver ett värde på den här instansen","%n rader behöver ett värde på den här instansen"],
+	"_1 row skipped._::_%n rows skipped._" : ["%n rad hoppades över.","%n rader hoppades över."],
+	"_1 reference unresolved — see the groups below._::_%n references unresolved — see the groups below._" : ["%n referens är olöst — se grupperna nedan.","%n referenser är olösta — se grupperna nedan."],
+	"_(1 env-bound value emptied)_::_(%n env-bound values emptied)_" : ["(%n instansbundet värde tömt)","(%n instansbundna värden tömda)"],
+	"_(1 secret redacted)_::_(%n secrets redacted)_" : ["(%n hemlighet maskerad)","(%n hemligheter maskerade)"],
+	"_(1 filtered)_::_(%n filtered)_" : ["(%n filtrerad)","(%n filtrerade)"],
+	"_(1 unresolved ref)_::_(%n unresolved refs)_" : ["(%n olöst referens)","(%n olösta referenser)"],
+	"_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._" : ["Varning: %n rad raderas permanent, sedan läses filens data in.","Varning: %n rader raderas permanent, sedan läses filens data in."],
+	"Owner’s groups" : "Ägarens grupper"
 	}
 );

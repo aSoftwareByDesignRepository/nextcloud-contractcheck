@@ -214,7 +214,7 @@
 			employment_related: 'Employment-related', other: 'Other'
 		},
 		scope: {
-			org: 'Whole organization', dept: 'Owner’s group(s)',
+			org: 'Whole organization', dept: 'Owner’s groups',
 			restricted: 'Only owner & managers'
 		},
 		termKind: {

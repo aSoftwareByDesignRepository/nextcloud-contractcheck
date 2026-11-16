@@ -1,12 +1,6 @@
 OC.L10N.register(
 	"contractcheck",
 	{
-	"%d row(s) need a value on this instance" : "%d fila(s) necesitan un valor en esta instancia",
-	"%d row(s) skipped and %d reference(s) unresolved — see the groups below." : "%d fila(s) omitida(s) y %d referencia(s) sin resolver — consulta los grupos siguientes.",
-	"(%d env-bound value(s) emptied)" : "(%d valor(es) ligados a la instancia vaciados)",
-	"(%d filtered)" : "(%d filtrada(s))",
-	"(%d secret(s) redacted)" : "(%d secreto(s) ocultado(s))",
-	"(%d unresolved ref)" : "(%d referencia(s) sin resolver)",
 	"(no cost center)" : "(sin centro de coste)",
 	"(opens in a new tab)" : "(se abre en una pestaña nueva)",
 	"(unknown — skipped)" : "(desconocido — omitido)",
@@ -260,7 +254,6 @@ OC.L10N.register(
 	"Organizations can commission features or support: %s" : "Las organizaciones pueden encargar funciones o soporte: %s",
 	"Other" : "Otros",
 	"Owner" : "Propietario",
-	"Owner’s group(s)" : "Grupo(s) del propietario",
 	"Parties" : "Interlocutores",
 	"Partner" : "Interlocutor",
 	"Party" : "Interlocutor",
@@ -381,7 +374,6 @@ OC.L10N.register(
 	"Viewer" : "Lector",
 	"Visibility" : "Visibilidad",
 	"Waiting for the job…" : "Esperando el trabajo…",
-	"Warning: %d row(s) will be permanently deleted, then the file data is loaded." : "Advertencia: %d fila(s) se eliminarán permanentemente y después se cargarán los datos del archivo.",
 	"Warnings" : "Avisos",
 	"Website" : "Sitio web",
 	"When" : "Cuándo",
@@ -428,6 +420,15 @@ OC.L10N.register(
 	"window missed — next " : "ventana perdida — siguiente ",
 	"yearly" : "anual",
 	"— none —" : "— ninguno —",
-	"“Effective at” is the date your cancellation takes effect — e.g. 3 months’ notice to month end." : "«Vigente desde» es la fecha en que su rescisión surte efecto — p. ej. preaviso de 3 meses a fin de mes."
+	"“Effective at” is the date your cancellation takes effect — e.g. 3 months’ notice to month end." : "«Vigente desde» es la fecha en que su rescisión surte efecto — p. ej. preaviso de 3 meses a fin de mes.",
+	"_1 row needs a value on this instance_::_%n rows need a value on this instance_" : ["%n fila necesita un valor en esta instancia","%n filas necesitan un valor en esta instancia"],
+	"_1 row skipped._::_%n rows skipped._" : ["%n fila omitida.","%n filas omitidas."],
+	"_1 reference unresolved — see the groups below._::_%n references unresolved — see the groups below._" : ["%n referencia sin resolver — consulta los grupos siguientes.","%n referencias sin resolver — consulta los grupos siguientes."],
+	"_(1 env-bound value emptied)_::_(%n env-bound values emptied)_" : ["(%n valor ligado a la instancia vaciado)","(%n valores ligados a la instancia vaciados)"],
+	"_(1 secret redacted)_::_(%n secrets redacted)_" : ["(%n secreto ocultado)","(%n secretos ocultados)"],
+	"_(1 filtered)_::_(%n filtered)_" : ["(%n filtrada)","(%n filtradas)"],
+	"_(1 unresolved ref)_::_(%n unresolved refs)_" : ["(%n referencia sin resolver)","(%n referencias sin resolver)"],
+	"_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._" : ["Advertencia: %n fila se eliminará permanentemente y después se cargarán los datos del archivo.","Advertencia: %n filas se eliminarán permanentemente y después se cargarán los datos del archivo."],
+	"Owner’s groups" : "Grupos del propietario"
 	}
 );

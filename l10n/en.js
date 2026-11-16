@@ -1,12 +1,6 @@
 OC.L10N.register(
 	"contractcheck",
 	{
-	"%d row(s) need a value on this instance" : "%d row(s) need a value on this instance",
-	"%d row(s) skipped and %d reference(s) unresolved — see the groups below." : "%d row(s) skipped and %d reference(s) unresolved — see the groups below.",
-	"(%d env-bound value(s) emptied)" : "(%d env-bound value(s) emptied)",
-	"(%d filtered)" : "(%d filtered)",
-	"(%d secret(s) redacted)" : "(%d secret(s) redacted)",
-	"(%d unresolved ref)" : "(%d unresolved ref)",
 	"(no cost center)" : "(no cost center)",
 	"(opens in a new tab)" : "(opens in a new tab)",
 	"(unknown — skipped)" : "(unknown — skipped)",
@@ -260,7 +254,6 @@ OC.L10N.register(
 	"Organizations can commission features or support: %s" : "Organizations can commission features or support: %s",
 	"Other" : "Other",
 	"Owner" : "Owner",
-	"Owner’s group(s)" : "Owner’s group(s)",
 	"Parties" : "Parties",
 	"Partner" : "Partner",
 	"Party" : "Party",
@@ -381,7 +374,6 @@ OC.L10N.register(
 	"Viewer" : "Viewer",
 	"Visibility" : "Visibility",
 	"Waiting for the job…" : "Waiting for the job…",
-	"Warning: %d row(s) will be permanently deleted, then the file data is loaded." : "Warning: %d row(s) will be permanently deleted, then the file data is loaded.",
 	"Warnings" : "Warnings",
 	"Website" : "Website",
 	"When" : "When",
@@ -428,6 +420,15 @@ OC.L10N.register(
 	"window missed — next " : "window missed — next ",
 	"yearly" : "yearly",
 	"— none —" : "— none —",
-	"“Effective at” is the date your cancellation takes effect — e.g. 3 months’ notice to month end." : "“Effective at” is the date your cancellation takes effect — e.g. 3 months’ notice to month end."
+	"“Effective at” is the date your cancellation takes effect — e.g. 3 months’ notice to month end." : "“Effective at” is the date your cancellation takes effect — e.g. 3 months’ notice to month end.",
+	"_1 row needs a value on this instance_::_%n rows need a value on this instance_" : ["%n row needs a value on this instance","%n rows need a value on this instance"],
+	"_1 row skipped._::_%n rows skipped._" : ["%n row skipped.","%n rows skipped."],
+	"_1 reference unresolved — see the groups below._::_%n references unresolved — see the groups below._" : ["%n reference unresolved — see the groups below.","%n references unresolved — see the groups below."],
+	"_(1 env-bound value emptied)_::_(%n env-bound values emptied)_" : ["(%n env-bound value emptied)","(%n env-bound values emptied)"],
+	"_(1 secret redacted)_::_(%n secrets redacted)_" : ["(%n secret redacted)","(%n secrets redacted)"],
+	"_(1 filtered)_::_(%n filtered)_" : ["(%n filtered)","(%n filtered)"],
+	"_(1 unresolved ref)_::_(%n unresolved refs)_" : ["(%n unresolved ref)","(%n unresolved refs)"],
+	"_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._" : ["Warning: %n row will be permanently deleted, then the file data is loaded.","Warning: %n rows will be permanently deleted, then the file data is loaded."],
+	"Owner’s groups" : "Owner’s groups"
 	}
 );

@@ -1,12 +1,6 @@
 OC.L10N.register(
 	"contractcheck",
 	{
-	"%d row(s) need a value on this instance" : "%d 行需要在此实例上填写值",
-	"%d row(s) skipped and %d reference(s) unresolved — see the groups below." : "已跳过 %d 行，%d 个引用未能解析——请查看下方分组。",
-	"(%d env-bound value(s) emptied)" : "（已清空 %d 个实例绑定值）",
-	"(%d filtered)" : "（已过滤 %d 项）",
-	"(%d secret(s) redacted)" : "（已遮蔽 %d 个机密）",
-	"(%d unresolved ref)" : "（%d 个引用未解析）",
 	"(no cost center)" : "（无成本中心）",
 	"(opens in a new tab)" : "（在新标签页中打开）",
 	"(unknown — skipped)" : "（未知——已跳过）",
@@ -260,7 +254,6 @@ OC.L10N.register(
 	"Organizations can commission features or support: %s" : "组织可委托开发功能或获取支持：%s",
 	"Other" : "其他",
 	"Owner" : "所有者",
-	"Owner’s group(s)" : "所有者的组",
 	"Parties" : "合作方",
 	"Partner" : "合作方",
 	"Party" : "合作方",
@@ -381,7 +374,6 @@ OC.L10N.register(
 	"Viewer" : "查看者",
 	"Visibility" : "可见性",
 	"Waiting for the job…" : "正在等待任务……",
-	"Warning: %d row(s) will be permanently deleted, then the file data is loaded." : "警告：%d 行将被永久删除，然后加载文件数据。",
 	"Warnings" : "警告",
 	"Website" : "网站",
 	"When" : "何时",
@@ -428,6 +420,15 @@ OC.L10N.register(
 	"window missed — next " : "已错过窗口——下次 ",
 	"yearly" : "每年",
 	"— none —" : "— 无 —",
-	"“Effective at” is the date your cancellation takes effect — e.g. 3 months’ notice to month end." : "“生效于”指解约生效的日期——例如提前 3 个月通知至月末。"
+	"“Effective at” is the date your cancellation takes effect — e.g. 3 months’ notice to month end." : "“生效于”指解约生效的日期——例如提前 3 个月通知至月末。",
+	"_1 row needs a value on this instance_::_%n rows need a value on this instance_" : ["%n 行需要在此实例上填写值","%n 行需要在此实例上填写值"],
+	"_1 row skipped._::_%n rows skipped._" : ["已跳过 %n 行。","已跳过 %n 行。"],
+	"_1 reference unresolved — see the groups below._::_%n references unresolved — see the groups below._" : ["%n 个引用未能解析——请查看下方分组。","%n 个引用未能解析——请查看下方分组。"],
+	"_(1 env-bound value emptied)_::_(%n env-bound values emptied)_" : ["（已清空 %n 个实例绑定值）","（已清空 %n 个实例绑定值）"],
+	"_(1 secret redacted)_::_(%n secrets redacted)_" : ["（已遮蔽 %n 个机密）","（已遮蔽 %n 个机密）"],
+	"_(1 filtered)_::_(%n filtered)_" : ["（已过滤 %n 项）","（已过滤 %n 项）"],
+	"_(1 unresolved ref)_::_(%n unresolved refs)_" : ["（%n 个引用未解析）","（%n 个引用未解析）"],
+	"_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._" : ["警告：%n 行将被永久删除，然后加载文件数据。","警告：%n 行将被永久删除，然后加载文件数据。"],
+	"Owner’s groups" : "所有者的组"
 	}
 );

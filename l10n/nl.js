@@ -1,12 +1,6 @@
 OC.L10N.register(
 	"contractcheck",
 	{
-	"%d row(s) need a value on this instance" : "%d rij(en) hebben een waarde nodig op deze installatie",
-	"%d row(s) skipped and %d reference(s) unresolved — see the groups below." : "%d rij(en) overgeslagen en %d verwijzing(en) onopgelost — zie de groepen hieronder.",
-	"(%d env-bound value(s) emptied)" : "(%d installatiegebonden waarden geleegd)",
-	"(%d filtered)" : "(%d gefilterd)",
-	"(%d secret(s) redacted)" : "(%d geheimen gemaskeerd)",
-	"(%d unresolved ref)" : "(%d onopgeloste verwijzingen)",
 	"(no cost center)" : "(geen kostenplaats)",
 	"(opens in a new tab)" : "(opent in een nieuw tabblad)",
 	"(unknown — skipped)" : "(onbekend — overgeslagen)",
@@ -260,7 +254,6 @@ OC.L10N.register(
 	"Organizations can commission features or support: %s" : "Organisaties kunnen functies of support bestellen: %s",
 	"Other" : "Overig",
 	"Owner" : "Eigenaar",
-	"Owner’s group(s)" : "Groep(en) van de eigenaar",
 	"Parties" : "Tegenpartijen",
 	"Partner" : "Tegenpartij",
 	"Party" : "Tegenpartij",
@@ -381,7 +374,6 @@ OC.L10N.register(
 	"Viewer" : "Kijker",
 	"Visibility" : "Zichtbaarheid",
 	"Waiting for the job…" : "Wachten op de taak…",
-	"Warning: %d row(s) will be permanently deleted, then the file data is loaded." : "Waarschuwing: %d rij(en) worden definitief verwijderd, daarna worden de bestandsgegevens geladen.",
 	"Warnings" : "Waarschuwingen",
 	"Website" : "Website",
 	"When" : "Wanneer",
@@ -428,6 +420,15 @@ OC.L10N.register(
 	"window missed — next " : "venster gemist — volgende ",
 	"yearly" : "jaarlijks",
 	"— none —" : "— geen —",
-	"“Effective at” is the date your cancellation takes effect — e.g. 3 months’ notice to month end." : "«Ingangsdatum» is de datum waarop uw opzegging ingaat — bijv. 3 maanden opzegtermijn tegen maandeinde."
+	"“Effective at” is the date your cancellation takes effect — e.g. 3 months’ notice to month end." : "«Ingangsdatum» is de datum waarop uw opzegging ingaat — bijv. 3 maanden opzegtermijn tegen maandeinde.",
+	"_1 row needs a value on this instance_::_%n rows need a value on this instance_" : ["%n rij heeft een waarde nodig op deze installatie","%n rijen hebben een waarde nodig op deze installatie"],
+	"_1 row skipped._::_%n rows skipped._" : ["%n rij overgeslagen.","%n rijen overgeslagen."],
+	"_1 reference unresolved — see the groups below._::_%n references unresolved — see the groups below._" : ["%n verwijzing onopgelost — zie de groepen hieronder.","%n verwijzingen onopgelost — zie de groepen hieronder."],
+	"_(1 env-bound value emptied)_::_(%n env-bound values emptied)_" : ["(%n installatiegebonden waarde geleegd)","(%n installatiegebonden waarden geleegd)"],
+	"_(1 secret redacted)_::_(%n secrets redacted)_" : ["(%n geheim gemaskeerd)","(%n geheimen gemaskeerd)"],
+	"_(1 filtered)_::_(%n filtered)_" : ["(%n gefilterd)","(%n gefilterd)"],
+	"_(1 unresolved ref)_::_(%n unresolved refs)_" : ["(%n onopgeloste verwijzing)","(%n onopgeloste verwijzingen)"],
+	"_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._" : ["Waarschuwing: %n rij wordt definitief verwijderd, daarna worden de bestandsgegevens geladen.","Waarschuwing: %n rijen worden definitief verwijderd, daarna worden de bestandsgegevens geladen."],
+	"Owner’s groups" : "Groepen van de eigenaar"
 	}
 );

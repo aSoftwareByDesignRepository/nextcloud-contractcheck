@@ -1,11 +1,5 @@
 {
 	"translations": {
-		"%d row(s) need a value on this instance": "%d ligne(s) nécessitent une valeur sur cette instance",
-		"%d row(s) skipped and %d reference(s) unresolved — see the groups below.": "%d ligne(s) ignorée(s) et %d référence(s) non résolue(s) — voir les groupes ci-dessous.",
-		"(%d env-bound value(s) emptied)": "(%d valeur(s) liées à l’instance vidée(s))",
-		"(%d filtered)": "(%d filtrée(s))",
-		"(%d secret(s) redacted)": "(%d secret(s) masqué(s))",
-		"(%d unresolved ref)": "(%d référence(s) non résolue(s))",
 		"(no cost center)": "(sans centre de coûts)",
 		"(opens in a new tab)": "(s’ouvre dans un nouvel onglet)",
 		"(unknown — skipped)": "(inconnu — ignoré)",
@@ -259,7 +253,6 @@
 		"Organizations can commission features or support: %s": "Les organisations peuvent commander des fonctions ou du support : %s",
 		"Other": "Autre",
 		"Owner": "Propriétaire",
-		"Owner’s group(s)": "Groupe(s) du propriétaire",
 		"Parties": "Partenaires",
 		"Partner": "Partenaire",
 		"Party": "Partenaire",
@@ -380,7 +373,6 @@
 		"Viewer": "Lecteur",
 		"Visibility": "Visibilité",
 		"Waiting for the job…": "En attente du traitement…",
-		"Warning: %d row(s) will be permanently deleted, then the file data is loaded.": "Avertissement : %d ligne(s) seront définitivement supprimées, puis les données du fichier seront chargées.",
 		"Warnings": "Avertissements",
 		"Website": "Site web",
 		"When": "Quand",
@@ -427,7 +419,40 @@
 		"window missed — next ": "fenêtre manquée — prochaine ",
 		"yearly": "annuel",
 		"— none —": "— aucun —",
-		"“Effective at” is the date your cancellation takes effect — e.g. 3 months’ notice to month end.": "« Prend effet le » est la date à laquelle votre résiliation s’applique — ex. préavis de 3 mois pour fin de mois."
+		"“Effective at” is the date your cancellation takes effect — e.g. 3 months’ notice to month end.": "« Prend effet le » est la date à laquelle votre résiliation s’applique — ex. préavis de 3 mois pour fin de mois.",
+		"_1 row needs a value on this instance_::_%n rows need a value on this instance_": [
+			"%n ligne nécessite une valeur sur cette instance",
+			"%n lignes nécessitent une valeur sur cette instance"
+		],
+		"_1 row skipped._::_%n rows skipped._": [
+			"%n ligne ignorée.",
+			"%n lignes ignorées."
+		],
+		"_1 reference unresolved — see the groups below._::_%n references unresolved — see the groups below._": [
+			"%n référence non résolue — voir les groupes ci-dessous.",
+			"%n références non résolues — voir les groupes ci-dessous."
+		],
+		"_(1 env-bound value emptied)_::_(%n env-bound values emptied)_": [
+			"(%n valeur liée à l’instance vidée)",
+			"(%n valeurs liées à l’instance vidées)"
+		],
+		"_(1 secret redacted)_::_(%n secrets redacted)_": [
+			"(%n secret masqué)",
+			"(%n secrets masqués)"
+		],
+		"_(1 filtered)_::_(%n filtered)_": [
+			"(%n filtrée)",
+			"(%n filtrées)"
+		],
+		"_(1 unresolved ref)_::_(%n unresolved refs)_": [
+			"(%n référence non résolue)",
+			"(%n références non résolues)"
+		],
+		"_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._": [
+			"Avertissement : %n ligne sera définitivement supprimée, puis les données du fichier seront chargées.",
+			"Avertissement : %n lignes seront définitivement supprimées, puis les données du fichier seront chargées."
+		],
+		"Owner’s groups": "Groupes du propriétaire"
 	},
 	"pluralForm": "nplurals=2; plural=(n > 1);"
 }
