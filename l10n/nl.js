@@ -195,7 +195,7 @@ OC.L10N.register(
 	"Insurance" : "Verzekering",
 	"Interval" : "Interval",
 	"Invoice" : "Factuur",
-	"Label" : "Label",
+	"Label" : "Etiket",
 	"Landlord Ltd" : "Verhuurder B.V.",
 	"Last transfer" : "Laatste overdracht",
 	"Leasing" : "Leasing",

@@ -325,7 +325,7 @@ OC.L10N.register(
 	"Start" : "Início",
 	"Starting…" : "Iniciando…",
 	"Starts" : "Começa",
-	"Status" : "Status",
+	"Status" : "Estado",
 	"Strong passphrase." : "Senha longa forte.",
 	"Subscribe to upcoming cancellation deadlines in your calendar app." : "Assine os próximos prazos de rescisão no seu app de calendário.",
 	"Subscribe to your visible cancellation deadlines (ICS) in any calendar app. The link is secret — anyone who has it sees your deadlines." : "Assine seus prazos de rescisão visíveis (ICS) em qualquer app de calendário. O link é secreto — quem o tiver verá seus prazos.",

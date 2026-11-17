@@ -11,7 +11,7 @@ OC.L10N.register(
 	"A transfer started by %s is already running." : "Un transfert lancé par %s est déjà en cours.",
 	"Access & roles" : "Accès & rôles",
 	"Access denied." : "Accès refusé.",
-	"Actions" : "Actions",
+	"Actions" : "Actes",
 	"Activate" : "Activer",
 	"Activated" : "Activé",
 	"Active" : "Actif",
