@@ -429,6 +429,14 @@ OC.L10N.register(
 	"_(1 filtered)_::_(%n filtered)_" : ["(%n filtrelendi)","(%n filtrelendi)"],
 	"_(1 unresolved ref)_::_(%n unresolved refs)_" : ["(%n çözümlenemeyen başvuru)","(%n çözümlenemeyen başvuru)"],
 	"_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._" : ["Uyarı: %n satır kalıcı olarak silinecek, ardından dosya verileri yüklenecek.","Uyarı: %n satır kalıcı olarak silinecek, ardından dosya verileri yüklenecek."],
-	"Owner’s groups" : "Sahibin grupları"
+	"Owner’s groups" : "Sahibin grupları",
+	"1 setting" : "1 ayar",
+	"%n settings" : "%n ayar",
+	"1 row" : "1 satır",
+	"%n rows" : "%n satır",
+	"_1 row_::_%n rows_" : ["%n satır"],
+	"_1 setting_::_%n settings_" : ["%n ayar"],
+	"This will update %1$s and %2$s — nothing is deleted." : "Bu işlem %1$s ve %2$s güncelleyecek — hiçbir şey silinmeyecek.",
+	"Import applied. %1$s and %2$s written." : "İçe aktarma uygulandı. %1$s ve %2$s yazıldı."
 	}
 );

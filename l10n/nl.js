@@ -429,6 +429,14 @@ OC.L10N.register(
 	"_(1 filtered)_::_(%n filtered)_" : ["(%n gefilterd)","(%n gefilterd)"],
 	"_(1 unresolved ref)_::_(%n unresolved refs)_" : ["(%n onopgeloste verwijzing)","(%n onopgeloste verwijzingen)"],
 	"_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._" : ["Waarschuwing: %n rij wordt definitief verwijderd, daarna worden de bestandsgegevens geladen.","Waarschuwing: %n rijen worden definitief verwijderd, daarna worden de bestandsgegevens geladen."],
-	"Owner’s groups" : "Groepen van de eigenaar"
+	"Owner’s groups" : "Groepen van de eigenaar",
+	"1 setting" : "1 instelling",
+	"%n settings" : "%n instellingen",
+	"1 row" : "1 rij",
+	"%n rows" : "%n rijen",
+	"_1 row_::_%n rows_" : ["1 rij","%n rijen"],
+	"_1 setting_::_%n settings_" : ["1 instelling","%n instellingen"],
+	"This will update %1$s and %2$s — nothing is deleted." : "Dit werkt %1$s en %2$s bij — er wordt niets verwijderd.",
+	"Import applied. %1$s and %2$s written." : "Import toegepast. %1$s en %2$s geschreven."
 	}
 );

@@ -452,7 +452,21 @@
 			"Avertissement : %n ligne sera définitivement supprimée, puis les données du fichier seront chargées.",
 			"Avertissement : %n lignes seront définitivement supprimées, puis les données du fichier seront chargées."
 		],
-		"Owner’s groups": "Groupes du propriétaire"
+		"Owner’s groups": "Groupes du propriétaire",
+		"1 setting": "1 paramètre",
+		"%n settings": "%n paramètres",
+		"1 row": "1 ligne",
+		"%n rows": "%n lignes",
+		"_1 row_::_%n rows_": [
+			"1 ligne",
+			"%n lignes"
+		],
+		"_1 setting_::_%n settings_": [
+			"1 paramètre",
+			"%n paramètres"
+		],
+		"This will update %1$s and %2$s — nothing is deleted.": "Cette opération mettra à jour %1$s et %2$s — rien ne sera supprimé.",
+		"Import applied. %1$s and %2$s written.": "Import appliqué. %1$s et %2$s écrits."
 	},
 	"pluralForm": "nplurals=2; plural=(n > 1);"
 }

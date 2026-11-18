@@ -429,6 +429,14 @@ OC.L10N.register(
 	"_(1 filtered)_::_(%n filtered)_" : ["（已过滤 %n 项）","（已过滤 %n 项）"],
 	"_(1 unresolved ref)_::_(%n unresolved refs)_" : ["（%n 个引用未解析）","（%n 个引用未解析）"],
 	"_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._" : ["警告：%n 行将被永久删除，然后加载文件数据。","警告：%n 行将被永久删除，然后加载文件数据。"],
-	"Owner’s groups" : "所有者的组"
+	"Owner’s groups" : "所有者的组",
+	"1 setting" : "1 项设置",
+	"%n settings" : "%n 项设置",
+	"1 row" : "1 行",
+	"%n rows" : "%n 行",
+	"_1 row_::_%n rows_" : ["%n 行"],
+	"_1 setting_::_%n settings_" : ["%n 项设置"],
+	"This will update %1$s and %2$s — nothing is deleted." : "这将更新 %1$s 和 %2$s——不会删除任何内容。",
+	"Import applied. %1$s and %2$s written." : "导入已应用。已写入 %1$s 和 %2$s。"
 	}
 );

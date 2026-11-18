@@ -429,6 +429,14 @@ OC.L10N.register(
 	"_(1 filtered)_::_(%n filtered)_" : ["（已篩選 %n 項）","（已篩選 %n 項）"],
 	"_(1 unresolved ref)_::_(%n unresolved refs)_" : ["（%n 個參照未解析）","（%n 個參照未解析）"],
 	"_Warning: 1 row will be permanently deleted, then the file data is loaded._::_Warning: %n rows will be permanently deleted, then the file data is loaded._" : ["警告：%n 列將被永久刪除，然後載入檔案資料。","警告：%n 列將被永久刪除，然後載入檔案資料。"],
-	"Owner’s groups" : "所有者的組"
+	"Owner’s groups" : "所有者的組",
+	"1 setting" : "1 項設定",
+	"%n settings" : "%n 項設定",
+	"1 row" : "1 列",
+	"%n rows" : "%n 列",
+	"_1 row_::_%n rows_" : ["%n 列"],
+	"_1 setting_::_%n settings_" : ["%n 項設定"],
+	"This will update %1$s and %2$s — nothing is deleted." : "這將更新 %1$s 與 %2$s——不會刪除任何內容。",
+	"Import applied. %1$s and %2$s written." : "匯入已套用。已寫入 %1$s 與 %2$s。"
 	}
 );
