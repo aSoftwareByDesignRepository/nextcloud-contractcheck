@@ -35,7 +35,7 @@ OC.L10N.register(
 	"Archive" : "Archiwizuj",
 	"Archive this contract? It can be restored later." : "Zarchiwizować tę umowę? Można ją później przywrócić.",
 	"Archived" : "Zarchiwizowany",
-	"Ask a ContractCheck manager or Nextcloud administrator to add you to an allowed group." : "Poproś menedżera ContractCheck lub administratora Nextcloud o dodanie Twojego konta do dozwolonej grupy.",
+	"Ask a ContractCheck manager or Nextcloud administrator to add you to an allowed group." : "Poproś menedżera ContractCheck lub administratora Nextcloud o dodanie konta do dozwolonej grupy.",
 	"At least 12 characters. Without this passphrase the file cannot be restored — store it safely." : "Co najmniej 12 znaków. Bez tego hasła pliku nie da się odtworzyć — przechowaj je bezpiecznie.",
 	"Audit history" : "Historia zmian",
 	"Auto-renewing" : "Odnawia się automatycznie",

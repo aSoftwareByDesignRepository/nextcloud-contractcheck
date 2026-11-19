@@ -138,7 +138,7 @@ OC.L10N.register(
 	"Edit party" : "Изменить контрагента",
 	"Effective at" : "Вступает в силу",
 	"Email" : "Эл. почта",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "Ответ по эл. почте — по мере возможности, без SLA по срокам. Нужна платная помощь? Обратитесь в раздел «Поддержка».",
+	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "Ответ по эл. почте — по мере возможности, без SLA по срокам. Нужна платная помощь? Обратитесь в раздел «Поддержка и мы».",
 	"Employment-related" : "Трудовые",
 	"Encryption passphrase" : "Парольная фраза шифрования",
 	"End" : "Окончание",
@@ -332,7 +332,7 @@ OC.L10N.register(
 	"Suggest an improvement" : "Предложить улучшение",
 	"Summary" : "Сводка",
 	"Support ContractCheck" : "Поддержать ContractCheck",
-	"Support us" : "Поддержите нас",
+	"Support us" : "Поддержать нас",
 	"Tags" : "Метки",
 	"Term" : "Срок действия",
 	"Term & dates" : "Срок и даты",
@@ -434,8 +434,8 @@ OC.L10N.register(
 	"%n settings" : "%n настроек",
 	"1 row" : "1 строка",
 	"%n rows" : "%n строк",
-	"_1 row_::_%n rows_" : ["1 строка","%n строки","%n строк"],
-	"_1 setting_::_%n settings_" : ["1 настройка","%n настройки","%n настроек"],
+	"_1 row_::_%n rows_" : ["%n строка","%n строки","%n строк"],
+	"_1 setting_::_%n settings_" : ["%n настройка","%n настройки","%n настроек"],
 	"This will update %1$s and %2$s — nothing is deleted." : "Будет обновлено: %1$s и %2$s — ничего не удаляется.",
 	"Import applied. %1$s and %2$s written." : "Импорт применён. Записано: %1$s и %2$s."
 	}

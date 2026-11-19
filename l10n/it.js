@@ -386,7 +386,7 @@ OC.L10N.register(
 	"Writing settings" : "Scrittura delle impostazioni",
 	"Years" : "Anni",
 	"You can close this — the result is saved and shown under “Last transfer”." : "Puoi chiudere — il risultato viene salvato e mostrato in “Ultimo trasferimento”.",
-	"You do not have access to ContractCheck. Your account is not in a group allowed to use this app." : "Non hai accesso a ContractCheck. Il tuo account non appartiene a un gruppo autorizzato a usare questa app.",
+	"You do not have access to ContractCheck. Your account is not in a group allowed to use this app." : "Non ha accesso a ContractCheck. Il Suo account non appartiene a un gruppo autorizzato a usare questa app.",
 	"You do not have the rights for this action." : "Non hai i permessi per questa azione.",
 	"active" : "attivo",
 	"add and update; nothing is deleted" : "aggiungi e aggiorna; niente viene eliminato",
