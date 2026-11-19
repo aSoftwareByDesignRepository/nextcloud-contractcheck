@@ -43,6 +43,7 @@ $enT = $catalogs['en']['translations'] ?? [];
 $failed = false;
 $expectedPluralCounts = [
 	'pl' => 3,
+	'ru' => 3,
 ];
 
 foreach ($enT as $key => $enVal) {
