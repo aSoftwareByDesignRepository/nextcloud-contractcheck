@@ -38,7 +38,7 @@ final class TransferManifest extends AbstractTransferManifest
 		return self::SCHEMA_VERSION;
 	}
 
-	/** @return array<string,array> */
+	/** @return array<string, array{class:string,refs:?array{kind:string,uid_paths:list<string>,gid_paths:list<string>},unresolved:string,section:?string,security:bool,store:?array{table:string,kind:string,key_col:string,value_col:string,row_id:int,json_col:string,json_key:string}}> */
 	public function keys(): array
 	{
 		return self::normaliseKeys([
@@ -79,7 +79,7 @@ final class TransferManifest extends AbstractTransferManifest
 		]);
 	}
 
-	/** @return array<string,array> */
+	/** @return array<string, array{class:string,strategy:string,natural_key:list<string>,pk:list<string>,fk:array<string,string>,fk_late:array<string,string>,uid_ref:list<string>,gid_ref:list<string>,uid_ref_nullable:list<string>,json_uid_list:list<string>,secret_columns:list<string>,env_columns:list<string>,depends_on:list<string>}> */
 	public function tables(): array
 	{
 		return self::normaliseTables([
