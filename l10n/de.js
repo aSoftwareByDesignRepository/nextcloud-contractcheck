@@ -138,7 +138,7 @@ OC.L10N.register(
 	"Edit party" : "Partner bearbeiten",
 	"Effective at" : "Wirksam zum",
 	"Email" : "E-Mail",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "E-Mail ist Best-Effort — ohne Antwortgarantie. Gebuchte Hilfe? Siehe „Unterstützen Sie uns“.",
+	"Email is best-effort — no reply SLA. Need booked help? See Support us." : "E-Mail ist Best-Effort — ohne Antwortgarantie. Gebuchte Hilfe? Siehe „Unterstützen Sie uns“.",
 	"Employment-related" : "Arbeitsvertrag",
 	"Encryption passphrase" : "Verschlüsselungs-Passphrase",
 	"End" : "Ende",

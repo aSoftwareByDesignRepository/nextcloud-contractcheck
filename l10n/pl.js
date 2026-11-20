@@ -138,7 +138,7 @@ OC.L10N.register(
 	"Edit party" : "Edytuj kontrahenta",
 	"Effective at" : "Obowiązuje od",
 	"Email" : "E-mail",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "Odpowiedź na e-mail bez gwarancji terminu. Potrzebna umówiona pomoc? Zobacz «Wsparcie i my».",
+	"Email is best-effort — no reply SLA. Need booked help? See Support us." : "Odpowiedź na e-mail bez gwarancji terminu. Potrzebna umówiona pomoc? Zobacz «Wesprzyj nas».",
 	"Employment-related" : "Związane z zatrudnieniem",
 	"Encryption passphrase" : "Hasło szyfrujące",
 	"End" : "Koniec",

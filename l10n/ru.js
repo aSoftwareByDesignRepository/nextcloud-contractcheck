@@ -138,7 +138,7 @@ OC.L10N.register(
 	"Edit party" : "Изменить контрагента",
 	"Effective at" : "Вступает в силу",
 	"Email" : "Эл. почта",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "Ответ по эл. почте — по мере возможности, без SLA по срокам. Нужна платная помощь? Обратитесь в раздел «Поддержка и мы».",
+	"Email is best-effort — no reply SLA. Need booked help? See Support us." : "Ответ по эл. почте — по мере возможности, без SLA по срокам. Нужна платная помощь? См. раздел «Поддержать нас».",
 	"Employment-related" : "Трудовые",
 	"Encryption passphrase" : "Парольная фраза шифрования",
 	"End" : "Окончание",

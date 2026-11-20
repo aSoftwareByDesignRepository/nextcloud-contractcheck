@@ -138,7 +138,7 @@ OC.L10N.register(
 	"Edit party" : "编辑合作方",
 	"Effective at" : "生效于",
 	"Email" : "邮箱",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "邮件为尽力回复——无回复时限承诺。需要预约帮助？请使用“支持与我们联系”。",
+	"Email is best-effort — no reply SLA. Need booked help? See Support us." : "邮件为尽力回复——无回复时限承诺。需要预约帮助？请参阅“支持我们”。",
 	"Employment-related" : "与雇佣相关",
 	"Encryption passphrase" : "加密口令",
 	"End" : "结束",

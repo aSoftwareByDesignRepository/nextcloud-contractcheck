@@ -138,7 +138,7 @@ OC.L10N.register(
 	"Edit party" : "Rediger motpart",
 	"Effective at" : "Gjelder fra",
 	"Email" : "E-post",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "E-post besvares uten svarfrist-garanti. Trenger du avtalt hjelp? Se «Support & oss».",
+	"Email is best-effort — no reply SLA. Need booked help? See Support us." : "E-post besvares uten svarfrist-garanti. Trenger du avtalt hjelp? Se «Støtt oss».",
 	"Employment-related" : "Arbeidsrelatert",
 	"Encryption passphrase" : "Passordfrase for den krypterte fila",
 	"End" : "Slutt",

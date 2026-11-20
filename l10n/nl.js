@@ -138,7 +138,7 @@ OC.L10N.register(
 	"Edit party" : "Tegenpartij bewerken",
 	"Effective at" : "Ingangsdatum",
 	"Email" : "E-mail",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "E-mail is zonder reactiegarantie. Hulp op afspraak nodig? Zie «Support & wij».",
+	"Email is best-effort — no reply SLA. Need booked help? See Support us." : "E-mail is zonder reactiegarantie. Hulp op afspraak nodig? Zie «Steun ons».",
 	"Employment-related" : "Arbeidsrechtelijk",
 	"Encryption passphrase" : "Versleutelingswachtwoordzin",
 	"End" : "Einde",

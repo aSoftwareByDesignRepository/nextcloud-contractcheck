@@ -138,7 +138,7 @@ OC.L10N.register(
 	"Edit party" : "Editar interlocutor",
 	"Effective at" : "Vigente desde",
 	"Email" : "Correo electrónico",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "El correo es sin garantía de respuesta. ¿Necesita ayuda contratada? Use «Soporte y nosotros».",
+	"Email is best-effort — no reply SLA. Need booked help? See Support us." : "El correo es sin garantía de respuesta. ¿Necesita ayuda contratada? Vea «Apóyenos».",
 	"Employment-related" : "Laboral",
 	"Encryption passphrase" : "Frase de contraseña de cifrado",
 	"End" : "Fin",

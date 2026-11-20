@@ -138,7 +138,7 @@ OC.L10N.register(
 	"Edit party" : "Edit party",
 	"Effective at" : "Effective at",
 	"Email" : "Email",
-	"Email is best-effort — no reply SLA. Need booked help? Use Support & us." : "Email is best-effort — no reply SLA. Need booked help? Use Support & us.",
+	"Email is best-effort — no reply SLA. Need booked help? See Support us." : "Email is best-effort — no reply SLA. Need booked help? See Support us.",
 	"Employment-related" : "Employment-related",
 	"Encryption passphrase" : "Encryption passphrase",
 	"End" : "End",
