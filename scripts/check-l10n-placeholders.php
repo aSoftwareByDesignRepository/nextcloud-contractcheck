@@ -44,6 +44,11 @@ $failed = false;
 $expectedPluralCounts = [
 	'pl' => 3,
 	'ru' => 3,
+	// Zero-form locales (tr/zh): runtime getPlural always selects index 0 —
+	// ship a single %n-bearing form (check-l10n-plural-arity.py).
+	'tr' => 1,
+	'zh_CN' => 1,
+	'zh_TW' => 1,
 ];
 
 foreach ($enT as $key => $enVal) {
@@ -79,8 +84,13 @@ foreach ($enT as $key => $enVal) {
 			foreach ($val as $i => $form) {
 				$formPh = ccPrintfPlaceholders((string)$form);
 				$ref = isset($enVal[$i]) ? ccPrintfPlaceholders((string)$enVal[$i]) : ['%n'];
-				// Polish has 3 forms; EN has 2 — each form must contain %n.
-				if (!in_array('%n', $formPh, true) && str_contains($key, '%n')) {
+				// %n is required where the runtime can select the form for a
+				// non-singular count: index 0 only in single-form locales
+				// (tr/zh_* — it renders for EVERY n), index >0 elsewhere.
+				// A literal singular ("1 row") carries no %n by design —
+				// mirrors check-l10n-plural-arity.py.
+				$needsN = ($want === 1) ? ($i === 0) : ($i > 0);
+				if ($needsN && !in_array('%n', $formPh, true) && str_contains($key, '%n')) {
 					$failed = true;
 					fwrite(STDERR, "{$lang}.json plural form {$i} missing %n for {$key}\n");
 				}
