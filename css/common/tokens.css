@@ -1,6 +1,6 @@
-/* Auto-adapted from arbeitszeitcheck/css/common/tokens.css for ContractCheck shell parity. Do not invent divergent layout rules here. */
+/* Auto-adapted from arbeitszeitcheck/css/common/tokens.css for the Check-family shell. Do not invent divergent layout rules here. */
 /*
- * ContractCheck design tokens (--cc-*).
+ * Contractcheck design tokens (--cc-*).
  * Colors derive from Nextcloud theme variables; no raw hex in feature CSS.
  * Spacing/typography on :root; theme colors on body + themed app surfaces
  * (NC sets --color-* on body [data-theme-*]).
@@ -63,15 +63,13 @@
 	--cc-icon-stroke: 2;
 
 	--cc-tab-num: tabular-nums;
-	/* Monospace stack — used by the synced transfer pack for key hashes/ids */
-	--cc-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 	/* Touch targets (WCAG 2.5.5 / design-system) */
 	--cc-touch: 44px;
 	--cc-touch-lg: 48px;
 
 	/*
 	 * QR / barcode canvas must stay light for scannability in every theme.
-	 * This is the only intentional non-theme surface in ContractCheck feature CSS.
+	 * This is the only intentional non-theme surface in Contractcheck feature CSS.
 	 */
 	--cc-qr-canvas: #ffffff;
 }
@@ -97,8 +95,15 @@ body,
 	--cc-bg-soft: color-mix(in srgb, var(--color-main-background) 96%, var(--color-main-text) 4%);
 	--cc-bg-card: var(--color-main-background);
 	--cc-bg-stripe: color-mix(in srgb, var(--color-main-background) 92%, var(--color-main-text) 8%);
+	--cc-bg-hover: var(--color-background-hover);
 	--cc-text: var(--color-main-text);
 	--cc-muted: var(--color-text-maxcontrast);
+	/* Muted ink on tinted surfaces (callouts/badges): main-text keeps it
+	   readable where pure maxcontrast washes out on the tint fill. */
+	--cc-muted-on-tint: color-mix(in srgb, var(--color-text-maxcontrast) 55%, var(--color-main-text));
+	/* Monospace for codes/refs (claim numbers, payment refs): NC ships no mono
+	   var, so pin a platform-native stack. */
+	--cc-mono: ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', 'Liberation Mono', Menlo, Consolas, monospace;
 	--cc-border: color-mix(in srgb, var(--color-main-text) 12%, transparent);
 	/* Boundaries of cards/controls/callouts/dialogs need >=3:1 vs the adjacent
 	   surface (WCAG 1.4.11): NC's --color-border-maxcontrast is theme-tuned for
@@ -117,6 +122,10 @@ body,
 	/* Primary / focus — track NC accent for custom branding */
 	--cc-primary: var(--color-primary-element);
 	--cc-primary-text: var(--color-primary-element-text);
+	/* Accent used as text/icon ink on surfaces: pure --color-primary-element
+	   drops below WCAG AA 4.5:1 on dark themes (~4.3:1); the dark override
+	   below blends it toward main-text. Fills keep --cc-primary. */
+	--cc-accent-ink: var(--color-primary-element);
 	--cc-focus: 3px solid var(--color-primary-element);
 	--cc-focus-offset: 2px;
 
@@ -215,6 +224,7 @@ body[data-theme-dark-highcontrast] #content.app-contractcheck {
 		var(--color-main-background)
 	);
 	--cc-danger-on-fill: var(--color-main-text);
+	--cc-accent-ink: color-mix(in srgb, var(--color-primary-element) 70%, var(--color-main-text));
 }
 
 /* NC high-contrast themes: stronger borders / shadows for 3:1 UI chrome */
@@ -256,15 +266,4 @@ body[data-theme-dark-highcontrast] #content.app-contractcheck {
 /* Alias for dead-name ref (literal fallback masked it). */
 body {
 	--cc-bg: var(--cc-bg-card);
-}
-
-/* Accent ink for text-on-surface: --color-primary-element as text drops below
-   WCAG AA (~4.3:1) on dark themes — blend toward main-text there. */
-body {
-	--cc-accent-ink: var(--color-primary-element);
-}
-
-body[data-theme-dark],
-body[data-theme-dark-highcontrast] {
-	--cc-accent-ink: color-mix(in srgb, var(--color-primary-element) 70%, var(--color-main-text));
 }
