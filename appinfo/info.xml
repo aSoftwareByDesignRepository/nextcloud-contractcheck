@@ -9,24 +9,24 @@
 	<summary>Contract register with cancellation deadlines, reminders, documents and yearly cost rollups</summary>
 	<summary lang="de">Vertragsregister mit Kündigungsfristen, Erinnerungen, Dokumenten und Jahreskosten</summary>
 	<description><![CDATA[
-# ContractCheck — never miss a cancellation window again
+# ContractCheck: never miss a cancellation window again
 
 Every contract in one register: notice periods and anchors (month end, quarter end, year end, contract end, anytime), automatic renewals, revision history, linked Nextcloud files, cost entries with yearly rollups, CSV/PDF export and an ICS feed straight into your calendar.
 
-A deterministic deadline engine computes the next cancel-by date for every contract — so auto-renewals stop surprising you.
+A deterministic deadline engine computes the next cancel-by date for every contract, so auto-renewals stop surprising you.
 
 ## Highlights
 
-- **Deadline engine** — next cancel-by computed from notice period and anchor, not from memory
-- **Auto-renewal tracking** — know what rolls over and when it last changed
-- **Costs that roll up** — cost entries with yearly totals per contract
-- **Documents attached** — link the contract file in Nextcloud Files
-- **Your calendar too** — ICS feed of every deadline; CSV/PDF export
+- **Deadline engine**: next cancel-by computed from notice period and anchor, not from memory
+- **Auto-renewal tracking**: know what rolls over and when it last changed
+- **Costs that roll up**: cost entries with yearly totals per contract
+- **Documents attached**: link the contract file in Nextcloud Files
+- **Your calendar too**: ICS feed of every deadline; CSV/PDF export
 
 ## Clear limits
 
 - Not e-signature, drafting or clause management.
-- Not procurement (EinkaufCheck) or invoicing (InvoiceCheck).
+- Not procurement or invoicing.
 - Not public tender law workflows.
 
 ## Requirements
@@ -36,24 +36,24 @@ A deterministic deadline engine computes the next cancel-by date for every contr
 - MySQL or PostgreSQL
 	]]></description>
 	<description lang="de"><![CDATA[
-# ContractCheck — nie wieder eine Kündigungsfrist verpassen
+# ContractCheck: nie wieder eine Kündigungsfrist verpassen
 
 Alle Verträge in einem Register: Kündigungsfristen mit Ankern (Monatsende, Quartalsende, Jahresende, Vertragsende, jederzeit), automatische Verlängerungen, Änderungshistorie, verknüpfte Nextcloud-Dateien, Kostenpositionen mit Jahresrollups, CSV/PDF-Export und ein ICS-Feed direkt in Ihren Kalender.
 
-Eine deterministische Fristen-Engine rechnet den nächsten Kündigungstermin für jeden Vertrag — damit Auto-Verlängerungen Sie nicht mehr überraschen.
+Eine deterministische Fristen-Engine rechnet den nächsten Kündigungstermin für jeden Vertrag, damit Auto-Verlängerungen Sie nicht mehr überraschen.
 
 ## Highlights
 
-- **Fristen-Engine** — nächster Kündigungstermin aus Frist und Anker berechnet, nicht aus dem Gedächtnis
-- **Auto-Verlängerung im Blick** — was sich verlängert und wann es sich zuletzt geändert hat
-- **Kosten, die sich aufsummieren** — Kostenpositionen mit Jahressummen je Vertrag
-- **Dokumente dabei** — die Vertragsakte direkt aus Nextcloud Files verknüpfen
-- **Auch Ihr Kalender** — ICS-Feed aller Fristen; CSV/PDF-Export
+- **Fristen-Engine**: nächster Kündigungstermin aus Frist und Anker berechnet, nicht aus dem Gedächtnis
+- **Auto-Verlängerung im Blick**: was sich verlängert und wann es sich zuletzt geändert hat
+- **Kosten, die sich aufsummieren**: Kostenpositionen mit Jahressummen je Vertrag
+- **Dokumente dabei**: die Vertragsakte direkt aus Nextcloud Files verknüpfen
+- **Auch Ihr Kalender**: ICS-Feed aller Fristen; CSV/PDF-Export
 
 ## Klare Grenzen
 
 - Keine E-Signatur, kein Entwurf, kein Klauselmanagement.
-- Kein Einkauf (EinkaufCheck) und keine Rechnungsstellung (InvoiceCheck).
+- Kein Einkauf und keine Rechnungsstellung.
 - Keine Workflows für öffentliches Vergaberecht.
 
 ## Voraussetzungen

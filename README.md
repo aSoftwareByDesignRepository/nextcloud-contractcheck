@@ -28,7 +28,7 @@ on your Nextcloud.
 ## Clear limits
 
 - Not e-signature, drafting, or clause management
-- Not procurement (EinkaufCheck) or invoicing (InvoiceCheck)
+- Not procurement or invoicing
 - Not public tender law workflows
 
 ## Dev
