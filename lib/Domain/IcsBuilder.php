@@ -22,7 +22,7 @@ final class IcsBuilder
 	}
 
 	/**
-	 * @param list<array{uid:string, title:string, cancelBy:string, effectiveAt:?string, leadDays:list<int>}> $events
+	 * @param list<array{uid:string, title:string, cancelBy:string, description:?string, leadDays:list<int>}> $events
 	 * @param string $dtstamp UTC stamp (Ymd\THis\Z) — supplied by the caller's Clock
 	 */
 	public static function build(string $calendarName, array $events, string $dtstamp): string
@@ -42,8 +42,8 @@ final class IcsBuilder
 			// DTEND is exclusive for all-day events → +1 day.
 			$lines[] = 'DTEND;VALUE=DATE:' . str_replace('-', '', DateMath::addDays($e['cancelBy'], 1));
 			$lines[] = 'SUMMARY:' . self::escape($e['title']);
-			if ($e['effectiveAt'] !== null) {
-				$lines[] = 'DESCRIPTION:' . self::escape('Effective: ' . $e['effectiveAt']);
+			if ($e['description'] !== null) {
+				$lines[] = 'DESCRIPTION:' . self::escape($e['description']);
 			}
 			foreach ($e['leadDays'] as $lead) {
 				if ($lead <= 0) {

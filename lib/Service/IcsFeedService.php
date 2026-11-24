@@ -9,8 +9,12 @@ declare(strict_types=1);
 
 namespace OCA\ContractCheck\Service;
 
+use OCA\ContractCheck\AppInfo\Application;
 use OCA\ContractCheck\Domain\DeadlineResult;
 use OCA\ContractCheck\Domain\IcsBuilder;
+use OCP\IL10N;
+use OCP\IUserManager;
+use OCP\L10N\IFactory as IL10NFactory;
 
 /**
  * Token-authenticated read-only ICS feed of upcoming cancel-by dates —
@@ -26,6 +30,8 @@ class IcsFeedService
 		private readonly DeadlineService $deadlines,
 		private readonly AccessService $access,
 		private readonly Clock $clock,
+		private readonly IUserManager $userManager,
+		private readonly IL10NFactory $l10nFactory,
 	) {
 	}
 
@@ -39,6 +45,10 @@ class IcsFeedService
 			return null;
 		}
 
+		// No session on this public route — resolve the feed owner's own
+		// language so calendar clients see their configured locale.
+		$l10n = $this->feedL10n($uid);
+
 		$events = [];
 		foreach ($this->contracts->listForUser($uid, null, 'active', [], 500, 0) as $contract) {
 			$result = $this->deadlines->compute($contract);
@@ -49,9 +59,11 @@ class IcsFeedService
 			// partner, no costs, no notes in the calendar feed).
 			$events[] = [
 				'uid' => 'contractcheck-' . $contract->getId() . '-' . $result->instanceId($contract->getId()) . '@contractcheck',
-				'title' => 'Cancel by: ' . $contract->getTitle(),
+				'title' => $l10n->t('Cancel by ') . $contract->getTitle(),
 				'cancelBy' => $result->cancelBy,
-				'effectiveAt' => $result->effectiveAt,
+				'description' => $result->effectiveAt !== null
+					? $l10n->t('Effective at') . ': ' . $result->effectiveAt
+					: null,
 				'leadDays' => \OCA\ContractCheck\Db\Contract::decodeIntList($contract->getLeadDaysJson(), [60, 30]),
 			];
 		}
@@ -59,10 +71,25 @@ class IcsFeedService
 		return [
 			'uid' => $uid,
 			'ics' => IcsBuilder::build(
-				$this->settings->getOrgName() . ' — contract deadlines',
+				$this->settings->getOrgName() . ' — ' . $l10n->t('Contract deadlines'),
 				$events,
 				$this->clock->now()->setTimezone(new \DateTimeZone('UTC'))->format('Ymd\THis\Z')
 			),
 		];
+	}
+
+	/**
+	 * The feed is token-authenticated (public route, no session user), so the
+	 * request's ambient locale is meaningless. Render in the feed owner's
+	 * configured language; a deleted owner falls back to the generic resolver.
+	 */
+	private function feedL10n(string $uid): IL10N
+	{
+		$user = $this->userManager->get($uid);
+		$lang = $user !== null
+			? $this->l10nFactory->getUserLanguage($user)
+			: $this->l10nFactory->findLanguage(Application::APP_ID);
+
+		return $this->l10nFactory->get(Application::APP_ID, $lang);
 	}
 }
