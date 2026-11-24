@@ -1,0 +1,16 @@
+{
+  "cc-app--denied": "page-variant marker on #app-content.cc-app root (denied surface); nav-less full-span owned by app.css :not(:has(>#app-navigation)) grid guard",
+  "cc-audit": "audit page section scope marker (aria-labelledby region); JS binds by id, layout via .cc-panel/.cc-table",
+  "cc-col-cost": "JS hook toggling yearly-cost column visibility (js/pages/contracts.js)",
+  "cc-contract-detail": "page-detect hook + region marker; contract.js dispatches detail vs form on this class",
+  "cc-contract-form": "page-detect hook + region marker; contract.js dispatches form vs detail on this class",
+  "cc-contracts": "contract-list page section scope marker (aria-labelledby region); JS binds by id",
+  "cc-dashboard": "dashboard page section scope marker (aria-labelledby region); page chrome via cc-app--dashboard scope variant",
+  "cc-import": "import page section scope marker (aria-labelledby region); result block styled via .cc-import-result",
+  "cc-parties": "parties page section scope marker (aria-labelledby region); JS binds by id",
+  "cc-picker__input": "picker element marker on styled .cc-input; combobox chrome owned by .cc-picker block (initPicker binds element refs, not the class)",
+  "cc-reports": "reports page section scope marker (aria-labelledby region); JS binds by id",
+  "cc-settings": "settings page mount hook (js/pages/settings.js querySelector) + region marker",
+  "cc-table__row": "row marker emitted on generated <tr> (js/pages/contracts.js); zebra/hover owned by .cc-table tbody tr rules",
+  "cc-transfer-report": "transfer report dialog variant marker on styled .cc-dialog"
+}
