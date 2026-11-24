@@ -118,4 +118,76 @@ test.describe('contract lifecycle', () => {
 		await apiCall(page, 'DELETE', `/api/contracts/${c.id}/costs/${cost.id}`)
 		await archiveContract(page, c.id)
 	})
+
+	test('document picker: manager gets the wired control, viewer gets neither control nor wiring', async ({ page, browser }) => {
+		test.skip(!viewer, 'Requires NC_E2E_* credentials')
+		await login(page, admin)
+		const title = uniqueTitle('DocGate')
+		await page.goto('/apps/contractcheck/', { waitUntil: 'domcontentloaded' })
+		const c = await apiPost(page, '/api/contracts', {
+			title, type: 'rent', scope: 'org', status: 'draft',
+			startDate: '2026-01-01', endDate: '2028-12-31',
+			termKind: 'fixed', noticeValue: 3, noticeUnit: 'months',
+			noticeAnchor: 'contract_end', leadDays: [30],
+		})
+
+		// Manager: picker rendered and interactive (search wiring armed).
+		await page.goto(`/apps/contractcheck/contracts/${c.id}`, { waitUntil: 'domcontentloaded' })
+		await expect(page.locator('#cc-detail-loading')).toBeHidden({ timeout: 15_000 })
+		await expect(page.locator('#cc-doc-picker')).toBeVisible()
+		await expect(page.locator('#cc-doc-search')).toBeVisible()
+
+		// Viewer: the control is a dead end for them — searchFiles 403s and
+		// linkDocument 404s — so it must not render and must not be wired.
+		const ctx2 = await browser.newContext()
+		const page2 = await ctx2.newPage()
+		const fileSearches = []
+		page2.on('request', (r) => {
+			if (r.url().includes('/api/files/search')) fileSearches.push(r.url())
+		})
+		await login(page2, viewer)
+		await page2.goto(`/apps/contractcheck/contracts/${c.id}`, { waitUntil: 'domcontentloaded' })
+		await expect(page2.locator('#cc-detail-loading')).toBeHidden({ timeout: 15_000 })
+		await expect(page2.locator('#cc-hero-title')).toHaveText(title)
+		await expect(page2.locator('#cc-doc-picker')).toBeHidden()
+		expect(fileSearches).toEqual([])
+		// Regression: the sibling cost form stays hidden for viewers too.
+		await expect(page2.locator('#cc-cost-form')).toBeHidden()
+		await ctx2.close()
+
+		await archiveContract(page, c.id)
+	})
+
+	test('viewer deep-links to contract forms redirect to read surfaces', async ({ page, browser }) => {
+		test.skip(!viewer, 'Requires NC_E2E_* credentials')
+		await login(page, admin)
+		const title = uniqueTitle('FormGate')
+		await page.goto('/apps/contractcheck/', { waitUntil: 'domcontentloaded' })
+		const c = await apiPost(page, '/api/contracts', {
+			title, type: 'rent', scope: 'org', status: 'draft',
+			startDate: '2026-01-01', endDate: '2028-12-31',
+			termKind: 'fixed', noticeValue: 3, noticeUnit: 'months',
+			noticeAnchor: 'contract_end', leadDays: [30],
+		})
+
+		// Manager regression: /edit still renders the real form.
+		await page.goto(`/apps/contractcheck/contracts/${c.id}/edit`, { waitUntil: 'domcontentloaded' })
+		await expect(page.locator('#cc-contract-form')).toBeVisible({ timeout: 15_000 })
+
+		const ctx2 = await browser.newContext()
+		const page2 = await ctx2.newPage()
+		await login(page2, viewer)
+		// /contracts/{id}/edit → the read surface (viewer can act there).
+		await page2.goto(`/apps/contractcheck/contracts/${c.id}/edit`, { waitUntil: 'domcontentloaded' })
+		await expect(page2).toHaveURL(new RegExp(`/contracts/${c.id}$`), { timeout: 15_000 })
+		await expect(page2.locator('#cc-detail-loading')).toBeHidden({ timeout: 15_000 })
+		await expect(page2.locator('#cc-hero-title')).toHaveText(title)
+		await expect(page2.locator('#cc-contract-form')).toHaveCount(0)
+		// /contracts/new → dashboard (same convention as /import).
+		await page2.goto('/apps/contractcheck/contracts/new', { waitUntil: 'domcontentloaded' })
+		await expect(page2).toHaveURL(/\/dashboard$/, { timeout: 15_000 })
+		await ctx2.close()
+
+		await archiveContract(page, c.id)
+	})
 })

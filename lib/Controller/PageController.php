@@ -73,8 +73,16 @@ class PageController extends Controller
 
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function contractNew(): TemplateResponse
+	public function contractNew(): Response
 	{
+		// Contract create/update are manager-only (createContract 403s,
+		// updateContract 404s for viewers). Deep links for viewers redirect —
+		// same convention as import — instead of rendering a form that can
+		// never save.
+		$user = $this->userSession->getUser();
+		if ($user === null || !$this->access->isManager($user->getUID())) {
+			return new RedirectResponse($this->urlGenerator->linkToRoute('contractcheck.page.dashboard'));
+		}
 		return $this->page('contract-form');
 	}
 
@@ -87,8 +95,13 @@ class PageController extends Controller
 
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function contractEdit(int $id): TemplateResponse
+	public function contractEdit(int $id): Response
 	{
+		$user = $this->userSession->getUser();
+		if ($user === null || !$this->access->isManager($user->getUID())) {
+			// Viewers land on the read surface, not a dead-end save form.
+			return new RedirectResponse($this->urlGenerator->linkToRoute('contractcheck.page.contractShow', ['id' => $id]));
+		}
 		return $this->page('contract-form', ['contractId' => $id]);
 	}
 

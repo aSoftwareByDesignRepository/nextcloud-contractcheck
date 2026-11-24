@@ -174,6 +174,7 @@
 		var contractId = parseInt(detailPage.getAttribute('data-contract-id'), 10);
 		var contract = null;
 		var costGuard = null;
+		var docPickerReady = false;
 
 		function dlRow(label, value) {
 			var wrap = CC.el('div', { class: 'cc-dl__row' });
@@ -299,6 +300,11 @@
 		}
 
 		function renderDocs(c) {
+			var picker = document.getElementById('cc-doc-picker');
+			picker.hidden = !c.canEdit;
+			if (c.canEdit && !docPickerReady) {
+				initDocPicker();
+			}
 			var ul = document.getElementById('cc-d-docs');
 			ul.innerHTML = '';
 			var docs = c.documents || [];
@@ -422,25 +428,30 @@
 			}).finally(function () { costGuard.end(); });
 		});
 
-		// Document picker (file search → link)
-		CC.initPicker({
-			container: document.getElementById('cc-doc-picker'),
-			input: document.getElementById('cc-doc-search'),
-			results: document.getElementById('cc-doc-results'),
-			chips: null,
-			hidden: null,
-			multiple: false,
-			search: function (term, signal) {
-				return CC.api('/api/files/search?q=' + encodeURIComponent(term), { signal: signal });
-			},
-			onChange: function (fileId) {
-				if (!fileId) return;
-				var kind = document.getElementById('cc-doc-kind').value;
-				CC.api('/api/contracts/' + contractId + '/documents', {
-					method: 'POST',
-					json: { fileId: fileId, kind: kind }
-				}).then(function () { reload(); reloadEvents(); }).catch(CC.handleError);
-			}
-		});
+		// Document picker (file search → link) — wired lazily on the first
+		// canEdit render: files/search 403s and documents POST 404s for
+		// viewers, so initializing it for them would arm a dead control.
+		function initDocPicker() {
+			docPickerReady = true;
+			CC.initPicker({
+				container: document.getElementById('cc-doc-picker'),
+				input: document.getElementById('cc-doc-search'),
+				results: document.getElementById('cc-doc-results'),
+				chips: null,
+				hidden: null,
+				multiple: false,
+				search: function (term, signal) {
+					return CC.api('/api/files/search?q=' + encodeURIComponent(term), { signal: signal });
+				},
+				onChange: function (fileId) {
+					if (!fileId) return;
+					var kind = document.getElementById('cc-doc-kind').value;
+					CC.api('/api/contracts/' + contractId + '/documents', {
+						method: 'POST',
+						json: { fileId: fileId, kind: kind }
+					}).then(function () { reload(); reloadEvents(); }).catch(CC.handleError);
+				}
+			});
+		}
 	}
 })();
