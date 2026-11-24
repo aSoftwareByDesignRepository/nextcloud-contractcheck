@@ -284,12 +284,28 @@
 	 *  results: <ul role=listbox>
 	 *  chips: chips container (may be null → single-select stored in hidden input)
 	 *  hidden: hidden input (single mode) OR null (chips mode keeps array)
-	 *  search(term, signal) → Promise<list<{id,label}>>
+	 *  search(term, signal) → Promise<list> of directory rows
 	 *  onChange(list|id)
 	 *  multiple: bool
 	 */
+	/* Directory endpoints return their own row shapes — {uid,displayName},
+	   {gid,displayName}, {fileId,name} — normalize once here so every
+	   picker downstream speaks {id,label} (chips, hidden input, emit). */
+	function normalizeItem(item) {
+		if (!item || typeof item !== 'object') return null;
+		var id = item.id !== undefined ? item.id
+			: (item.uid !== undefined ? item.uid
+			: (item.gid !== undefined ? item.gid : item.fileId));
+		if (id === undefined || id === null || id === '') return null;
+		var label = item.label !== undefined ? item.label
+			: (item.displayName !== undefined ? item.displayName
+			: (item.name !== undefined && item.name !== '' ? item.name : id));
+		if (label === undefined || label === null || label === '') label = id;
+		return { id: id, label: String(label) };
+	}
+
 	function initPicker(cfg) {
-		var state = { items: [], aborter: null, selected: [] };
+		var state = { items: [], aborter: null, selected: [], lastItems: {} };
 		var input = cfg.input, results = cfg.results;
 
 		function renderChips() {
@@ -328,6 +344,7 @@
 		function hideResults() {
 			results.hidden = true;
 			results.innerHTML = '';
+			state.lastItems = {};
 			input.setAttribute('aria-expanded', 'false');
 		}
 
@@ -353,7 +370,14 @@
 			state.aborter = new AbortController();
 			cfg.search(term, state.aborter.signal).then(function (items) {
 				results.innerHTML = '';
-				items.slice(0, 8).forEach(function (item) {
+				state.lastItems = {};
+				var list = [];
+				(items || []).forEach(function (raw) {
+					var it = normalizeItem(raw);
+					if (it !== null && list.length < 8) list.push(it);
+				});
+				list.forEach(function (item) {
+					state.lastItems[String(item.id)] = item;
 					var li = el('li', {
 						class: 'cc-picker__result', role: 'option', tabindex: '-1',
 						'data-id': String(item.id)
@@ -364,8 +388,8 @@
 					});
 					results.appendChild(li);
 				});
-				results.hidden = items.length === 0;
-				input.setAttribute('aria-expanded', items.length ? 'true' : 'false');
+				results.hidden = list.length === 0;
+				input.setAttribute('aria-expanded', list.length ? 'true' : 'false');
 			}).catch(function (e) {
 				if (e && e.name === 'AbortError') return;
 				hideResults();
@@ -392,9 +416,7 @@
 			if (ev.key === 'Enter' || ev.key === ' ') {
 				ev.preventDefault();
 				var id = cur.getAttribute('data-id');
-				var item = Array.prototype.find.call(results.children, function () { return false; });
-				cfg.searchLastItem = cfg.searchLastItem || {};
-				var hit = cfg.searchLastItem[id];
+				var hit = state.lastItems[id];
 				if (hit) choose(hit);
 			}
 			if (ev.key === 'Escape') { hideResults(); input.focus(); }

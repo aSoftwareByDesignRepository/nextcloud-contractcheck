@@ -81,6 +81,16 @@ $mutants = [
 		'tests' => 'ApiJsonTraitTest',
 	],
 	[
+		// Reproduces the 2026-11-24 Johan-intake bug: a pristine settings doc
+		// carries version 0 — rejecting it made every fresh-install first
+		// save 409 forever (paramId was the wrong helper here).
+		'name' => 'api: paramVersion rejects 0 (fresh-install first save 409)',
+		'file' => 'lib/Controller/ApiJsonTrait.php',
+		'find' => "if (is_int(\$v) && \$v >= 0) {",
+		'repl' => "if (is_int(\$v) && \$v > 0) {",
+		'tests' => 'ApiJsonTraitTest',
+	],
+	[
 		'name' => 'api: literal "false" treated as truthy',
 		'file' => 'lib/Controller/ApiJsonTrait.php',
 		'find' => "in_array(strtolower(\$v), ['1', 'true', 'yes'], true);",

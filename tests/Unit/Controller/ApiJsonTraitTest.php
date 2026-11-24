@@ -31,6 +31,7 @@ final class ApiJsonTraitTest extends TestCase
 			public function pubFromThrowable(\Throwable $e) { return $this->fromThrowable($e); }
 			public function pubBool(mixed $v, bool $d = false) { return $this->paramBool($v, $d); }
 			public function pubId(mixed $v) { return $this->paramId($v); }
+			public function pubVersion(mixed $v) { return $this->paramVersion($v); }
 		};
 	}
 
@@ -138,5 +139,29 @@ final class ApiJsonTraitTest extends TestCase
 	public function testParamIdStrictDigits(mixed $v, ?int $expected): void
 	{
 		self::assertSame($expected, $this->ctl->pubId($v));
+	}
+
+	public static function versions(): iterable
+	{
+		// 0 is the pristine never-saved state (fresh install) — legal CAS
+		// input. Regression: paramId rejected it → first settings save
+		// always 409'd with "changed in the meantime" (Johan, 1.0.3).
+		yield [0, 0];
+		yield ['0', 0];
+		yield [5, 5];
+		yield ['12', 12];
+		yield ['05', 5];
+		yield [-1, null];
+		yield ['-1', null];
+		yield ['2.9', null];
+		yield ['abc', null];
+		yield [null, null];
+		yield [true, null];
+	}
+
+	/** @dataProvider versions */
+	public function testParamVersionAcceptsZero(mixed $v, ?int $expected): void
+	{
+		self::assertSame($expected, $this->ctl->pubVersion($v));
 	}
 }

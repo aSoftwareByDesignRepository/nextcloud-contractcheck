@@ -566,7 +566,7 @@ class ApiController extends Controller
 				throw new ForbiddenException('Manager role required');
 			}
 			$params = $this->request->getParams();
-			$version = $this->paramId($params['version'] ?? null);
+			$version = $this->paramVersion($params['version'] ?? null);
 			if ($version === null) {
 				return $this->fail('CONFLICT', 'Missing settings version — reload and retry.', [], Http::STATUS_CONFLICT);
 			}

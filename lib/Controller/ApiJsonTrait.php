@@ -114,4 +114,21 @@ trait ApiJsonTrait
 
 		return null;
 	}
+
+	/**
+	 * CAS token (settings doc version) — unlike paramId, 0 is legal: it is
+	 * the pristine never-saved state on a fresh install. Mirrors
+	 * ContractService::requireRevision semantics.
+	 */
+	protected function paramVersion(mixed $v): ?int
+	{
+		if (is_int($v) && $v >= 0) {
+			return $v;
+		}
+		if (is_string($v) && preg_match('/^\d+$/', $v) === 1) {
+			return (int)$v;
+		}
+
+		return null;
+	}
 }
