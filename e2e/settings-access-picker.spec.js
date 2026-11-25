@@ -32,60 +32,95 @@ const manager = credsFromEnv('ADMIN')
 test.describe('settings access pickers', () => {
 	test.skip(!manager, 'Requires NC_E2E_* or NC_ADMIN_* credentials')
 
-	test('group picker renders real labels+ids, Enter selects, save persists', async ({ page }) => {
+	test('group picker renders real labels+ids, Enter selects, save persists', async ({ page }, testInfo) => {
+		// shared_fixture_race (2026-11-25 trace-proven): every parallel project
+		// used to run this leg against the same managerGroups fixture on the
+		// shared cc_settings CAS doc. A sibling project's save landing between
+		// hydration and the baseline apiGet skewed the two snapshots (v2620 vs
+		// v2621 in the traces) — the "new" target gid was already a hydrated
+		// chip, choose() deduped into a silent no-op, and the chip-count
+		// assertion died. The mutation leg is therefore pinned to ONE project;
+		// the non-mutating legs still run in every project. Targeted local
+		// re-run of the leg: `--project=chromium-1280`.
+		test.skip(testInfo.project.name !== 'chromium-1280',
+			'shared cc_settings CAS fixture — mutation leg runs in one project only')
 		await login(page, manager)
-		// The pickers hydrate asynchronously off GET /api/settings — a pick
-		// landing before hydration completes gets clobbered by setSelected.
-		const hydrated = page.waitForResponse(
-			(r) => r.url().includes('/api/settings') && r.request().method() === 'GET' && r.ok(),
-		)
-		await page.goto(`${APP}/settings/access`, { waitUntil: 'domcontentloaded' })
-		await hydrated
 
+		// Baseline for the cleanup restore. Target selection below keys off
+		// the PAGE's chip state instead — the hydrated chips are the exact
+		// selection set choose() dedups against.
 		const before = await apiGet(page, '/api/settings')
 		const originalManagers = before.settings?.managerGroups ?? []
 
 		try {
-			const input = page.locator('#cc-set-managers')
-			await input.fill('check')
-			const options = page.locator('#cc-managers-results .cc-picker__result')
-			await expect(options.first()).toBeVisible({ timeout: 10000 })
+			let pickedGid = null
+			// Retry bound: sibling writers that legitimately share the settings
+			// doc (e.g. the reports spec's merge+retry budget saves) can still
+			// win the CAS race between our hydration and our save — the page
+			// then toasts the conflict and we reload for a fresh version.
+			for (let attempt = 0; attempt < 4 && pickedGid === null; attempt++) {
+				// The pickers hydrate asynchronously off GET /api/settings — a pick
+				// landing before hydration completes gets clobbered by setSelected.
+				const hydrated = page.waitForResponse(
+					(r) => r.url().includes('/api/settings') && r.request().method() === 'GET' && r.ok(),
+				)
+				await page.goto(`${APP}/settings/access`, { waitUntil: 'domcontentloaded' })
+				await hydrated
 
-			// 1. Every option carries a real id and non-empty label — the
-			//    shipped bug rendered data-id="undefined" with blank text.
-			const count = await options.count()
-			expect(count, 'group search must return at least one option').toBeGreaterThan(0)
-			const ids = []
-			for (let i = 0; i < count; i++) {
-				const opt = options.nth(i)
-				const dataId = await opt.getAttribute('data-id')
-				expect(dataId, 'option id must be the gid').toBeTruthy()
-				expect(dataId).not.toBe('undefined')
-				expect((await opt.textContent())?.trim() ?? '', 'option label must not be blank').not.toBe('')
-				ids.push(dataId)
+				const input = page.locator('#cc-set-managers')
+				await input.fill('check')
+				const options = page.locator('#cc-managers-results .cc-picker__result')
+				await expect(options.first()).toBeVisible({ timeout: 10000 })
+
+				// 1. Every option carries a real id and non-empty label — the
+				//    shipped bug rendered data-id="undefined" with blank text.
+				const count = await options.count()
+				expect(count, 'group search must return at least one option').toBeGreaterThan(0)
+				const ids = []
+				for (let i = 0; i < count; i++) {
+					const opt = options.nth(i)
+					const dataId = await opt.getAttribute('data-id')
+					expect(dataId, 'option id must be the gid').toBeTruthy()
+					expect(dataId).not.toBe('undefined')
+					expect((await opt.textContent())?.trim() ?? '', 'option label must not be blank').not.toBe('')
+					ids.push(dataId)
+				}
+
+				// 2. Keyboard path: ArrowDown into the listbox, Enter selects the
+				//    focused option (dead lookup in shipped code). Re-picking an
+				//    already-selected gid dedups silently — correct behaviour, so
+				//    navigate to the first option that is not yet a chip. Hydrated
+				//    chips carry the gid as their label.
+				const chipGids = (await page.locator('#cc-managers-chips .cc-chip__label').allTextContents())
+					.map((t) => t.trim())
+				const targetIdx = ids.findIndex((id) => !chipGids.includes(id))
+				expect(targetIdx, 'search must offer at least one not-yet-selected group').toBeGreaterThan(-1)
+				const targetGid = ids[targetIdx]
+				const chipsBefore = await page.locator('#cc-managers-chips .cc-chip').count()
+				await input.press('ArrowDown')
+				for (let i = 0; i < targetIdx; i++) await page.keyboard.press('ArrowDown')
+				await page.keyboard.press('Enter')
+				const chips = page.locator('#cc-managers-chips .cc-chip')
+				await expect(chips).toHaveCount(chipsBefore + 1)
+				const chipTexts = await chips.allTextContents()
+				expect(chipTexts.join(' ')).not.toContain('undefined')
+				// The emitted id must be the gid, not "undefined" — the save below
+				// would otherwise fail validation with a field error, not succeed.
+
+				// 3. Save persists the picked gid via the real button. A 409 is
+				//    the honest CAS conflict — reload and retry; anything else
+				//    that is not 200 is a real product failure, assert it.
+				const posted = page.waitForResponse(
+					(r) => r.url().includes('/api/settings') && r.request().method() === 'POST',
+				)
+				await page.locator('#cc-set-save-access').click()
+				const resp = await posted
+				if (resp.status() === 409) continue
+				expect(resp.status(), 'settings save response').toBe(200)
+				await expect(page.locator('#cc-toasts .cc-toast--success')).toBeVisible({ timeout: 10000 })
+				pickedGid = targetGid
 			}
-
-			// 2. Keyboard path: ArrowDown into the listbox, Enter selects the
-			//    focused option (dead lookup in shipped code). Re-picking an
-			//    already-selected gid dedups silently — correct behaviour, so
-			//    navigate to the first option that is not yet a chip.
-			const targetIdx = ids.findIndex((id) => !originalManagers.includes(id))
-			expect(targetIdx, 'search must offer at least one not-yet-selected group').toBeGreaterThan(-1)
-			const pickedGid = ids[targetIdx]
-			const chipsBefore = await page.locator('#cc-managers-chips .cc-chip').count()
-			await input.press('ArrowDown')
-			for (let i = 0; i < targetIdx; i++) await page.keyboard.press('ArrowDown')
-			await page.keyboard.press('Enter')
-			const chips = page.locator('#cc-managers-chips .cc-chip')
-			await expect(chips).toHaveCount(chipsBefore + 1)
-			const chipTexts = await chips.allTextContents()
-			expect(chipTexts.join(' ')).not.toContain('undefined')
-			// The emitted id must be the gid, not "undefined" — the save below
-			// would otherwise fail validation with a field error, not succeed.
-
-			// 3. Save persists the picked gid (and returns a bumped version).
-			await page.locator('#cc-set-save-access').click()
-			await expect(page.locator('#cc-toasts .cc-toast--success')).toBeVisible({ timeout: 10000 })
+			expect(pickedGid, 'settings save kept losing the CAS race across retries').toBeTruthy()
 			const after = await apiGet(page, '/api/settings')
 			expect(after.settings.managerGroups).toContain(pickedGid)
 		} finally {
